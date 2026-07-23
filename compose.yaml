@@ -1,0 +1,19 @@
+services:
+  i14y-mcp:
+    build: .
+    image: i14y-mcp:dev
+    ports: ["8000:8000"]
+    environment:
+      I14Y_MCP_TRANSPORT: sse
+      # Bind all interfaces INSIDE the isolated container so the published port
+      # is reachable (see server.py: HOST defaults to 0.0.0.0 for SSE).
+      HOST: "0.0.0.0"
+      PORT: "8000"
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    # Resource limits: honoured by `docker compose up` (v2).
+    mem_limit: 256m
+    cpus: 0.5
+    pids_limit: 128
+    restart: unless-stopped

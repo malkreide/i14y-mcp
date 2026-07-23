@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "i14y": {
+      "command": "python",
+      "args": ["-m", "i14y_mcp.server"]
+    }
+  }
+}

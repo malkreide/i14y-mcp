@@ -4,6 +4,18 @@ All notable changes to this project are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+- Portfolio-standard repository scaffolding to align with the other Swiss Public
+  Data MCP servers: `Dockerfile`, `compose.yaml`, `claude_desktop_config.json`,
+  `.dockerignore`, `.gitignore`, and a `server.json` manifest for the MCP Registry.
+- GitHub Actions workflows: `ci.yml` (matrix 3.10–3.13), `live.yml` (scheduled
+  live API suite), `publish.yml` (PyPI + MCP Registry via OIDC Trusted Publishing),
+  plus `.github/dependabot.yml`.
+- Contributor and security documentation: `CONTRIBUTING.md` / `CONTRIBUTING.de.md`,
+  `SECURITY.md` / `SECURITY.de.md`, and `PUBLISHING.md`.
+
 ## [0.1.0] — 2026-07-21
 
 ### Added
@@ -43,4 +55,5 @@ server in the portfolio does not have to rediscover them.
 - **Read endpoints need no authentication**, despite the OpenAPI document
   declaring a Bearer scheme. Write endpoints do.
 
+[Unreleased]: https://github.com/malkreide/i14y-mcp/compare/v0.1.0...HEAD
 [0.1.0]: https://github.com/malkreide/i14y-mcp/releases/tag/v0.1.0

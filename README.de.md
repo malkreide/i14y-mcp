@@ -156,6 +156,16 @@ I14Y_MCP_TRANSPORT=sse PORT=8000 i14y-mcp
 
 `I14Y_MCP_TRANSPORT` akzeptiert `stdio` (Standard), `sse` oder `streamable-http`.
 
+### Docker
+
+```bash
+docker compose up --build      # SSE-Transport auf http://localhost:8000
+```
+
+Das Image ist ein gehärteter Multi-Stage-Build: Es läuft als Nicht-Root-Benutzer,
+enthält keine Build-Tools und benötigt keine Secrets (die API ist
+unauthentifiziert). Siehe [`Dockerfile`](Dockerfile) und [`compose.yaml`](compose.yaml).
+
 ---
 
 ## Join Keys
@@ -209,6 +219,16 @@ python -m ruff check src tests
 Die Live-Tests sind kein Zierrat: Fundstück 4 im Probe-Report — Keywords, die
 ihr Sprachobjekt unter `label` verschachteln — wurde von einem Live-Test
 gefunden, nachdem die Unit-Tests bereits grün waren.
+
+---
+
+## Mitwirken & Sicherheit
+
+- [`CONTRIBUTING.de.md`](CONTRIBUTING.de.md) — Grundregeln (read-only, ein
+  Egress-Host, keine Secrets) und der lokale Entwicklungs-Loop.
+- [`SECURITY.de.md`](SECURITY.de.md) — Sicherheits-Posture und wie Schwachstellen
+  gemeldet werden.
+- [`PUBLISHING.md`](PUBLISHING.md) — der Release-Prozess für PyPI / MCP-Registry.
 
 ---
 

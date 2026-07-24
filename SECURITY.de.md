@@ -21,7 +21,7 @@ Server stellt ausschliesslich Katalog-Metadaten bereit.
 
 | Bereich | Kontrolle |
 |---|---|
-| Egress | Fixe HTTPS-Basis-URL nur zu `api.i14y.admin.ch`; keine nutzergesteuerten URLs, daher keine SSRF-Angriffsfläche |
+| Egress | Code-Layer-Allow-List (`frozenset({"api.i14y.admin.ch"})`, nicht env-konfigurierbar), geprüft bevor der Client gebaut wird; `follow_redirects=False` verweigert jeden Off-Host-Redirect; keine nutzergesteuerten URLs, daher keine SSRF-Angriffsfläche. Siehe [`docs/network-egress.md`](docs/network-egress.md) |
 | TLS | httpx-Zertifikatsprüfung standardmässig aktiv und im Code nie deaktiviert |
 | Auth / Secrets | Unauthentifizierte öffentliche Lese-API — es werden keine API-Keys, Tokens oder Secrets gespeichert oder weitergereicht. Schreib-Endpunkte der Quell-API benötigen einen Bearer-Token und werden bewusst nicht exponiert |
 | Input | Pydantic-v2-Validierung an allen Tool-Grenzen; Query-Parameter werden URL-kodiert und numerische Bereiche geklammert |
@@ -39,9 +39,18 @@ Open-Data-Anbieter erreicht.
 
 - **Session-Krypto-Bindung** — nicht anwendbar: Es gibt keine Nutzeridentität zum
   Binden, da der Server öffentliche Daten ohne Authentifizierung bereitstellt.
-- **Server-übergreifende Tool-Poisoning-Erkennung** — Aufgabe des Gateways/Hosts.
-  Die Tool-Definitionen dieses Servers sind versioniert, in-repo verfasst und per
-  PR reviewt; es gibt keine dynamische oder Remote-Tool-Registrierung.
+- **Tool-Allow-Listing & server-übergreifende Tool-Poisoning-Erkennung** (SEC-014,
+  SEC-015) — Aufgabe des Gateways/Hosts, als Kontrolle auf Portfolio-Ebene
+  akzeptiert. Dieser Server hat kein Auth-Modell und keine Rollen, es gibt also
+  serverseitig nichts zu gaten; seine Tool-Definitionen sind versioniert, in-repo
+  verfasst und per PR reviewt, ohne dynamische oder Remote-Tool-Registrierung. Als
+  Rug-Pull-Schutz wird ein Hash-Snapshot jedes Tool-Namens und seiner
+  Argument-Oberfläche (Argument-Namen + required-Set) in
+  [`tool-definitions.lock.json`](tool-definitions.lock.json) committet und in der
+  CI geprüft (SEC-022) — jede stille Änderung des Tool-Sets oder eines
+  Tool-Vertrags lässt den Build fehlschlagen. Bei Aggregation hinter einem
+  gemeinsamen Gateway dessen Tool-Allow-Listing und Tool-Poisoning-Erkennung
+  aktivieren.
 - **Netzwerk-Binding für gehostete Deployments** — der SSE-/streamable-http-
   Transport bindet an `HOST`, standardmässig `127.0.0.1` (Loopback). Ein Binding
   an `0.0.0.0` ist ein expliziter Opt-in (das Container-Image setzt es bewusst)

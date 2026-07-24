@@ -1,0 +1,139 @@
+{
+  "server": "i14y-mcp",
+  "tool_count": 13,
+  "combined_sha256": "6a62df85321936e931d22a34c2c3ea6620ca41afb4872ea9df7fda4164e5bbab",
+  "tools": [
+    {
+      "name": "api_status",
+      "arguments": [],
+      "required": []
+    },
+    {
+      "name": "get_concept",
+      "arguments": [
+        "concept_id",
+        "language"
+      ],
+      "required": [
+        "concept_id"
+      ]
+    },
+    {
+      "name": "get_data_service",
+      "arguments": [
+        "data_service_id",
+        "language"
+      ],
+      "required": [
+        "data_service_id"
+      ]
+    },
+    {
+      "name": "get_dataset",
+      "arguments": [
+        "dataset_id",
+        "language"
+      ],
+      "required": [
+        "dataset_id"
+      ]
+    },
+    {
+      "name": "get_dataset_distributions",
+      "arguments": [
+        "dataset_id",
+        "language"
+      ],
+      "required": [
+        "dataset_id"
+      ]
+    },
+    {
+      "name": "list_catalogs",
+      "arguments": [
+        "language",
+        "page",
+        "page_size"
+      ],
+      "required": []
+    },
+    {
+      "name": "list_concepts",
+      "arguments": [
+        "language",
+        "page",
+        "page_size",
+        "publisher_identifier"
+      ],
+      "required": []
+    },
+    {
+      "name": "list_data_services",
+      "arguments": [
+        "language",
+        "page",
+        "page_size",
+        "publisher_identifier"
+      ],
+      "required": []
+    },
+    {
+      "name": "list_datasets",
+      "arguments": [
+        "access_rights",
+        "language",
+        "page",
+        "page_size",
+        "publisher_identifier"
+      ],
+      "required": []
+    },
+    {
+      "name": "list_public_services",
+      "arguments": [
+        "language",
+        "page",
+        "page_size",
+        "publisher_identifier"
+      ],
+      "required": []
+    },
+    {
+      "name": "list_publishers",
+      "arguments": [
+        "identifier",
+        "language",
+        "page",
+        "page_size",
+        "uid"
+      ],
+      "required": []
+    },
+    {
+      "name": "search_catalog",
+      "arguments": [
+        "language",
+        "limit",
+        "publishers",
+        "query",
+        "themes",
+        "types"
+      ],
+      "required": [
+        "query"
+      ]
+    },
+    {
+      "name": "search_codelist_entries",
+      "arguments": [
+        "concept_id",
+        "language",
+        "page",
+        "page_size"
+      ],
+      "required": [
+        "concept_id"
+      ]
+    }
+  ]
+}

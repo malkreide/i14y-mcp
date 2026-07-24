@@ -10,13 +10,16 @@ trying to query it.
 from __future__ import annotations
 
 import datetime as _dt
+import hashlib
+import json as _json
 import os
 import sys
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
-from typing import Any, Literal
+from typing import Annotated, Any, Literal
 
-from mcp.server.fastmcp import FastMCP
+from mcp.server.fastmcp import Context, FastMCP
+from pydantic import Field
 
 from . import mappers
 from .client import (
@@ -31,6 +34,7 @@ from .client import (
     set_shared_client,
     unwrap,
 )
+from .logging_config import configure_logging, logger
 from .models import (
     CatalogListResult,
     CodeListResult,
@@ -57,10 +61,12 @@ async def _lifespan(_server: FastMCP) -> AsyncIterator[None]:
     """
     async with build_client() as http:
         set_shared_client(http)
+        logger.info("server.start", transport=os.getenv("I14Y_MCP_TRANSPORT", "stdio"))
         try:
             yield
         finally:
             set_shared_client(None)
+            logger.info("server.stop")
 
 
 mcp = FastMCP("i14y-mcp", lifespan=_lifespan)
@@ -69,6 +75,27 @@ Language = Literal["de", "fr", "it", "rm", "en"]
 ResourceType = Literal["Dataset", "DataService", "PublicService", "Concept", "MappingTable"]
 
 READ_ONLY: dict[str, Any] = {"readOnlyHint": True, "destructiveHint": False}
+
+# SEC-018: strict, whitelist-based argument constraints applied at the tool
+# boundary. Pydantic (via FastMCP) rejects out-of-range, oversized or malformed
+# input *before* a tool body runs; `_clamp()` stays as defence in depth for
+# direct/programmatic calls that bypass the schema layer.
+PathId = Annotated[
+    str,
+    Field(
+        min_length=1,
+        max_length=128,
+        # Whitelist: catalogue IDs are UUID-like. No slash/space/dot-dot, which
+        # also removes any path-traversal surface in the interpolated URL.
+        pattern=r"^[A-Za-z0-9._\-]+$",
+    ),
+]
+FilterStr = Annotated[str, Field(min_length=1, max_length=256)]
+QueryStr = Annotated[str, Field(max_length=256)]
+Page = Annotated[int, Field(ge=1, le=100_000)]
+PageSize100 = Annotated[int, Field(ge=1, le=100)]
+PageSize200 = Annotated[int, Field(ge=1, le=200)]
+Limit = Annotated[int, Field(ge=1, le=SEARCH_HARD_CAP)]
 
 
 def _now() -> str:
@@ -79,7 +106,13 @@ def _clamp(value: int, low: int, high: int) -> int:
     return max(low, min(value, high))
 
 
-async def _get(path: str, params: dict[str, Any] | None = None) -> Any:
+async def _get(
+    path: str,
+    params: dict[str, Any] | None = None,
+    ctx: Context | None = None,
+) -> Any:
+    if ctx is not None:
+        await ctx.debug(f"Querying I14Y {path}")
     async with client_session() as http:
         return unwrap(await fetch_json(http, path, params))
 
@@ -91,12 +124,13 @@ async def _get(path: str, params: dict[str, Any] | None = None) -> Any:
 
 @mcp.tool(annotations=READ_ONLY)
 async def search_catalog(
-    query: str,
+    query: QueryStr,
     language: Language = "de",
     types: list[ResourceType] | None = None,
     themes: list[str] | None = None,
     publishers: list[str] | None = None,
-    limit: int = 25,
+    limit: Limit = 25,
+    ctx: Context | None = None,
 ) -> SearchResult:
     """Search Switzerland's national metadata catalogue for data resources.
 
@@ -133,9 +167,22 @@ async def search_catalog(
     if publishers:
         params["publishers"] = list(publishers)
 
-    raw = await _get("/search", params) or []
+    raw = await _get("/search", params, ctx=ctx) or []
     total = len(raw)
     hits = [mappers.map_search_hit(r, language) for r in raw[:limit]]
+    # ARCH-003: never hand back a bare empty result. Tell the agent whether the
+    # term matched and, when it did not, where to look next.
+    if total == 0:
+        match_type = "none"
+        hint = (
+            "No catalogue entries matched. The search index covers Datasets only "
+            "and about half the register — try broader or German terms, or call "
+            "list_datasets / list_concepts / list_data_services for the complete "
+            "registers."
+        )
+    else:
+        match_type = "exact"
+        hint = None
     return SearchResult(
         retrieved_at=_now(),
         query=query or None,
@@ -143,17 +190,20 @@ async def search_catalog(
         total_matched=total,
         returned=len(hits),
         truncated=total > len(hits),
+        match_type=match_type,
+        hint=hint,
         hits=hits,
     )
 
 
 @mcp.tool(annotations=READ_ONLY)
 async def list_datasets(
-    publisher_identifier: str | None = None,
-    access_rights: str | None = None,
+    publisher_identifier: FilterStr | None = None,
+    access_rights: FilterStr | None = None,
     language: Language = "de",
-    page: int = 1,
-    page_size: int = 25,
+    page: Page = 1,
+    page_size: PageSize100 = 25,
+    ctx: Context | None = None,
 ) -> DatasetListResult:
     """List registered datasets, optionally filtered by publisher.
 
@@ -178,6 +228,7 @@ async def list_datasets(
                 "page": max(page, 1),
                 "pageSize": page_size,
             },
+            ctx=ctx,
         )
         or []
     )
@@ -191,17 +242,22 @@ async def list_datasets(
 
 
 @mcp.tool(annotations=READ_ONLY)
-async def get_dataset(dataset_id: str, language: Language = "de") -> DatasetDetailResult:
-    """Retrieve the full metadata record for one dataset.
+async def get_dataset(
+    dataset_id: PathId, language: Language = "de", ctx: Context | None = None
+) -> DatasetDetailResult:
+    """Retrieve the full, aggregated metadata record for one dataset.
 
-    Includes contact point, temporal and spatial coverage, documentation links
-    and all distributions with their licences.
+    This is the aggregated detail tool: a single call returns the contact
+    point, temporal and spatial coverage, documentation links *and* every
+    distribution with its licence — so `search_catalog` → `get_dataset`
+    answers «who publishes it, through which interface, under which licence»
+    in two calls, without a separate distributions or contact lookup.
 
     Args:
         dataset_id: UUID from `search_catalog` or `list_datasets`.
         language: Language for titles and descriptions.
     """
-    raw = await _get(f"/datasets/{dataset_id}")
+    raw = await _get(f"/datasets/{dataset_id}", ctx=ctx)
     return DatasetDetailResult(
         retrieved_at=_now(),
         dataset=mappers.map_dataset_detail(raw or {}, language),
@@ -210,20 +266,21 @@ async def get_dataset(dataset_id: str, language: Language = "de") -> DatasetDeta
 
 @mcp.tool(annotations=READ_ONLY)
 async def get_dataset_distributions(
-    dataset_id: str, language: Language = "de"
+    dataset_id: PathId, language: Language = "de", ctx: Context | None = None
 ) -> DistributionsResult:
     """Get the downloadable files and access URLs for a dataset.
 
     This is the «where do I actually get the data» tool. Each distribution
     carries its own format, licence and download URL — licences differ between
     distributions of the same dataset, so always read the `licence` field
-    before reusing the data.
+    before reusing the data. (`get_dataset` returns these same distributions
+    alongside the rest of the record.)
 
     Args:
         dataset_id: UUID from `search_catalog` or `list_datasets`.
         language: Language for titles and descriptions.
     """
-    raw = await _get(f"/datasets/{dataset_id}") or {}
+    raw = await _get(f"/datasets/{dataset_id}", ctx=ctx) or {}
     detail = mappers.map_dataset_detail(raw, language)
     return DistributionsResult(
         retrieved_at=_now(),
@@ -241,10 +298,11 @@ async def get_dataset_distributions(
 
 @mcp.tool(annotations=READ_ONLY)
 async def list_data_services(
-    publisher_identifier: str | None = None,
+    publisher_identifier: FilterStr | None = None,
     language: Language = "de",
-    page: int = 1,
-    page_size: int = 25,
+    page: Page = 1,
+    page_size: PageSize100 = 25,
+    ctx: Context | None = None,
 ) -> DataServiceListResult:
     """List machine interfaces (APIs) registered by Swiss public bodies.
 
@@ -268,6 +326,7 @@ async def list_data_services(
                 "page": max(page, 1),
                 "pageSize": page_size,
             },
+            ctx=ctx,
         )
         or []
     )
@@ -282,7 +341,7 @@ async def list_data_services(
 
 @mcp.tool(annotations=READ_ONLY)
 async def get_data_service(
-    data_service_id: str, language: Language = "de"
+    data_service_id: PathId, language: Language = "de", ctx: Context | None = None
 ) -> DataServiceDetailResult:
     """Retrieve the full record for one registered API, including endpoints.
 
@@ -290,7 +349,7 @@ async def get_data_service(
         data_service_id: UUID from `list_data_services`.
         language: Language for titles and descriptions.
     """
-    raw = await _get(f"/dataservices/{data_service_id}")
+    raw = await _get(f"/dataservices/{data_service_id}", ctx=ctx)
     return DataServiceDetailResult(
         retrieved_at=_now(),
         data_service=mappers.map_data_service(raw or {}, language),
@@ -299,10 +358,11 @@ async def get_data_service(
 
 @mcp.tool(annotations=READ_ONLY)
 async def list_public_services(
-    publisher_identifier: str | None = None,
+    publisher_identifier: FilterStr | None = None,
     language: Language = "de",
-    page: int = 1,
-    page_size: int = 25,
+    page: Page = 1,
+    page_size: PageSize100 = 25,
+    ctx: Context | None = None,
 ) -> PublicServiceListResult:
     """List registered public services (administrative offerings for citizens).
 
@@ -321,6 +381,7 @@ async def list_public_services(
                 "page": max(page, 1),
                 "pageSize": page_size,
             },
+            ctx=ctx,
         )
         or []
     )
@@ -340,10 +401,11 @@ async def list_public_services(
 
 @mcp.tool(annotations=READ_ONLY)
 async def list_concepts(
-    publisher_identifier: str | None = None,
+    publisher_identifier: FilterStr | None = None,
     language: Language = "de",
-    page: int = 1,
-    page_size: int = 25,
+    page: Page = 1,
+    page_size: PageSize100 = 25,
+    ctx: Context | None = None,
 ) -> ConceptListResult:
     """List harmonised concepts and code lists of the Swiss administration.
 
@@ -366,6 +428,7 @@ async def list_concepts(
                 "page": max(page, 1),
                 "pageSize": page_size,
             },
+            ctx=ctx,
         )
         or []
     )
@@ -379,14 +442,16 @@ async def list_concepts(
 
 
 @mcp.tool(annotations=READ_ONLY)
-async def get_concept(concept_id: str, language: Language = "de") -> ConceptDetailResult:
+async def get_concept(
+    concept_id: PathId, language: Language = "de", ctx: Context | None = None
+) -> ConceptDetailResult:
     """Retrieve one concept definition, including its value type and version.
 
     Args:
         concept_id: UUID from `list_concepts`.
         language: Language for titles and descriptions.
     """
-    raw = await _get(f"/concepts/{concept_id}")
+    raw = await _get(f"/concepts/{concept_id}", ctx=ctx)
     return ConceptDetailResult(
         retrieved_at=_now(),
         concept=mappers.map_concept(raw or {}, language),
@@ -395,10 +460,11 @@ async def get_concept(concept_id: str, language: Language = "de") -> ConceptDeta
 
 @mcp.tool(annotations=READ_ONLY)
 async def search_codelist_entries(
-    concept_id: str,
+    concept_id: PathId,
     language: Language = "de",
-    page: int = 1,
-    page_size: int = 50,
+    page: Page = 1,
+    page_size: PageSize200 = 50,
+    ctx: Context | None = None,
 ) -> CodeListResult:
     """List the individual codes of a code-list concept.
 
@@ -417,6 +483,7 @@ async def search_codelist_entries(
         await _get(
             f"/concepts/{concept_id}/codelist-entries/search",
             {"language": language, "page": max(page, 1), "pageSize": page_size},
+            ctx=ctx,
         )
         or []
     )
@@ -438,11 +505,12 @@ async def search_codelist_entries(
 
 @mcp.tool(annotations=READ_ONLY)
 async def list_publishers(
-    identifier: str | None = None,
-    uid: str | None = None,
+    identifier: FilterStr | None = None,
+    uid: FilterStr | None = None,
     language: Language = "de",
-    page: int = 1,
-    page_size: int = 50,
+    page: Page = 1,
+    page_size: PageSize100 = 50,
+    ctx: Context | None = None,
 ) -> PublisherListResult:
     """List the public bodies that publish into I14Y.
 
@@ -466,6 +534,7 @@ async def list_publishers(
                 "page": max(page, 1),
                 "pageSize": page_size,
             },
+            ctx=ctx,
         )
         or []
     )
@@ -480,7 +549,10 @@ async def list_publishers(
 
 @mcp.tool(annotations=READ_ONLY)
 async def list_catalogs(
-    language: Language = "de", page: int = 1, page_size: int = 50
+    language: Language = "de",
+    page: Page = 1,
+    page_size: PageSize100 = 50,
+    ctx: Context | None = None,
 ) -> CatalogListResult:
     """List the catalogues that feed into I14Y.
 
@@ -492,7 +564,7 @@ async def list_catalogs(
         page_size: Records per page (1-100).
     """
     page_size = _clamp(page_size, 1, 100)
-    raw = await _get("/catalogs", {"page": max(page, 1), "pageSize": page_size}) or []
+    raw = await _get("/catalogs", {"page": max(page, 1), "pageSize": page_size}, ctx=ctx) or []
     return CatalogListResult(
         retrieved_at=_now(),
         page=max(page, 1),
@@ -508,7 +580,7 @@ async def list_catalogs(
 
 
 @mcp.tool(annotations=READ_ONLY)
-async def api_status() -> StatusResult:
+async def api_status(ctx: Context | None = None) -> StatusResult:
     """Check whether the I14Y API is reachable and which endpoints respond.
 
     Always returns an evaluable status rather than an empty result, so an agent
@@ -516,12 +588,15 @@ async def api_status() -> StatusResult:
     """
     checks: dict[str, str] = {}
     reachable = False
+    endpoints = (
+        ("datasets", "/datasets"),
+        ("dataservices", "/dataservices"),
+        ("concepts", "/concepts"),
+    )
     async with client_session() as http:
-        for name, path in (
-            ("datasets", "/datasets"),
-            ("dataservices", "/dataservices"),
-            ("concepts", "/concepts"),
-        ):
+        for index, (name, path) in enumerate(endpoints, start=1):
+            if ctx is not None:
+                await ctx.report_progress(index, len(endpoints), f"checking {name}")
             try:
                 payload = unwrap(await fetch_json(http, path, {"page": 1, "pageSize": 1}))
                 checks[name] = f"ok ({len(payload or [])} record)"
@@ -540,6 +615,60 @@ async def api_status() -> StatusResult:
             "need a Bearer token and are deliberately not exposed by this server."
         ),
     )
+
+
+# --------------------------------------------------------------------------
+# Tool-definition integrity (SEC-022)
+# --------------------------------------------------------------------------
+
+
+def _stable_signature(schema: dict[str, Any]) -> dict[str, Any]:
+    """Project a tool's input schema to its rug-pull-relevant surface.
+
+    Deliberately captures only the *contract* — the argument names and which are
+    required — and not pydantic/mcp-version-specific serialisation of constraints
+    (minimum/maximum/pattern/title/anyOf), so the lock is stable across SDK patch
+    upgrades. Argument-level constraints live in the reviewed source and CHANGELOG.
+    """
+    props = schema.get("properties", {}) if isinstance(schema, dict) else {}
+    return {
+        "arguments": sorted(props),
+        "required": sorted(schema.get("required", []) if isinstance(schema, dict) else []),
+    }
+
+
+async def tool_manifest() -> dict[str, Any]:
+    """Return a deterministic hash snapshot of the registered tool definitions.
+
+    Committed as `tool-definitions.lock.json` and checked in CI so a silent
+    change to the tool set, a tool's name, or its argument surface (a rug-pull)
+    fails the build until the lock is regenerated and reviewed.
+
+    The snapshot deliberately covers only what is derived from the *source
+    function signatures* — tool name, argument names, and which are required —
+    because that is stable across mcp/pydantic patch upgrades. Descriptions
+    (docstrings) are normalised differently by different SDK versions, so they
+    are governed by PR review + CHANGELOG rather than by this hash.
+    """
+    tools = sorted(await mcp.list_tools(), key=lambda t: t.name)
+    entries = [
+        {"name": tool.name, **_stable_signature(tool.inputSchema or {})}
+        for tool in tools
+    ]
+    combined = hashlib.sha256(
+        _json.dumps(entries, sort_keys=True, ensure_ascii=False).encode("utf-8")
+    ).hexdigest()
+    return {
+        "server": "i14y-mcp",
+        "tool_count": len(entries),
+        "combined_sha256": combined,
+        "tools": entries,
+    }
+
+
+# --------------------------------------------------------------------------
+# Transport
+# --------------------------------------------------------------------------
 
 
 def build_http_app(transport: str) -> Any:
@@ -573,6 +702,7 @@ def _run_http(transport: str, host: str, port: int) -> None:
 
 def main() -> None:
     """Entry point. Transport is selected via the I14Y_MCP_TRANSPORT env var."""
+    configure_logging(os.getenv("LOG_LEVEL", "INFO"))
     transport = os.getenv("I14Y_MCP_TRANSPORT", "stdio").lower()
     if transport in {"sse", "streamable-http", "http"}:
         # SEC-016: default to loopback. Binding to all interfaces is an

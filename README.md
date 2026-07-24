@@ -39,16 +39,15 @@ profile (eCH-0200).
 search_catalog(query="Sonderpädagogik")
   → «Statistik der Sonderpädagogik» — Federal Statistical Office (BFS), theme: Bildung
 
-get_dataset_distributions(dataset_id=...)
+get_dataset(dataset_id=...)
   → 2 distributions, licence: «Opendata BY ASK — attribution required,
     commercial use only with permission from the data supplier»
-
-get_dataset(dataset_id=...)
   → contact: auskunftsdienst@bfs.admin.ch
 ```
 
-Three tool calls turn a vague topic into a named authority, a download URL and
-a licence you can act on.
+Two tool calls turn a vague topic into a named authority, a download URL and a
+licence you can act on — `get_dataset` aggregates the distributions, licences
+and contact point into one record.
 
 ---
 
@@ -125,6 +124,23 @@ the prerequisites for any future write capability.
 
 All tools are annotated `readOnlyHint: true`. Write operations exist in the
 upstream API but are deliberately not exposed.
+
+### MCP primitives
+
+This server exposes **Tools only** — no Resources, no Prompts. That is a
+deliberate choice, not an omission: I14Y is queried by free-text search and by
+opaque UUIDs, so there is no small, stable set of addressable URIs that would map
+cleanly onto MCP Resources, and the server ships no opinionated prompt templates.
+Every tool is read-only and idempotent; if a future stable entry point emerges
+(e.g. a fixed theme list) it is a candidate for a Resource.
+
+### MCP protocol version
+
+Built against the MCP Python SDK (`mcp >= 1.28.1`), which negotiates the protocol
+version with the client at initialize time. The tested SDK floor is pinned in
+`pyproject.toml`; [Dependabot](.github/dependabot.yml) opens monthly SDK-update
+PRs, and any change that bumps the negotiated spec version is called out in
+[`CHANGELOG.md`](CHANGELOG.md).
 
 ---
 

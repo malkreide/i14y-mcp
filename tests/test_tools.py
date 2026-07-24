@@ -201,3 +201,55 @@ def test_http_app_exposes_session_id_via_cors(transport):
     cors = [m for m in app.user_middleware if m.cls is CORSMiddleware]
     assert cors, "CORS middleware is not configured on the HTTP app"
     assert "Mcp-Session-Id" in cors[0].kwargs.get("expose_headers", [])
+
+
+@respx.mock
+async def test_search_empty_returns_actionable_hint():
+    """ARCH-003: a zero-match search returns match_type=none plus a hint,
+    never a bare empty list."""
+    respx.get(f"{BASE}/search").mock(return_value=httpx.Response(200, json={"data": []}))
+    result = await server.search_catalog(query="zzznotathing", language="de")
+    assert result.total_matched == 0
+    assert result.match_type == "none"
+    assert result.hint and "list_datasets" in result.hint
+
+
+async def test_invalid_id_is_rejected_at_the_boundary():
+    """SEC-018 / OBS-001: a malformed id is rejected by the schema before the
+    tool body runs, surfaced as a protocol-level tool error."""
+    from mcp.server.fastmcp.exceptions import ToolError
+
+    with pytest.raises(ToolError):
+        await server.mcp.call_tool("get_dataset", {"dataset_id": "../etc/passwd"})
+
+
+async def test_unknown_tool_is_a_protocol_error():
+    """OBS-001: calling an unknown tool is a protocol error, not a crash."""
+    from mcp.server.fastmcp.exceptions import ToolError
+
+    with pytest.raises(ToolError):
+        await server.mcp.call_tool("does_not_exist", {})
+
+
+@respx.mock
+async def test_execution_error_surfaces_not_swallowed():
+    """OBS-001: an upstream failure is surfaced as an error, not swallowed."""
+    respx.get(f"{BASE}/datasets/abc").mock(return_value=httpx.Response(500))
+    with pytest.raises(c.UpstreamError):
+        await server.get_dataset("abc")
+
+
+async def test_tool_manifest_matches_committed_lock():
+    """SEC-022: the live tool definitions must match tool-definitions.lock.json
+    so a silent rug-pull fails CI until the lock is regenerated and reviewed."""
+    import json
+    from pathlib import Path
+
+    lock_path = Path(__file__).resolve().parent.parent / "tool-definitions.lock.json"
+    assert lock_path.exists(), "tool-definitions.lock.json is missing"
+    committed = json.loads(lock_path.read_text(encoding="utf-8"))
+    live = await server.tool_manifest()
+    assert live["combined_sha256"] == committed["combined_sha256"], (
+        "Tool definitions changed. Regenerate tool-definitions.lock.json and "
+        "note the change in CHANGELOG.md (SEC-022)."
+    )

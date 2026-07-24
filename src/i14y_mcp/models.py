@@ -98,6 +98,14 @@ class SearchResult(I14YResponse):
     total_matched: int = Field(description="Matches reported by the upstream index.")
     returned: int = Field(description="Records in this payload after capping.")
     truncated: bool = Field(description="True when the upstream result set exceeded the cap.")
+    match_type: Literal["exact", "none"] = Field(
+        default="exact",
+        description="'none' when nothing matched, so the agent never sees a bare empty result.",
+    )
+    hint: str | None = Field(
+        default=None,
+        description="Actionable next step when match_type is 'none' (e.g. which tool to try).",
+    )
     hits: list[SearchHit]
 
 

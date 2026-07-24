@@ -104,6 +104,30 @@ async def test_client_session_reuses_shared_client():
     assert c.get_shared_client() is None
 
 
+def test_egress_allow_list_rejects_foreign_host():
+    """SEC-021: only the allow-listed host may be reached."""
+    c.assert_host_allowed(c.BASE_URL)  # does not raise
+    with pytest.raises(c.UpstreamError):
+        c.assert_host_allowed("https://evil.example.com/api")
+
+
+def test_build_client_does_not_follow_redirects():
+    """SEC-021: a redirect must never carry the client off the allow-listed host."""
+    client = c.build_client()
+    assert client.follow_redirects is False
+
+
+@respx.mock
+async def test_redirect_is_refused():
+    """SEC-021: a 3xx from upstream is surfaced as an error, not followed."""
+    respx.get(f"{BASE}/datasets").mock(
+        return_value=httpx.Response(302, headers={"Location": "https://evil.example.com"})
+    )
+    async with c.build_client() as http:
+        with pytest.raises(c.UpstreamError):
+            await c.fetch_json(http, "/datasets")
+
+
 @respx.mock
 async def test_429_is_retried():
     route = respx.get(f"{BASE}/datasets").mock(

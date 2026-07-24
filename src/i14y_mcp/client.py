@@ -8,13 +8,24 @@ from __future__ import annotations
 
 import asyncio
 import datetime as _dt
+import time
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from typing import Any
+from urllib.parse import urlsplit
 
 import httpx
 
+from .logging_config import logger
+
 BASE_URL = "https://api.i14y.admin.ch/api"
+
+# SEC-021: code-layer egress allow-list. A `frozenset` (not env-configurable) is
+# the single destination this server may ever reach. `assert_host_allowed` runs
+# before the client is built, and redirects off this host are refused in
+# `fetch_json`. The network-layer counterpart is documented in
+# `docs/network-egress.md`.
+ALLOWED_HOSTS: frozenset[str] = frozenset({"api.i14y.admin.ch"})
 
 ATTRIBUTION = (
     "Data: I14Y Interoperability Platform, Swiss Federal Statistical Office (BFS) "
@@ -54,13 +65,25 @@ def _record_success() -> None:
     _LAST_SUCCESS["ts"] = _dt.datetime.now(_dt.timezone.utc).isoformat(timespec="seconds")
 
 
+def assert_host_allowed(url: str) -> None:
+    """Raise UpstreamError if `url`'s host is not on the egress allow-list."""
+    host = urlsplit(url).hostname or ""
+    if host not in ALLOWED_HOSTS:
+        raise UpstreamError(
+            f"Egress to {host!r} is not allowed (allow-list: {sorted(ALLOWED_HOSTS)})."
+        )
+
+
 def build_client() -> httpx.AsyncClient:
     """Create a configured AsyncClient. Caller owns the lifecycle."""
+    assert_host_allowed(BASE_URL)
     return httpx.AsyncClient(
         base_url=BASE_URL,
         timeout=TIMEOUT_S,
         headers={"Accept": "application/json", "User-Agent": USER_AGENT},
-        follow_redirects=True,
+        # SEC-021: never auto-follow a redirect off the allow-listed host. The
+        # read endpoints return JSON directly; a 3xx is treated as an error.
+        follow_redirects=False,
     )
 
 
@@ -114,13 +137,26 @@ async def fetch_json(
 
     for attempt in range(MAX_ATTEMPTS):
         if attempt > 0:
+            logger.debug("i14y.retry", path=path, attempt=attempt)
             await asyncio.sleep(2**attempt)
+        started = time.perf_counter()
         try:
             resp = await http.get(path, params=clean)
+            elapsed_ms = round((time.perf_counter() - started) * 1000)
             if resp.status_code == 404:
-                raise NotFoundError(f"I14Y returned 404 for {path}")
+                logger.info("i14y.not_found", path=path, ms=elapsed_ms)
+                raise NotFoundError(
+                    f"I14Y has no resource at {path} (HTTP 404). "
+                    "Verify the identifier via search_catalog or list_datasets."
+                )
+            if 300 <= resp.status_code < 400:
+                # SEC-021: a redirect would leave the allow-listed host.
+                raise UpstreamError(
+                    f"I14Y returned an unexpected redirect ({resp.status_code}) for {path}."
+                )
             resp.raise_for_status()
             _record_success()
+            logger.info("i14y.ok", path=path, status=resp.status_code, ms=elapsed_ms)
             return resp.json()
         except NotFoundError:
             raise
@@ -130,16 +166,26 @@ async def fetch_json(
             if 400 <= status < 500 and status != 429:
                 # OBS-002: surface a categorised error, not the raw upstream
                 # response body — the LLM never sees stray provider internals.
+                logger.warning("i14y.client_error", path=path, status=status)
                 raise UpstreamError(
                     f"I14Y rejected the request with HTTP {status} for {path}."
                 ) from exc
+            logger.warning("i14y.server_error", path=path, status=status, attempt=attempt)
         except httpx.RequestError as exc:
             last_error = exc
+            logger.warning(
+                "i14y.network_error",
+                path=path,
+                error=type(exc).__name__,
+                attempt=attempt,
+            )
 
+    logger.error("i14y.unreachable", path=path, attempts=MAX_ATTEMPTS)
     raise UpstreamError(
         f"I14Y unreachable after {MAX_ATTEMPTS} attempts for {path}. "
         f"Last error: {last_error}. "
-        f"Last successful call: {last_success() or 'none in this session'}."
+        f"Last successful call: {last_success() or 'none in this session'}. "
+        "Call api_status to check whether the source is down before retrying."
     )
 
 

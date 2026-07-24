@@ -19,7 +19,7 @@ no personal data is processed — the server exposes catalogue metadata only.
 
 | Area | Control |
 |---|---|
-| Egress | Fixed HTTPS base URL to `api.i14y.admin.ch` only; no user-supplied URLs, so no SSRF surface |
+| Egress | Code-layer allow-list (`frozenset({"api.i14y.admin.ch"})`, not env-configurable) checked before the client is built; `follow_redirects=False` refuses any off-host redirect; no user-supplied URLs, so no SSRF surface. See [`docs/network-egress.md`](docs/network-egress.md) |
 | TLS | httpx certificate verification is on by default and never disabled in code |
 | Auth / secrets | Unauthenticated public read API — no API keys, tokens or secrets are stored or forwarded. Upstream write endpoints require a Bearer token and are deliberately not exposed |
 | Input | Pydantic v2 validation at all tool boundaries; query parameters are URL-encoded and numeric ranges are clamped |
@@ -36,9 +36,16 @@ unauthenticated, and reaches only one trusted public-data provider.
 
 - **Session crypto-binding** — not applicable: there is no user identity to bind,
   as the server exposes public data with no authentication.
-- **Cross-server tool-poisoning detection** — a gateway/host responsibility. This
-  server's tool definitions are version-controlled, authored in-repo, and
-  reviewed via PR; there is no dynamic or remote tool registration.
+- **Tool allow-listing & cross-server tool-poisoning detection** (SEC-014,
+  SEC-015) — a gateway/host responsibility, accepted as a portfolio-level control.
+  This server has no auth model and no roles, so there is nothing to gate
+  server-side; its tool definitions are version-controlled, authored in-repo, and
+  reviewed via PR, with no dynamic or remote tool registration. As a rug-pull
+  guard, a hash snapshot of every tool name, description and input schema is
+  committed to [`tool-definitions.lock.json`](tool-definitions.lock.json) and
+  checked in CI (SEC-022), so any silent change to a tool definition fails the
+  build. When aggregated behind a shared gateway, enable the gateway's tool
+  allow-listing and tool-poisoning detection.
 - **Network binding for hosted deployments** — the SSE / streamable-http
   transport binds to `HOST`, defaulting to `127.0.0.1` (loopback). Binding to
   `0.0.0.0` is an explicit opt-in (the container image sets it on purpose) and

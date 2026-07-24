@@ -11,8 +11,9 @@ public I14Y API; contributions should keep it that way.
   `destructiveHint: false`. No write, send, or filesystem capability. Write
   endpoints exist in the upstream API but are deliberately not exposed.
 - **One egress host.** Requests go only to the fixed base URL
-  `https://api.i14y.admin.ch/api` (see `src/i14y_mcp/client.py`); no
-  user-supplied URLs, so there is no SSRF surface.
+  `https://api.i14y.admin.ch/api`, enforced by the `ALLOWED_HOSTS` allow-list in
+  `src/i14y_mcp/client.py` (see [`docs/network-egress.md`](docs/network-egress.md));
+  no user-supplied URLs, so there is no SSRF surface.
 - **No secrets.** The read endpoints are unauthenticated; do not add credential
   handling.
 

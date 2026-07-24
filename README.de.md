@@ -39,16 +39,15 @@ DCAT-AP-CH-Profil (eCH-0200).
 search_catalog(query="Sonderpädagogik")
   → «Statistik der Sonderpädagogik» — Bundesamt für Statistik (BFS), Thema: Bildung
 
-get_dataset_distributions(dataset_id=...)
+get_dataset(dataset_id=...)
   → 2 Distributionen, Lizenz: «Opendata BY ASK — Quellenangabe ist Pflicht,
     kommerzielle Nutzung nur mit Bewilligung des Datenlieferanten»
-
-get_dataset(dataset_id=...)
   → Kontakt: auskunftsdienst@bfs.admin.ch
 ```
 
-Drei Tool-Aufrufe verwandeln ein vages Thema in eine benannte Behörde, eine
-Download-URL und eine handlungsrelevante Lizenz.
+Zwei Tool-Aufrufe verwandeln ein vages Thema in eine benannte Behörde, eine
+Download-URL und eine handlungsrelevante Lizenz — `get_dataset` aggregiert
+Distributionen, Lizenzen und Kontaktstelle in einem Datensatz.
 
 ---
 
@@ -125,6 +124,24 @@ die Voraussetzungen für eine allfällige spätere Schreibfähigkeit.
 
 Alle Tools sind mit `readOnlyHint: true` annotiert. Schreibende Operationen
 existieren in der Quell-API, werden hier aber bewusst nicht exponiert.
+
+### MCP-Primitive
+
+Dieser Server exponiert **ausschliesslich Tools** — keine Resources, keine
+Prompts. Das ist eine bewusste Entscheidung, kein Versäumnis: I14Y wird per
+Volltextsuche und über opake UUIDs abgefragt, es gibt also keinen kleinen,
+stabilen Satz adressierbarer URIs, der sich sauberer auf MCP-Resources abbilden
+liesse; und der Server liefert keine vorgefertigten Prompt-Templates. Alle Tools
+sind read-only und idempotent; entsteht künftig ein stabiler Einstiegspunkt (z. B.
+eine feste Themenliste), ist er ein Kandidat für eine Resource.
+
+### MCP-Protokoll-Version
+
+Gebaut gegen das MCP-Python-SDK (`mcp >= 1.28.1`), das die Protokoll-Version beim
+Initialize mit dem Client aushandelt. Der getestete SDK-Floor ist in
+`pyproject.toml` gepinnt; [Dependabot](.github/dependabot.yml) öffnet monatliche
+SDK-Update-PRs, und jede Änderung, die die ausgehandelte Spec-Version anhebt, wird
+in [`CHANGELOG.md`](CHANGELOG.md) vermerkt.
 
 ---
 

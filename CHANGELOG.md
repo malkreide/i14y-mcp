@@ -19,7 +19,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - `docs/roadmap.md` documenting the Read-only-First phase architecture (OPS-003).
 - `HEALTHCHECK` in the Docker image so orchestrators can detect an unhealthy
   container (SCALE-004).
-- Tests for the shared client, error masking and CORS session-header exposure.
+- Structured JSON logging on stderr via `structlog`, with per-request severity
+  levels (OBS-003).
+- `Context` injection across all tools for client-visible progress/logging, with
+  per-endpoint progress in `api_status` (SDK-003).
+- `search_catalog` now returns a `match_type` and an actionable `hint` on an empty
+  result instead of a bare empty list (ARCH-003).
+- `docs/network-egress.md` documenting the code- and network-layer egress
+  controls (SEC-021).
+- `tool-definitions.lock.json`, a committed hash snapshot of every tool
+  definition, verified by a test as a rug-pull guard (SEC-022).
+- README sections on MCP primitives (tools-only rationale, ARCH-008) and the MCP
+  protocol version / update policy (ARCH-012).
+- Container FD `ulimits` and a memory reservation in `compose.yaml` (SCALE-006).
+- Tests for the shared client, error masking, CORS session-header exposure, empty
+  search hints, boundary input rejection, egress control and tool-lock integrity.
 
 ### Changed
 - **HTTP transports now default to `HOST=127.0.0.1` (loopback)** instead of
@@ -28,14 +42,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
   remote/PaaS deployments must set it explicitly.
 - A single pooled `httpx.AsyncClient` is now created once in a FastMCP lifespan and
   reused across tool calls instead of being rebuilt per call (SDK-001).
+- Tool arguments now carry strict schema constraints (`ge`/`le`, `min_length`,
+  whitelist `pattern` on IDs), so malformed input is rejected at the boundary
+  instead of silently clamped (SEC-018).
+- The anchor demo query is now answered in two tool calls; `get_dataset` is
+  documented as the aggregated detail tool (ARCH-007).
 
 ### Fixed
 - SSE / streamable-http now sets CORS to expose the `Mcp-Session-Id` header, so
   browser MCP clients keep their session (SDK-004).
+- Upstream failures surface actionable execution errors (pointing at
+  `api_status` / `search_catalog`), covered by execution- and protocol-error
+  tests (OBS-001).
 
 ### Security
 - Upstream 4xx error bodies are no longer embedded verbatim in client-facing
   errors; a categorised message (HTTP status + path) is surfaced instead (OBS-002).
+- Code-layer egress allow-list (`ALLOWED_HOSTS` frozenset) with
+  `follow_redirects=False`, refusing any off-host redirect (SEC-021).
 
 ## [0.1.0] — 2026-07-21
 

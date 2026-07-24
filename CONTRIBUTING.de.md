@@ -12,8 +12,9 @@ die öffentliche I14Y-API; Beiträge sollen das so belassen.
   Dateisystem-Fähigkeit. Schreib-Endpunkte existieren in der Quell-API, werden
   hier aber bewusst nicht exponiert.
 - **Nur ein Egress-Host.** Anfragen gehen ausschliesslich an die fixe Basis-URL
-  `https://api.i14y.admin.ch/api` (siehe `src/i14y_mcp/client.py`); keine
-  nutzergesteuerten URLs, daher keine SSRF-Angriffsfläche.
+  `https://api.i14y.admin.ch/api`, erzwungen durch die `ALLOWED_HOSTS`-Allow-List
+  in `src/i14y_mcp/client.py` (siehe [`docs/network-egress.md`](docs/network-egress.md));
+  keine nutzergesteuerten URLs, daher keine SSRF-Angriffsfläche.
 - **Keine Secrets.** Die Lese-Endpunkte sind unauthentifiziert; keine
   Credential-Verarbeitung hinzufügen.
 

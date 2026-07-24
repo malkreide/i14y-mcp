@@ -33,6 +33,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - README sections on MCP primitives (tools-only rationale, ARCH-008) and the MCP
   protocol version / update policy (ARCH-012).
 - Container FD `ulimits` and a memory reservation in `compose.yaml` (SCALE-006).
+- All tool annotations now also set `idempotentHint: true` and
+  `openWorldHint: true` (every tool is a side-effect-free GET against an external
+  API), alongside the existing `readOnlyHint`/`destructiveHint` (ARCH-009).
+- Second audit run under `audits/` confirming production-readiness (36 pass, 5
+  residual non-blocking partials, 0 fail).
 - Tests for the shared client, error masking, CORS session-header exposure, empty
   search hints, boundary input rejection, egress control and tool-lock integrity.
 

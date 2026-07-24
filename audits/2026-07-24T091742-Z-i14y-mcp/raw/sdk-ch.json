@@ -1,0 +1,54 @@
+{
+  "SDK-001": {
+    "status": "pass",
+    "evidence": [
+      "server.py:55-69 defines @asynccontextmanager _lifespan(_server: FastMCP) that builds one client via `async with build_client() as http` and installs it with set_shared_client(http); cleanup runs in a finally block (set_shared_client(None)).",
+      "server.py:72 passes lifespan into the constructor: FastMCP(\"i14y-mcp\", lifespan=_lifespan).",
+      "client.py:93-122 keeps the single pooled client in _SHARED and client_session() yields it (follow_redirects=False, base_url pooling); tools call _get()/client_session() rather than constructing httpx.AsyncClient() per call.",
+      "Single-server setup, so AsyncExitStack (only required for multi-server ASGI mounts) is not applicable."
+    ],
+    "gaps": []
+  },
+  "SDK-002": {
+    "status": "pass",
+    "evidence": [
+      "pyproject.toml:27 pins pydantic>=2.7; models.py uses v2-only syntax (ConfigDict, model_config = ConfigDict(extra=\"forbid\")) throughout.",
+      "Every tool in server.py carries an explicit Pydantic return annotation (-> SearchResult, DatasetListResult, DatasetDetailResult, DataServiceListResult, ConceptListResult, StatusResult, etc.).",
+      "Consistent envelope: all result models inherit I14YResponse (models.py:22-29) which carries source, provenance and retrieved_at; list/search results add a `returned` count plus a named result list (hits/datasets/...).",
+      "Field(default_factory=list) used for list defaults (e.g. SearchHit.themes) and Literal types used for enumerable values (Provenance, match_type, Language, ResourceType)."
+    ],
+    "gaps": []
+  },
+  "SDK-003": {
+    "status": "pass",
+    "evidence": [
+      "Every @mcp.tool in server.py declares ctx: Context | None = None and forwards it (search_catalog, list_datasets, get_dataset, get_dataset_distributions, list_data_services, get_data_service, list_public_services, list_concepts, get_concept, search_codelist_entries, list_publishers, list_catalogs, api_status).",
+      "_get() (server.py:109-117) calls `await ctx.debug(f\"Querying I14Y {path}\")` when ctx is present, so the injected context is actually used, not a dead parameter.",
+      "api_status (server.py:596-599) iterates the endpoint checks and calls `await ctx.report_progress(index, len(endpoints), ...)` — progress reporting on the only multi-step tool.",
+      "No print()/stdlib logging inside tool bodies; the one print() (server.py:713) is a startup 0.0.0.0 warning to stderr, outside any tool."
+    ],
+    "gaps": []
+  },
+  "SDK-004": {
+    "status": "partial",
+    "evidence": [
+      "build_http_app() (server.py:674-693) builds the SSE/streamable-http ASGI app itself and adds CORSMiddleware because FastMCP.run() serves without CORS.",
+      "expose_headers=[\"Mcp-Session-Id\"] is set (server.py:691) — the critical header exposure that lets browser clients read the session id is present.",
+      "allow_headers=[\"*\", \"Mcp-Session-Id\"] includes Mcp-Session-Id for follow-up requests; allow_methods includes GET/POST/DELETE/OPTIONS.",
+      "No allow_credentials=True is set and the server is no-auth, so the wildcard-origin + credentials CORS-spec violation does not arise."
+    ],
+    "gaps": [
+      "allow_origins=[\"*\"] is hardcoded (server.py:687), not read from an env var and not restricted to an explicit list in production — Pass Criterion 'allow_origins is in Production keine Wildcard, sondern explizite Liste' is unmet. The primary Mcp-Session-Id exposure is fixed; this remaining origin-hardening item keeps it at partial."
+    ]
+  },
+  "CH-004": {
+    "status": "pass",
+    "evidence": [
+      "client.py:30-34 defines ATTRIBUTION naming the provider (I14Y / BFS), the source URL, and pointing to the per-distribution licence field.",
+      "models.py:22-29 I14YResponse sets source=ATTRIBUTION by default on every outbound payload, so no tool response can omit attribution (extra=\"forbid\", inherited by all *Result models).",
+      "Per-distribution licence is surfaced: Distribution.licence (models.py:124) and rights (models.py:125), populated in mappers.py:129,195 via vocab_label(raw.get(\"license\")); get_dataset and get_dataset_distributions both return these.",
+      "README.md documents the data source (Credits, line 259: I14Y / BFS) and the licence model (Known limitations 4, lines 221-223: licences vary per distribution, mostly 'Opendata BY ASK', attribution required, read the licence field before reuse); line 265-266 states catalogue data remains subject to per-publisher terms."
+    ],
+    "gaps": []
+  }
+}

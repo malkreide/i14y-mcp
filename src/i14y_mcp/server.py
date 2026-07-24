@@ -74,7 +74,14 @@ mcp = FastMCP("i14y-mcp", lifespan=_lifespan)
 Language = Literal["de", "fr", "it", "rm", "en"]
 ResourceType = Literal["Dataset", "DataService", "PublicService", "Concept", "MappingTable"]
 
-READ_ONLY: dict[str, Any] = {"readOnlyHint": True, "destructiveHint": False}
+# ARCH-009: every tool is a side-effect-free GET (idempotent) that reaches an
+# external HTTP API (open world). All four hints are set explicitly.
+READ_ONLY: dict[str, Any] = {
+    "readOnlyHint": True,
+    "destructiveHint": False,
+    "idempotentHint": True,
+    "openWorldHint": True,
+}
 
 # SEC-018: strict, whitelist-based argument constraints applied at the tool
 # boundary. Pydantic (via FastMCP) rejects out-of-range, oversized or malformed

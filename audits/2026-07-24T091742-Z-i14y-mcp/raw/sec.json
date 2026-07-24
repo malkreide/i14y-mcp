@@ -1,0 +1,171 @@
+{
+  "SEC-004": {
+    "status": "pass",
+    "evidence": [
+      "No tool accepts a user/LLM-supplied URL: every request targets the fixed BASE_URL='https://api.i14y.admin.ch/api' with a relative path only (client.py:21, server.py _get/api_status).",
+      "HTTPS is enforced structurally — the only reachable scheme/host is the hardcoded HTTPS BASE_URL, gated by ALLOWED_HOSTS frozenset + assert_host_allowed() run before the client is built (client.py:28,68-74,79).",
+      "Path IDs are whitelist-validated (PathId pattern ^[A-Za-z0-9._\\-]+$, server.py:83-92), removing path-injection/traversal into the interpolated URL.",
+      "follow_redirects=False and any 3xx is raised as UpstreamError, so a redirect can never carry the client to an internal/metadata address (client.py:86,152-156; test_redirect_is_refused).",
+      "TLS certificate verification is on by default and never disabled (SECURITY.md TLS row)."
+    ],
+    "gaps": [
+      "No resolved-IP blocklist / DNS-pinning / explicit 169.254.169.254 block is implemented, but the SSRF attack class it mitigates is structurally absent here (fixed trusted government host, no user-controlled destination, no redirects)."
+    ]
+  },
+  "SEC-005": {
+    "status": "pass",
+    "evidence": [
+      "The only reachable hostname is the hardcoded, trusted api.i14y.admin.ch pinned via the ALLOWED_HOSTS frozenset (client.py:28) — there is no attacker-influenceable hostname to rebind, so the TOCTOU window does not exist.",
+      "follow_redirects=False refuses any off-host 3xx (client.py:86,152-156), closing redirect-based rebinding.",
+      "httpx TLS certificate validation is on; a rebind of the fixed host to an internal IP would fail cert verification (SECURITY.md TLS row)."
+    ],
+    "gaps": [
+      "No explicit DNS-pinning / single-resolution custom transport, but it is unnecessary given the fixed trusted destination and no user-supplied URLs; residual risk relies on TLS cert validation."
+    ]
+  },
+  "SEC-006": {
+    "status": "pass",
+    "evidence": [
+      "Default transport is stdio: transport = os.getenv('I14Y_MCP_TRANSPORT', 'stdio') and the else branch calls mcp.run(transport='stdio') (server.py:706,721-722).",
+      "SSE/streamable-http only activate via the explicit I14Y_MCP_TRANSPORT env var (server.py:707-720); default start opens no TCP port.",
+      "README documents local stdio use via uvx + claude_desktop_config.json (README.md:147-171; claude_desktop_config.json uses command 'python -m i14y_mcp.server', no network).",
+      "README + SECURITY.md document the cloud/HTTP use case separately with binding/security notes (README.md:177-193, SECURITY.md Binding row)."
+    ],
+    "gaps": []
+  },
+  "SEC-007": {
+    "status": "pass",
+    "evidence": [
+      "Dockerfile runs as a dedicated non-root user (groupadd/useradd mcp, USER mcp) with nologin shell (Dockerfile runtime stage).",
+      "compose.yaml applies read_only: true, cap_drop: [ALL], security_opt: [no-new-privileges:true], pids_limit: 128 and mem/cpu limits (SCALE-006) — strong runtime confinement.",
+      "No filesystem tools exist, so no writable data-volume surface; the venv is copied with --chown=mcp:mcp."
+    ],
+    "gaps": [
+      "Dockerfile uses a system UID (useradd --system) rather than an explicit UID >= 10000 as the check literally requests.",
+      "seccompProfile RuntimeDefault is not pinned explicitly (relies on Docker's default seccomp); no Kubernetes SecurityContext manifest is shipped (deployment is stdio/local + demo container)."
+    ]
+  },
+  "SEC-008": {
+    "status": "pass",
+    "evidence": [
+      "Pure Python packaging with hatchling and a single console entry point; no pre/postinstall or custom build hooks that fetch external resources (pyproject.toml [project.scripts], [build-system]).",
+      "README shows the full, ungated install command (uvx i14y-mcp) and the complete claude_desktop_config.json snippet (README.md:147-171).",
+      "PyPI publishing uses OIDC Trusted Publisher via pypa/gh-action-pypi-publish with permissions id-token: write and no long-lived token (.github/workflows/publish.yml), yielding Sigstore attestations.",
+      "CONTRIBUTING.md documents the build/ground rules for independent verification."
+    ],
+    "gaps": []
+  },
+  "SEC-009": {
+    "status": "pass",
+    "evidence": [
+      "The server is no-auth and exposes only public data — there is no user identity, OAuth token, or server-side session store to bind (SECURITY.md 'Session crypto-binding — not applicable').",
+      "HTTP transport session IDs are handled by the MCP SDK (uuid4-based, cryptographically random); this server never mints or trusts a client-supplied user identity.",
+      "SECURITY.md 'Re-evaluation triggers' commits to implementing bound, TTL'd, server-side-invalidated sessions if an auth model is ever added, and to re-audit before merge."
+    ],
+    "gaps": [
+      "No user-bound sessions exist because there is no authentication; this is documented as N/A with an explicit re-audit trigger rather than implemented."
+    ]
+  },
+  "SEC-013": {
+    "status": "pass",
+    "evidence": [
+      "The server stores/forwards no API keys, tokens, or secrets — it uses the unauthenticated public I14Y read API (SECURITY.md Auth/secrets row; client.py has no credential handling).",
+      "Container image carries no secrets: Dockerfile runtime stage sets no secret ENV and the CMD comment notes 'no secrets required at runtime'.",
+      "Public-open-data classification and the absence of secrets are documented in SECURITY.md, satisfying the Stufe-1 'documented' allowance."
+    ],
+    "gaps": [
+      "There is no dedicated docs/secret-management.md file the check names literally; the equivalent statement lives in SECURITY.md. No secrets exist to manage, so region/rotation criteria are N/A."
+    ]
+  },
+  "SEC-014": {
+    "status": "pass",
+    "evidence": [
+      "Explicitly documented as an accepted portfolio-level / gateway-layer control in SECURITY.md 'Accepted risks' (SEC-014): a single no-auth server has no roles to gate server-side.",
+      "Tool definitions are version-controlled, authored in-repo, reviewed via PR, with no dynamic or remote tool registration (SECURITY.md; server.py uses static @mcp.tool decorators only).",
+      "SECURITY.md 'Re-evaluation triggers' instructs enabling the gateway's tool allow-listing when the server is aggregated behind a shared MCP gateway."
+    ],
+    "gaps": [
+      "No server-side group/role allow-list (there is no auth model or roles to enforce); this is a gateway responsibility accepted at portfolio level."
+    ]
+  },
+  "SEC-015": {
+    "status": "pass",
+    "evidence": [
+      "Documented as an accepted gateway-layer control in SECURITY.md 'Accepted risks' (SEC-015); the server integrates no external/untrusted MCP servers.",
+      "All 13 tool definitions are authored in-repo and reviewed; a hash snapshot of the tool set and each tool's argument surface is committed to tool-definitions.lock.json and enforced in CI as a rug-pull guard (SEC-022 test).",
+      "SECURITY.md 'Re-evaluation triggers' requires enabling the gateway's tool-poisoning detection once behind a shared gateway or if tools are registered from remote sources."
+    ],
+    "gaps": [
+      "No pre-flight prompt-injection/poisoning scanner is present (a gateway concern); relevant only in multi-server/untrusted setups, which do not apply to this single trusted server."
+    ]
+  },
+  "SEC-016": {
+    "status": "pass",
+    "evidence": [
+      "No 0.0.0.0 default in code: host = os.getenv('HOST', '127.0.0.1') for the HTTP transports (server.py:710).",
+      "Binding to 0.0.0.0 is an explicit opt-in and prints a stderr warning (server.py:712-717).",
+      "The container image sets HOST=0.0.0.0 explicitly and only there (Dockerfile ENV); compose.yaml sets it explicitly for the isolated container with a SEC-016 comment.",
+      "README documents the local(127.0.0.1)/container(0.0.0.0) differentiation (README.md:180-193)."
+    ],
+    "gaps": [
+      "The stderr warning fires on any 0.0.0.0 bind (not container-gated), so it also prints inside the container — informational only, not a security gap."
+    ]
+  },
+  "SEC-018": {
+    "status": "pass",
+    "evidence": [
+      "All tool arguments carry Annotated pydantic Field constraints applied at the boundary by FastMCP: numeric ge/le (Page 1..100000, PageSize100 1..100, PageSize200 1..200, Limit 1..SEARCH_HARD_CAP), string min/max (FilterStr, QueryStr) and whitelist pattern on IDs (PathId ^[A-Za-z0-9._\\-]+$) (server.py:83-98).",
+      "Patterns are whitelist-based, not blacklist (PathId), removing path-traversal surface.",
+      "Invalid input is rejected at the schema boundary and surfaced as a protocol ToolError, not a crash: test_invalid_id_is_rejected_at_the_boundary asserts get_dataset('../etc/passwd') raises ToolError; page_size/page clamp verified (test_page_size_is_clamped).",
+      "_clamp() remains as defence-in-depth for direct/programmatic calls (server.py:105-106,157,221)."
+    ],
+    "gaps": [
+      "Tools use function-parameter schemas without an explicit pydantic model_config strict=True / extra='forbid'; type coercion is left at FastMCP defaults and extra fields are not provably forbidden by additionalProperties:false."
+    ]
+  },
+  "SEC-019": {
+    "status": "pass",
+    "evidence": [
+      "The server holds at most one of the three trifecta legs: no private-data access (public catalogue metadata only), no external send/write capability. Confirmed by grep — no smtplib/send_mail/.post()/webhook/slack anywhere in src.",
+      "All 13 tools are annotated readOnlyHint:true, destructiveHint:false (server.py:77) and only issue GET requests to one trusted host.",
+      "Posture is documented: SECURITY.md states 'no write, send, or filesystem capabilities, and no personal data is processed'; README describes Phase 1 read-only-first architecture (README.md:100-134).",
+      "Egress destination is a frozenset, not runtime-mutable (client.py:28), so no send-side allow-list can be widened at runtime."
+    ],
+    "gaps": [
+      "The read-only/no-send assessment is documented in SECURITY.md/README prose rather than as an explicitly labelled 'Lethal Trifecta' scoring table."
+    ]
+  },
+  "SEC-020": {
+    "status": "pass",
+    "evidence": [
+      "grep for os.system(, shell=True, eval(, exec(, os.popen(, subprocess across src/ returns nothing — the server is a pure httpx API client.",
+      "No subprocess/shell usage anywhere in the Python code base (repo-wide grep, excluding .git).",
+      "No user input is ever passed to a shell; upstream calls go through httpx with URL-encoded params (client.py fetch_json)."
+    ],
+    "gaps": []
+  },
+  "SEC-021": {
+    "status": "pass",
+    "evidence": [
+      "Code-layer allow-list is a frozenset, not env-configurable: ALLOWED_HOSTS = frozenset({'api.i14y.admin.ch'}) (client.py:28).",
+      "assert_host_allowed() is called before the client is built (client.py:79) and follow_redirects=False refuses off-host 3xx (client.py:86,152-156); every request uses the fixed BASE_URL client so no request escapes the allow-list.",
+      "Tested: test_egress_allow_list_rejects_foreign_host, test_build_client_does_not_follow_redirects, test_redirect_is_refused (test_client.py).",
+      "docs/network-egress.md documents allow-listed hosts, both layers, the network-layer NetworkPolicy/firewall guidance including DNS on 53, and the reviewed update procedure; CHANGELOG references SEC-021."
+    ],
+    "gaps": [
+      "The network-layer egress control is provided as documented per-deployment guidance (K8s NetworkPolicy / cloud firewall in docs/network-egress.md) rather than a committed enforced manifest, since the repo ships no fixed cloud deployment (compose has no native egress filtering)."
+    ]
+  },
+  "SEC-022": {
+    "status": "partial",
+    "evidence": [
+      "Hash-pinning is implemented and enforced: tool_manifest() produces a deterministic sha256 over tool name + argument names + required set, committed to tool-definitions.lock.json (13 tools) and checked in CI by test_tool_manifest_matches_committed_lock (server.py:625-666; tests/test_tools.py).",
+      "CHANGELOG documents the lock and the rug-pull guard rationale (CHANGELOG SEC-022 entry); SECURITY.md describes it as the rug-pull control.",
+      "Tool definitions are static/in-repo with no dynamic or remote registration."
+    ],
+    "gaps": [
+      "Tool names have NO server-identity namespace prefix (e.g. get_dataset, search_catalog instead of i14y__get_dataset), so cross-server tool shadowing behind a shared gateway is not structurally prevented — the first pass-criterion is unmet.",
+      "The lock hash deliberately excludes tool descriptions (only name + argument surface), so a description-only rug-pull would not be detected by the hash and relies on PR review instead."
+    ]
+  }
+}

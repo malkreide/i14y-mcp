@@ -1,0 +1,595 @@
+{
+  "audit_meta": {
+    "server_name": "i14y-mcp",
+    "run_id": "2026-07-24T091742-Z-i14y-mcp",
+    "audit_date": "2026-07-24",
+    "skill_version": "1.0.0",
+    "catalog_hash": "091f446b27965044ce658a1d5f4b2cabe2b0ab5661dcc1a53b6be8f1f2e093c0",
+    "applies_when_dsl_version": "1.0",
+    "policy": "fail-or-partial"
+  },
+  "results": {
+    "ARCH-001": {
+      "status": "pass",
+      "category": "ARCH",
+      "severity": "medium",
+      "evidence": [
+        "All 13 tools use consistent snake_case function names (server.py:126 search_catalog, :200 list_datasets, :245 get_dataset, :268 get_dataset_distributions, :300 list_data_services, :343 get_data_service, :360 list_public_services, :403 list_concepts, :445 get_concept, :462 search_codelist_entries, :507 list_publishers, :551 list_catalogs, :583 api_status).",
+        "No spaces, dots, brackets or special characters in any tool name; no mixed conventions.",
+        "Descriptions are multi-sentence and carry use-case context, not just a function label (e.g. server.py:135-156 'The primary entry point: use this to find out *who* publishes data on a topic before looking for a specific dataset', server.py:307-318 'Use this to discover whether an interface already exists before building a scraper')."
+      ],
+      "gaps": []
+    },
+    "ARCH-002": {
+      "status": "pass",
+      "category": "ARCH",
+      "severity": "medium",
+      "evidence": [
+        "Tool descriptions are well over 100 chars in the median; none is a bare one-liner (server.py docstrings for all 13 tools).",
+        "Use-case framing present in prose for essentially every tool (server.py:137 'The primary entry point', :271 'This is the «where do I actually get the data» tool', :311 'The strategic payload of this server').",
+        "Caveats/important-notes are inline in docstrings where relevant (server.py:141-145 search index covers Datasets only; :275-278 licences differ per distribution; :410-414 concepts not reachable via search_catalog).",
+        "Differentiation between similar tools is explicit (search_catalog vs list_datasets at :209-212; get_dataset vs get_dataset_distributions at :249-254 and :275-278)."
+      ],
+      "gaps": [
+        "Use-case/important-notes information is written as prose, not as literal <use_case>/<important_notes> XML tags — accepted here under the 'oder Aequivalent' clause, but the structured-tag convention from the check example is not used."
+      ]
+    },
+    "ARCH-003": {
+      "status": "pass",
+      "category": "ARCH",
+      "severity": "medium",
+      "evidence": [
+        "search_catalog never returns a bare empty result: on total==0 it sets match_type='none' and an actionable hint pointing at the alternative registers (server.py:173-196).",
+        "SearchResult model carries match_type: Literal['exact','none'] and hint fields (models.py:101-108).",
+        "hint text is actionable — tells the agent the index covers Datasets only and to call list_datasets/list_concepts/list_data_services (server.py:177-182).",
+        "Covered by test test_search_empty_returns_actionable_hint (tests/test_tools.py:206-214). Data is non-sensitive public open data, so the sensitive-lookup exception does not apply."
+      ],
+      "gaps": [
+        "Only search_catalog carries match_type/hint; match_type has no 'fuzzy' tier, but the upstream search offers no fuzzy capability so a partial-match fallback is not available (documented limitation)."
+      ]
+    },
+    "ARCH-004": {
+      "status": "pass",
+      "category": "ARCH",
+      "severity": "high",
+      "evidence": [
+        "Tool handlers take only ctx: Context for client/session info; no handler touches request.headers, websocket, stdin or stdout (server.py tool signatures; ctx used only for ctx.debug/report_progress at :114-115, :598-599).",
+        "Dual transport selectable at runtime via I14Y_MCP_TRANSPORT env var — stdio, sse and streamable-http all supported (server.py:706-722).",
+        "Shared setup (single pooled httpx client) lives in a FastMCP lifespan common to all transports (server.py:55-72, _lifespan / build_client / set_shared_client).",
+        "Tool bodies are transport-agnostic and produce identical results regardless of transport; HTTP CORS wrapping is isolated in build_http_app (server.py:674-693)."
+      ],
+      "gaps": [
+        "Configuration is read via scattered os.getenv() calls in main() rather than a Pydantic BaseSettings object; acceptable under the 'o.ae.' clause since config is trivial (transport/host/port/log_level) and read function-locally, not via mutable global module vars — but no formal Settings object exists."
+      ]
+    },
+    "ARCH-005": {
+      "status": "pass",
+      "category": "ARCH",
+      "severity": "critical",
+      "evidence": [
+        "No API keys, passwords, tokens or connection strings in source — the I14Y read API is unauthenticated (server.py:613-616, client.py has no auth headers).",
+        "No os.environ.get(..., default=secret) patterns; the only env vars are non-secret config: I14Y_MCP_TRANSPORT, LOG_LEVEL, HOST, PORT (server.py:64,705-711).",
+        "No secrets emitted to logs; structured logging only records paths/status/timings (client.py:140-189).",
+        ".gitignore contains .env (.gitignore:12); no .env file is committed."
+      ],
+      "gaps": [
+        "No CI secret-scanning workflow (gitleaks/trufflehog) runs on PRs — an explicit pass-criterion, though the server has zero secret surface so the residual risk is only accidental future commits.",
+        "No .env.example present (there is nothing secret to configure, so effectively N/A)."
+      ]
+    },
+    "ARCH-006": {
+      "status": "pass",
+      "category": "ARCH",
+      "severity": "high",
+      "evidence": [
+        "13 tools exposed (server.py; README.md:107-123 tool table), within the 9-15 'review the clustering' band rather than the >15 API-mapping anti-pattern zone.",
+        "Not a 1:1 REST-endpoint mapping: get_dataset aggregates the full record incl. distributions in one call so the anchor query is answered in two calls (server.py:245-264).",
+        "Tools are use-case oriented (discovery, interfaces, semantics, actors, ops groups) rather than CRUD-per-endpoint.",
+        "Anchor demo query documented as answerable via search_catalog -> get_dataset, i.e. <=2 tool calls (README.md:33-53, server.py:249-254)."
+      ],
+      "gaps": [
+        "13 tools is one above the 'idealerweise <=12' guideline; justified by the distinct entity registers (datasets, data services, public services, concepts, publishers, catalogs) each needing list/detail access."
+      ]
+    },
+    "ARCH-007": {
+      "status": "pass",
+      "category": "ARCH",
+      "severity": "medium",
+      "evidence": [
+        "get_dataset is a genuinely aggregated tool: one call returns contact point, temporal/spatial coverage, documentation links and every distribution with its licence (server.py:245-264; models.py DatasetDetail:148-155 includes distributions).",
+        "Tools return thought-complete results, not opaque IDs requiring follow-up calls — list results carry titles/publishers/themes/landing pages (models.py summaries).",
+        "The aggregated character is called out explicitly in the description and CHANGELOG (server.py:249-254 'a single call returns ... so search_catalog -> get_dataset answers ... in two calls'; CHANGELOG Unreleased ARCH-007 entry)."
+      ],
+      "gaps": [
+        "No asyncio.gather parallelism, but it is unnecessary here: the upstream /datasets/{id} endpoint already returns the full aggregated record in a single HTTP call, so there is nothing to fan out.",
+        "get_dataset_distributions overlaps with get_dataset; documented as such (server.py:275-278), a minor convenience-tool redundancy rather than a chaining requirement."
+      ]
+    },
+    "ARCH-008": {
+      "status": "pass",
+      "category": "ARCH",
+      "severity": "medium",
+      "evidence": [
+        "Server exposes Tools only (no @mcp.resource or @mcp.prompt anywhere in src/).",
+        "README documents the tools-only choice with an explicit, reasoned justification under a 'MCP primitives' heading (README.md:128-135): free-text + opaque-UUID access means no small stable set of addressable URIs, and no opinionated prompt templates ship.",
+        "README.de.md carries the parallel 'MCP-Primitive' section (README.de.md:128).",
+        "Rationale notes tools are read-only/idempotent and flags a future Resource candidate if a stable entry point emerges — meeting the 'documented, justified tools-only' pass path."
+      ],
+      "gaps": []
+    },
+    "ARCH-009": {
+      "status": "pass",
+      "category": "ARCH",
+      "severity": "high",
+      "evidence": [
+        "server.py:77-83 — READ_ONLY now sets all four hints: readOnlyHint, destructiveHint:false, idempotentHint:true, openWorldHint:true",
+        "Verified live: get_dataset annotations include idempotentHint=True openWorldHint=True",
+        "All 13 tools are GET-only reads against an external API"
+      ],
+      "gaps": []
+    },
+    "ARCH-011": {
+      "status": "partial",
+      "category": "ARCH",
+      "severity": "medium",
+      "evidence": [
+        "All mandatory top-level files present: README.md, README.de.md, CHANGELOG.md, LICENSE, pyproject.toml.",
+        "Mandatory directories present: src/, tests/, .github/workflows/.",
+        "Correct src-layout: code under src/i14y_mcp/, and pyproject declares packages = ['src/i14y_mcp'] (pyproject.toml:49-50).",
+        "CI workflows present beyond the minimum: ci.yml (test+lint, 3.10-3.13 matrix), publish.yml (PyPI), live.yml (nightly live).",
+        "README.de.md holds the same top-level section inventory as README.md (verified: matching ## headings for Why/Architecture/Tools/Installation/Join keys/Known limitations/Testing/Contributing/Credits)."
+      ],
+      "gaps": [
+        "With 13 tools (>5) the check expects a tools/ package split with server.py < ~200 lines, or a documented justification; instead all 13 tool bodies live inline in a single 726-line server.py (server.py:1-726) and no deviation rationale is given in the README."
+      ]
+    },
+    "ARCH-012": {
+      "status": "partial",
+      "category": "ARCH",
+      "severity": "medium",
+      "evidence": [
+        "CHANGELOG.md present and in Keep-a-Changelog format with SemVer statement and Unreleased/0.1.0 sections (CHANGELOG.md:1-105).",
+        "README has an 'MCP protocol version' section describing the SDK floor pin and update policy (README.md:137-143).",
+        "SDK floor pinned in pyproject (mcp>=1.28.1, pyproject.toml:25) and Dependabot configured for monthly pip + actions update PRs (.github/dependabot.yml).",
+        "Update policy documented: monthly Dependabot PRs and CHANGELOG call-out on any negotiated-spec change (README.md:139-143)."
+      ],
+      "gaps": [
+        "protocolVersion is NOT explicitly pinned in server code — mcp = FastMCP('i14y-mcp', lifespan=_lifespan) (server.py:72) sets no protocol_version; the README makes a deliberate choice to rely on SDK-negotiated version + floor pin instead, which does not satisfy the check's explicit-pin criterion.",
+        "The README 'MCP protocol version' section names no concrete supported spec date (e.g. 2025-06-18); CHANGELOG entries reference SDK/tooling but no explicit spec-version bump line yet (acceptable while still on floor-pin, but the explicit-version criterion is unmet)."
+      ]
+    },
+    "CH-004": {
+      "status": "pass",
+      "category": "CH",
+      "severity": "medium",
+      "evidence": [
+        "client.py:30-34 defines ATTRIBUTION naming the provider (I14Y / BFS), the source URL, and pointing to the per-distribution licence field.",
+        "models.py:22-29 I14YResponse sets source=ATTRIBUTION by default on every outbound payload, so no tool response can omit attribution (extra=\"forbid\", inherited by all *Result models).",
+        "Per-distribution licence is surfaced: Distribution.licence (models.py:124) and rights (models.py:125), populated in mappers.py:129,195 via vocab_label(raw.get(\"license\")); get_dataset and get_dataset_distributions both return these.",
+        "README.md documents the data source (Credits, line 259: I14Y / BFS) and the licence model (Known limitations 4, lines 221-223: licences vary per distribution, mostly 'Opendata BY ASK', attribution required, read the licence field before reuse); line 265-266 states catalogue data remains subject to per-publisher terms."
+      ],
+      "gaps": []
+    },
+    "OBS-001": {
+      "status": "pass",
+      "category": "OBS",
+      "severity": "high",
+      "evidence": [
+        "Execution errors: client.py fetch_json raises categorised UpstreamError/NotFoundError (client.py:146-189) which FastMCP converts to an isError tool-result, not a JSON-RPC protocol error; messages are actionable and point at api_status (client.py:186-188)",
+        "api_status tool (server.py:582-617) never raises — it catches UpstreamError/NotFoundError and returns an evaluable StatusResult so the agent can tell 'no match' from 'source down'",
+        "Protocol errors handled by SDK: unknown tool / bad schema surface as ToolError — tests/test_tools.py:226-231 (unknown tool) and :217-223 (malformed id rejected at schema boundary)",
+        "Execution-error test tests/test_tools.py:234-239 (upstream 500 surfaces as UpstreamError, not swallowed); graceful-failure test :142-148"
+      ],
+      "gaps": [
+        "No explicit -326xx/-320xx error-code constants in src/ — protocol codes are delegated to the FastMCP/JSON-RPC framework rather than defined in-repo (acceptable; SDK provides -32601/-32602)"
+      ]
+    },
+    "OBS-002": {
+      "status": "partial",
+      "category": "OBS",
+      "severity": "high",
+      "evidence": [
+        "No raw upstream body, stacktrace, SQL or path leaks: fetch_json categorises 4xx/5xx into clean UpstreamError text (client.py:163-172, OBS-002 comment at :168-169); no traceback.format_exc / sys.exc_info anywhere in src/",
+        "Execution errors carry user-friendly, internals-free messages (client.py:148-151, 184-189)",
+        "Logs are stderr-only structured JSON with no tokens/PII (no-auth server; logging_config.py)"
+      ],
+      "gaps": [
+        "FastMCP is initialised without mask_error_details=True (server.py:72) — the headline OBS-002 pass criterion is unmet; an unexpected/unhandled exception (a code bug outside the categorised UpstreamError path) would have its str() surfaced to the LLM by the FastMCP default"
+      ]
+    },
+    "OBS-003": {
+      "status": "pass",
+      "category": "OBS",
+      "severity": "medium",
+      "evidence": [
+        "structlog>=24.1 declared in pyproject.toml:28 (dependencies)",
+        "logging_config.py:27-40 configures structlog with add_log_level + ISO TimeStamper + JSONRenderer (JSON output, RFC 5424-style level field)",
+        "Severity filtering via make_filtering_bound_logger; >=4 levels actively used in client.py: logger.debug (:140), .info (:147,159), .warning (:169,173,176), .error (:183)",
+        "Per HTTP request the logger binds context: path, status, ms (client.py:159) — plus server.start/stop lifecycle events (server.py:64,69)"
+      ],
+      "gaps": [
+        "Bound context is per upstream HTTP request (endpoint path) rather than per tool-call — no tool-name / session_id / correlation_id binding; acceptable but the richest OBS-003 sub-criterion is only partially met"
+      ]
+    },
+    "OBS-004": {
+      "status": "pass",
+      "category": "OBS",
+      "severity": "critical",
+      "evidence": [
+        "logging_config.py:35 structlog logger_factory=structlog.PrintLoggerFactory(file=sys.stderr) — all logs to stderr, never stdout",
+        "logging_config.py:44 configure_logging() called eagerly at import so any stray log before main() is already stderr-bound",
+        "No print() in any tool body; the only print() in src/ (server.py:713-717, the 0.0.0.0 bind warning) explicitly passes file=sys.stderr, so stdout stays clean for the JSON-RPC stream"
+      ],
+      "gaps": [
+        "No CI grep-guard against future print()-to-stdout regressions (remediation suggests one); current code is compliant"
+      ]
+    },
+    "OBS-006": {
+      "status": "todo",
+      "category": "OBS",
+      "severity": "medium",
+      "evidence": [
+        "Server is container/cloud-deployable (Dockerfile + compose.yaml, HTTP transports) so this check applies",
+        "grep for opentelemetry/otel/tracer across src/ and pyproject.toml returns nothing"
+      ],
+      "gaps": [
+        "No OpenTelemetry SDK dependency, no TracerProvider/OTLP exporter, no per-tool-call spans, no httpx auto-instrumentation, no OTEL_* env config — none of the OBS-006 criteria implemented (unchanged, as noted)"
+      ]
+    },
+    "OPS-001": {
+      "status": "pass",
+      "category": "OPS",
+      "severity": "high",
+      "evidence": [
+        "Clean unit/live separation: tests/test_client.py + tests/test_tools.py hold respx-mocked unit tests; live tests are marked @pytest.mark.live (tests/test_tools.py:165,172,179).",
+        "respx used for HTTP mocking throughout (tests/test_client.py:24-133, tests/test_tools.py:92-241).",
+        "live marker registered in pyproject (markers = ['live: hits the real I14Y API (excluded from CI)'], pyproject.toml:54).",
+        "CI runs pytest -m 'not live' and lints (.github/workflows/ci.yml); a separate scheduled/on-demand live workflow runs pytest -m live (.github/workflows/live.yml). No production credentials are involved (unauthenticated API)."
+      ],
+      "gaps": [
+        "Coverage depth below the letter of the criterion: ~26 unit tests across 13 tools (roughly 2/tool, not the '>=5 per tool' target) and only 3 live tests (test_live_search/data_services/status), not one live test per tool. The strategy and infrastructure are fully in place; per-tool test counts are not."
+      ]
+    },
+    "OPS-002": {
+      "status": "pass",
+      "category": "OPS",
+      "severity": "medium",
+      "evidence": [
+        "All mandatory README sections present: Anchor Demo Query (README.md:33), Installation (:147), Tools overview (:107), Configuration (env vars at :174-183), Security (Contributing & security :248 + SECURITY.md + no-auth/no-personal-data notes :86-103), ASCII architecture diagram (:56-80), Known limitations (:209-229), License/Credits (:257-263 + LICENSE).",
+        "Anchor demo query is concrete and natural-language with a decomposition into tool calls (README.md:33-53).",
+        "ASCII box-drawing architecture diagram present with data-flow labels (README.md:56-80).",
+        "Known limitations section is explicit with 6 items (>=3 required) (README.md:213-229). CHANGELOG in Keep-a-Changelog format; CONTRIBUTING.md and CONTRIBUTING.de.md both present (bilingual). README.de.md keeps the parallel section inventory."
+      ],
+      "gaps": []
+    },
+    "OPS-003": {
+      "status": "pass",
+      "category": "OPS",
+      "severity": "high",
+      "evidence": [
+        "Current phase explicitly declared in README: 'Phase 1 (read-only)' with rationale (README.md:98-103).",
+        "Phase matches tool annotations: all 13 tools readOnlyHint:true, destructiveHint:false, GET-only, no destructive tools (docs/roadmap.md:9-14, server.py:77).",
+        "docs/roadmap.md present with a phase table (1 read-only / 2 write / 3 multi-agent) and phase-specific scope/status (docs/roadmap.md:16-20).",
+        "Phase-transition prerequisites documented: Phase 2 needs auth model, HITL, strict input validation, fresh audit with no open critical/high; Phase 3 adds tool namespacing/hash-pinning and gateway allow-listing/poisoning detection (docs/roadmap.md:22-36)."
+      ],
+      "gaps": [
+        "No CHANGELOG phase-transition entries yet, but the server is still in Phase 1 so none are due (criterion is N/A at this stage)."
+      ]
+    },
+    "SCALE-001": {
+      "status": "pass",
+      "category": "SCALE",
+      "severity": "high",
+      "evidence": [
+        "src/i14y_mcp/server.py:704-722 main() reads I14Y_MCP_TRANSPORT and branches: stdio via mcp.run(transport='stdio') else sse/streamable-http/http via _run_http()",
+        "src/i14y_mcp/server.py:707-720 sets host/port from HOST/PORT env for the HTTP transports (loopback default, 0.0.0.0 opt-in)",
+        "Dockerfile:24 sets I14Y_MCP_TRANSPORT=sse (+HOST=0.0.0.0, PORT=8000) so the cloud/container default is HTTP, not stdio; compose.yaml:7 mirrors this",
+        "README.md:174-183 documents remote deployment (Render/Railway) with I14Y_MCP_TRANSPORT=sse|streamable-http; no WebSocket transport anywhere in src/"
+      ],
+      "gaps": []
+    },
+    "SCALE-002": {
+      "status": "todo",
+      "category": "SCALE",
+      "severity": "high",
+      "evidence": [
+        "Transport is dual (stdio + sse/streamable-http) so this check applies",
+        "src/i14y_mcp/server.py:684-692 CORS exposes Mcp-Session-Id so browser clients can hold a session (SDK-004 prerequisite), but that is server-side only"
+      ],
+      "gaps": [
+        "No sticky-session / affinity config and no shared-state (Redis/Durable Objects) session manager exists — grep for redis/sessionAffinity/stick-table across repo returns nothing",
+        "Deployed single-instance (no LB), as expected/acknowledged; no session TTL and no failover test",
+        "None of the SCALE-002 pass criteria (sticky-on-Mcp-Session-Id OR shared-state store, explicit TTL, failover behaviour) are implemented"
+      ]
+    },
+    "SCALE-003": {
+      "status": "todo",
+      "category": "SCALE",
+      "severity": "high",
+      "evidence": [
+        "No haproxy.cfg / nginx.conf / ingress*.yaml / k8s manifests in repo (find across repo returns only .github workflows, compose.yaml, pyproject.toml)",
+        "server.py:691 lists Mcp-Session-Id in CORS expose_headers, but that is application-layer, not an edge-LB routing rule"
+      ],
+      "gaps": [
+        "No edge load-balancer reads Mcp-Session-Id for routing; no stick-table / consistent-hash config",
+        "Single-instance deployment (no cloud LB layer) — SCALE-003 unmet by design; stick-table capacity/TTL/failover criteria all absent"
+      ]
+    },
+    "SCALE-004": {
+      "status": "pass",
+      "category": "SCALE",
+      "severity": "medium",
+      "evidence": [
+        "Dockerfile:3 and :19 — two FROM statements with named stages (AS builder, AS runtime), multi-stage build",
+        "Dockerfile:3,19 base is python:3.14-slim (slim runtime); venv from builder copied at :32, no build toolchain in final image",
+        "Dockerfile:28-34 creates system user 'mcp' and runs USER mcp (non-root)",
+        "Dockerfile:40-41 HEALTHCHECK present (stdlib TCP connect to PORT, no curl needed in slim image)"
+      ],
+      "gaps": [
+        "Final image size not measured in this audit, but slim base + venv-only copy makes <200 MB expected"
+      ]
+    },
+    "SCALE-006": {
+      "status": "pass",
+      "category": "SCALE",
+      "severity": "medium",
+      "evidence": [
+        "compose.yaml:16 mem_limit: 256m (explicit memory cap)",
+        "compose.yaml:17 mem_reservation: 128m — request < limit gives burst head-room",
+        "compose.yaml:18 cpus: 0.5 (CPU cap); :19 pids_limit: 128",
+        "compose.yaml:20-23 ulimits.nofile soft 4096 / hard 8192 (>= 4096 for outbound HTTP)",
+        "compose.yaml:24 restart: unless-stopped (clean OOM restart policy)"
+      ],
+      "gaps": []
+    },
+    "SDK-001": {
+      "status": "pass",
+      "category": "SDK",
+      "severity": "high",
+      "evidence": [
+        "server.py:55-69 defines @asynccontextmanager _lifespan(_server: FastMCP) that builds one client via `async with build_client() as http` and installs it with set_shared_client(http); cleanup runs in a finally block (set_shared_client(None)).",
+        "server.py:72 passes lifespan into the constructor: FastMCP(\"i14y-mcp\", lifespan=_lifespan).",
+        "client.py:93-122 keeps the single pooled client in _SHARED and client_session() yields it (follow_redirects=False, base_url pooling); tools call _get()/client_session() rather than constructing httpx.AsyncClient() per call.",
+        "Single-server setup, so AsyncExitStack (only required for multi-server ASGI mounts) is not applicable."
+      ],
+      "gaps": []
+    },
+    "SDK-002": {
+      "status": "pass",
+      "category": "SDK",
+      "severity": "medium",
+      "evidence": [
+        "pyproject.toml:27 pins pydantic>=2.7; models.py uses v2-only syntax (ConfigDict, model_config = ConfigDict(extra=\"forbid\")) throughout.",
+        "Every tool in server.py carries an explicit Pydantic return annotation (-> SearchResult, DatasetListResult, DatasetDetailResult, DataServiceListResult, ConceptListResult, StatusResult, etc.).",
+        "Consistent envelope: all result models inherit I14YResponse (models.py:22-29) which carries source, provenance and retrieved_at; list/search results add a `returned` count plus a named result list (hits/datasets/...).",
+        "Field(default_factory=list) used for list defaults (e.g. SearchHit.themes) and Literal types used for enumerable values (Provenance, match_type, Language, ResourceType)."
+      ],
+      "gaps": []
+    },
+    "SDK-003": {
+      "status": "pass",
+      "category": "SDK",
+      "severity": "medium",
+      "evidence": [
+        "Every @mcp.tool in server.py declares ctx: Context | None = None and forwards it (search_catalog, list_datasets, get_dataset, get_dataset_distributions, list_data_services, get_data_service, list_public_services, list_concepts, get_concept, search_codelist_entries, list_publishers, list_catalogs, api_status).",
+        "_get() (server.py:109-117) calls `await ctx.debug(f\"Querying I14Y {path}\")` when ctx is present, so the injected context is actually used, not a dead parameter.",
+        "api_status (server.py:596-599) iterates the endpoint checks and calls `await ctx.report_progress(index, len(endpoints), ...)` — progress reporting on the only multi-step tool.",
+        "No print()/stdlib logging inside tool bodies; the one print() (server.py:713) is a startup 0.0.0.0 warning to stderr, outside any tool."
+      ],
+      "gaps": []
+    },
+    "SDK-004": {
+      "status": "partial",
+      "category": "SDK",
+      "severity": "high",
+      "evidence": [
+        "build_http_app() (server.py:674-693) builds the SSE/streamable-http ASGI app itself and adds CORSMiddleware because FastMCP.run() serves without CORS.",
+        "expose_headers=[\"Mcp-Session-Id\"] is set (server.py:691) — the critical header exposure that lets browser clients read the session id is present.",
+        "allow_headers=[\"*\", \"Mcp-Session-Id\"] includes Mcp-Session-Id for follow-up requests; allow_methods includes GET/POST/DELETE/OPTIONS.",
+        "No allow_credentials=True is set and the server is no-auth, so the wildcard-origin + credentials CORS-spec violation does not arise."
+      ],
+      "gaps": [
+        "allow_origins=[\"*\"] is hardcoded (server.py:687), not read from an env var and not restricted to an explicit list in production — Pass Criterion 'allow_origins is in Production keine Wildcard, sondern explizite Liste' is unmet. The primary Mcp-Session-Id exposure is fixed; this remaining origin-hardening item keeps it at partial."
+      ]
+    },
+    "SEC-004": {
+      "status": "pass",
+      "category": "SEC",
+      "severity": "critical",
+      "evidence": [
+        "No tool accepts a user/LLM-supplied URL: every request targets the fixed BASE_URL='https://api.i14y.admin.ch/api' with a relative path only (client.py:21, server.py _get/api_status).",
+        "HTTPS is enforced structurally — the only reachable scheme/host is the hardcoded HTTPS BASE_URL, gated by ALLOWED_HOSTS frozenset + assert_host_allowed() run before the client is built (client.py:28,68-74,79).",
+        "Path IDs are whitelist-validated (PathId pattern ^[A-Za-z0-9._\\-]+$, server.py:83-92), removing path-injection/traversal into the interpolated URL.",
+        "follow_redirects=False and any 3xx is raised as UpstreamError, so a redirect can never carry the client to an internal/metadata address (client.py:86,152-156; test_redirect_is_refused).",
+        "TLS certificate verification is on by default and never disabled (SECURITY.md TLS row)."
+      ],
+      "gaps": [
+        "No resolved-IP blocklist / DNS-pinning / explicit 169.254.169.254 block is implemented, but the SSRF attack class it mitigates is structurally absent here (fixed trusted government host, no user-controlled destination, no redirects)."
+      ]
+    },
+    "SEC-005": {
+      "status": "pass",
+      "category": "SEC",
+      "severity": "high",
+      "evidence": [
+        "The only reachable hostname is the hardcoded, trusted api.i14y.admin.ch pinned via the ALLOWED_HOSTS frozenset (client.py:28) — there is no attacker-influenceable hostname to rebind, so the TOCTOU window does not exist.",
+        "follow_redirects=False refuses any off-host 3xx (client.py:86,152-156), closing redirect-based rebinding.",
+        "httpx TLS certificate validation is on; a rebind of the fixed host to an internal IP would fail cert verification (SECURITY.md TLS row)."
+      ],
+      "gaps": [
+        "No explicit DNS-pinning / single-resolution custom transport, but it is unnecessary given the fixed trusted destination and no user-supplied URLs; residual risk relies on TLS cert validation."
+      ]
+    },
+    "SEC-006": {
+      "status": "pass",
+      "category": "SEC",
+      "severity": "high",
+      "evidence": [
+        "Default transport is stdio: transport = os.getenv('I14Y_MCP_TRANSPORT', 'stdio') and the else branch calls mcp.run(transport='stdio') (server.py:706,721-722).",
+        "SSE/streamable-http only activate via the explicit I14Y_MCP_TRANSPORT env var (server.py:707-720); default start opens no TCP port.",
+        "README documents local stdio use via uvx + claude_desktop_config.json (README.md:147-171; claude_desktop_config.json uses command 'python -m i14y_mcp.server', no network).",
+        "README + SECURITY.md document the cloud/HTTP use case separately with binding/security notes (README.md:177-193, SECURITY.md Binding row)."
+      ],
+      "gaps": []
+    },
+    "SEC-007": {
+      "status": "pass",
+      "category": "SEC",
+      "severity": "high",
+      "evidence": [
+        "Dockerfile runs as a dedicated non-root user (groupadd/useradd mcp, USER mcp) with nologin shell (Dockerfile runtime stage).",
+        "compose.yaml applies read_only: true, cap_drop: [ALL], security_opt: [no-new-privileges:true], pids_limit: 128 and mem/cpu limits (SCALE-006) — strong runtime confinement.",
+        "No filesystem tools exist, so no writable data-volume surface; the venv is copied with --chown=mcp:mcp."
+      ],
+      "gaps": [
+        "Dockerfile uses a system UID (useradd --system) rather than an explicit UID >= 10000 as the check literally requests.",
+        "seccompProfile RuntimeDefault is not pinned explicitly (relies on Docker's default seccomp); no Kubernetes SecurityContext manifest is shipped (deployment is stdio/local + demo container)."
+      ]
+    },
+    "SEC-008": {
+      "status": "pass",
+      "category": "SEC",
+      "severity": "medium",
+      "evidence": [
+        "Pure Python packaging with hatchling and a single console entry point; no pre/postinstall or custom build hooks that fetch external resources (pyproject.toml [project.scripts], [build-system]).",
+        "README shows the full, ungated install command (uvx i14y-mcp) and the complete claude_desktop_config.json snippet (README.md:147-171).",
+        "PyPI publishing uses OIDC Trusted Publisher via pypa/gh-action-pypi-publish with permissions id-token: write and no long-lived token (.github/workflows/publish.yml), yielding Sigstore attestations.",
+        "CONTRIBUTING.md documents the build/ground rules for independent verification."
+      ],
+      "gaps": []
+    },
+    "SEC-009": {
+      "status": "pass",
+      "category": "SEC",
+      "severity": "critical",
+      "evidence": [
+        "The server is no-auth and exposes only public data — there is no user identity, OAuth token, or server-side session store to bind (SECURITY.md 'Session crypto-binding — not applicable').",
+        "HTTP transport session IDs are handled by the MCP SDK (uuid4-based, cryptographically random); this server never mints or trusts a client-supplied user identity.",
+        "SECURITY.md 'Re-evaluation triggers' commits to implementing bound, TTL'd, server-side-invalidated sessions if an auth model is ever added, and to re-audit before merge."
+      ],
+      "gaps": [
+        "No user-bound sessions exist because there is no authentication; this is documented as N/A with an explicit re-audit trigger rather than implemented."
+      ]
+    },
+    "SEC-013": {
+      "status": "pass",
+      "category": "SEC",
+      "severity": "high",
+      "evidence": [
+        "The server stores/forwards no API keys, tokens, or secrets — it uses the unauthenticated public I14Y read API (SECURITY.md Auth/secrets row; client.py has no credential handling).",
+        "Container image carries no secrets: Dockerfile runtime stage sets no secret ENV and the CMD comment notes 'no secrets required at runtime'.",
+        "Public-open-data classification and the absence of secrets are documented in SECURITY.md, satisfying the Stufe-1 'documented' allowance."
+      ],
+      "gaps": [
+        "There is no dedicated docs/secret-management.md file the check names literally; the equivalent statement lives in SECURITY.md. No secrets exist to manage, so region/rotation criteria are N/A."
+      ]
+    },
+    "SEC-014": {
+      "status": "pass",
+      "category": "SEC",
+      "severity": "medium",
+      "evidence": [
+        "Explicitly documented as an accepted portfolio-level / gateway-layer control in SECURITY.md 'Accepted risks' (SEC-014): a single no-auth server has no roles to gate server-side.",
+        "Tool definitions are version-controlled, authored in-repo, reviewed via PR, with no dynamic or remote tool registration (SECURITY.md; server.py uses static @mcp.tool decorators only).",
+        "SECURITY.md 'Re-evaluation triggers' instructs enabling the gateway's tool allow-listing when the server is aggregated behind a shared MCP gateway."
+      ],
+      "gaps": [
+        "No server-side group/role allow-list (there is no auth model or roles to enforce); this is a gateway responsibility accepted at portfolio level."
+      ]
+    },
+    "SEC-015": {
+      "status": "pass",
+      "category": "SEC",
+      "severity": "medium",
+      "evidence": [
+        "Documented as an accepted gateway-layer control in SECURITY.md 'Accepted risks' (SEC-015); the server integrates no external/untrusted MCP servers.",
+        "All 13 tool definitions are authored in-repo and reviewed; a hash snapshot of the tool set and each tool's argument surface is committed to tool-definitions.lock.json and enforced in CI as a rug-pull guard (SEC-022 test).",
+        "SECURITY.md 'Re-evaluation triggers' requires enabling the gateway's tool-poisoning detection once behind a shared gateway or if tools are registered from remote sources."
+      ],
+      "gaps": [
+        "No pre-flight prompt-injection/poisoning scanner is present (a gateway concern); relevant only in multi-server/untrusted setups, which do not apply to this single trusted server."
+      ]
+    },
+    "SEC-016": {
+      "status": "pass",
+      "category": "SEC",
+      "severity": "critical",
+      "evidence": [
+        "No 0.0.0.0 default in code: host = os.getenv('HOST', '127.0.0.1') for the HTTP transports (server.py:710).",
+        "Binding to 0.0.0.0 is an explicit opt-in and prints a stderr warning (server.py:712-717).",
+        "The container image sets HOST=0.0.0.0 explicitly and only there (Dockerfile ENV); compose.yaml sets it explicitly for the isolated container with a SEC-016 comment.",
+        "README documents the local(127.0.0.1)/container(0.0.0.0) differentiation (README.md:180-193)."
+      ],
+      "gaps": [
+        "The stderr warning fires on any 0.0.0.0 bind (not container-gated), so it also prints inside the container — informational only, not a security gap."
+      ]
+    },
+    "SEC-018": {
+      "status": "pass",
+      "category": "SEC",
+      "severity": "high",
+      "evidence": [
+        "All tool arguments carry Annotated pydantic Field constraints applied at the boundary by FastMCP: numeric ge/le (Page 1..100000, PageSize100 1..100, PageSize200 1..200, Limit 1..SEARCH_HARD_CAP), string min/max (FilterStr, QueryStr) and whitelist pattern on IDs (PathId ^[A-Za-z0-9._\\-]+$) (server.py:83-98).",
+        "Patterns are whitelist-based, not blacklist (PathId), removing path-traversal surface.",
+        "Invalid input is rejected at the schema boundary and surfaced as a protocol ToolError, not a crash: test_invalid_id_is_rejected_at_the_boundary asserts get_dataset('../etc/passwd') raises ToolError; page_size/page clamp verified (test_page_size_is_clamped).",
+        "_clamp() remains as defence-in-depth for direct/programmatic calls (server.py:105-106,157,221)."
+      ],
+      "gaps": [
+        "Tools use function-parameter schemas without an explicit pydantic model_config strict=True / extra='forbid'; type coercion is left at FastMCP defaults and extra fields are not provably forbidden by additionalProperties:false."
+      ]
+    },
+    "SEC-019": {
+      "status": "pass",
+      "category": "SEC",
+      "severity": "critical",
+      "evidence": [
+        "The server holds at most one of the three trifecta legs: no private-data access (public catalogue metadata only), no external send/write capability. Confirmed by grep — no smtplib/send_mail/.post()/webhook/slack anywhere in src.",
+        "All 13 tools are annotated readOnlyHint:true, destructiveHint:false (server.py:77) and only issue GET requests to one trusted host.",
+        "Posture is documented: SECURITY.md states 'no write, send, or filesystem capabilities, and no personal data is processed'; README describes Phase 1 read-only-first architecture (README.md:100-134).",
+        "Egress destination is a frozenset, not runtime-mutable (client.py:28), so no send-side allow-list can be widened at runtime."
+      ],
+      "gaps": [
+        "The read-only/no-send assessment is documented in SECURITY.md/README prose rather than as an explicitly labelled 'Lethal Trifecta' scoring table."
+      ]
+    },
+    "SEC-020": {
+      "status": "pass",
+      "category": "SEC",
+      "severity": "critical",
+      "evidence": [
+        "grep for os.system(, shell=True, eval(, exec(, os.popen(, subprocess across src/ returns nothing — the server is a pure httpx API client.",
+        "No subprocess/shell usage anywhere in the Python code base (repo-wide grep, excluding .git).",
+        "No user input is ever passed to a shell; upstream calls go through httpx with URL-encoded params (client.py fetch_json)."
+      ],
+      "gaps": []
+    },
+    "SEC-021": {
+      "status": "pass",
+      "category": "SEC",
+      "severity": "high",
+      "evidence": [
+        "Code-layer allow-list is a frozenset, not env-configurable: ALLOWED_HOSTS = frozenset({'api.i14y.admin.ch'}) (client.py:28).",
+        "assert_host_allowed() is called before the client is built (client.py:79) and follow_redirects=False refuses off-host 3xx (client.py:86,152-156); every request uses the fixed BASE_URL client so no request escapes the allow-list.",
+        "Tested: test_egress_allow_list_rejects_foreign_host, test_build_client_does_not_follow_redirects, test_redirect_is_refused (test_client.py).",
+        "docs/network-egress.md documents allow-listed hosts, both layers, the network-layer NetworkPolicy/firewall guidance including DNS on 53, and the reviewed update procedure; CHANGELOG references SEC-021."
+      ],
+      "gaps": [
+        "The network-layer egress control is provided as documented per-deployment guidance (K8s NetworkPolicy / cloud firewall in docs/network-egress.md) rather than a committed enforced manifest, since the repo ships no fixed cloud deployment (compose has no native egress filtering)."
+      ]
+    },
+    "SEC-022": {
+      "status": "partial",
+      "category": "SEC",
+      "severity": "high",
+      "evidence": [
+        "Hash-pinning is implemented and enforced: tool_manifest() produces a deterministic sha256 over tool name + argument names + required set, committed to tool-definitions.lock.json (13 tools) and checked in CI by test_tool_manifest_matches_committed_lock (server.py:625-666; tests/test_tools.py).",
+        "CHANGELOG documents the lock and the rug-pull guard rationale (CHANGELOG SEC-022 entry); SECURITY.md describes it as the rug-pull control.",
+        "Tool definitions are static/in-repo with no dynamic or remote registration."
+      ],
+      "gaps": [
+        "Tool names have NO server-identity namespace prefix (e.g. get_dataset, search_catalog instead of i14y__get_dataset), so cross-server tool shadowing behind a shared gateway is not structurally prevented — the first pass-criterion is unmet.",
+        "The lock hash deliberately excludes tool descriptions (only name + argument surface), so a description-only rug-pull would not be detected by the hash and relies on PR review instead."
+      ]
+    }
+  }
+}

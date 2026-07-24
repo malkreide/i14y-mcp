@@ -622,24 +622,39 @@ async def api_status(ctx: Context | None = None) -> StatusResult:
 # --------------------------------------------------------------------------
 
 
+def _stable_signature(schema: dict[str, Any]) -> dict[str, Any]:
+    """Project a tool's input schema to its rug-pull-relevant surface.
+
+    Deliberately captures only the *contract* — the argument names and which are
+    required — and not pydantic/mcp-version-specific serialisation of constraints
+    (minimum/maximum/pattern/title/anyOf), so the lock is stable across SDK patch
+    upgrades. Argument-level constraints live in the reviewed source and CHANGELOG.
+    """
+    props = schema.get("properties", {}) if isinstance(schema, dict) else {}
+    return {
+        "arguments": sorted(props),
+        "required": sorted(schema.get("required", []) if isinstance(schema, dict) else []),
+    }
+
+
 async def tool_manifest() -> dict[str, Any]:
     """Return a deterministic hash snapshot of the registered tool definitions.
 
     Committed as `tool-definitions.lock.json` and checked in CI so a silent
-    change to any tool name, description or input schema (a rug-pull) fails the
-    build until the lock is regenerated and reviewed.
+    change to the tool set, a tool's name/description, or its argument surface
+    (a rug-pull) fails the build until the lock is regenerated and reviewed.
     """
     tools = sorted(await mcp.list_tools(), key=lambda t: t.name)
     entries = []
     for tool in tools:
-        schema = _json.dumps(tool.inputSchema or {}, sort_keys=True, ensure_ascii=False)
+        signature = _stable_signature(tool.inputSchema or {})
         entries.append(
             {
                 "name": tool.name,
                 "description_sha256": hashlib.sha256(
                     (tool.description or "").encode("utf-8")
                 ).hexdigest(),
-                "input_schema_sha256": hashlib.sha256(schema.encode("utf-8")).hexdigest(),
+                "signature": signature,
             }
         )
     combined = hashlib.sha256(

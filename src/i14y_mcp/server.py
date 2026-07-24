@@ -641,22 +641,20 @@ async def tool_manifest() -> dict[str, Any]:
     """Return a deterministic hash snapshot of the registered tool definitions.
 
     Committed as `tool-definitions.lock.json` and checked in CI so a silent
-    change to the tool set, a tool's name/description, or its argument surface
-    (a rug-pull) fails the build until the lock is regenerated and reviewed.
+    change to the tool set, a tool's name, or its argument surface (a rug-pull)
+    fails the build until the lock is regenerated and reviewed.
+
+    The snapshot deliberately covers only what is derived from the *source
+    function signatures* — tool name, argument names, and which are required —
+    because that is stable across mcp/pydantic patch upgrades. Descriptions
+    (docstrings) are normalised differently by different SDK versions, so they
+    are governed by PR review + CHANGELOG rather than by this hash.
     """
     tools = sorted(await mcp.list_tools(), key=lambda t: t.name)
-    entries = []
-    for tool in tools:
-        signature = _stable_signature(tool.inputSchema or {})
-        entries.append(
-            {
-                "name": tool.name,
-                "description_sha256": hashlib.sha256(
-                    (tool.description or "").encode("utf-8")
-                ).hexdigest(),
-                "signature": signature,
-            }
-        )
+    entries = [
+        {"name": tool.name, **_stable_signature(tool.inputSchema or {})}
+        for tool in tools
+    ]
     combined = hashlib.sha256(
         _json.dumps(entries, sort_keys=True, ensure_ascii=False).encode("utf-8")
     ).hexdigest()

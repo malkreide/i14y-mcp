@@ -27,8 +27,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
   result instead of a bare empty list (ARCH-003).
 - `docs/network-egress.md` documenting the code- and network-layer egress
   controls (SEC-021).
-- `tool-definitions.lock.json`, a committed hash snapshot of every tool
-  definition, verified by a test as a rug-pull guard (SEC-022).
+- `tool-definitions.lock.json`, a committed hash snapshot of the tool set and
+  each tool's argument surface (names + required), verified by a test as a
+  rug-pull guard that is stable across SDK patch upgrades (SEC-022).
 - README sections on MCP primitives (tools-only rationale, ARCH-008) and the MCP
   protocol version / update policy (ARCH-012).
 - Container FD `ulimits` and a memory reservation in `compose.yaml` (SCALE-006).

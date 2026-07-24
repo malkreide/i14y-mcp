@@ -41,9 +41,10 @@ unauthenticated, and reaches only one trusted public-data provider.
   This server has no auth model and no roles, so there is nothing to gate
   server-side; its tool definitions are version-controlled, authored in-repo, and
   reviewed via PR, with no dynamic or remote tool registration. As a rug-pull
-  guard, a hash snapshot of every tool name, description and input schema is
-  committed to [`tool-definitions.lock.json`](tool-definitions.lock.json) and
-  checked in CI (SEC-022), so any silent change to a tool definition fails the
+  guard, a hash snapshot of every tool name and its argument surface (argument
+  names + required set) is committed to
+  [`tool-definitions.lock.json`](tool-definitions.lock.json) and checked in CI
+  (SEC-022), so any silent change to the tool set or a tool's contract fails the
   build. When aggregated behind a shared gateway, enable the gateway's tool
   allow-listing and tool-poisoning detection.
 - **Network binding for hosted deployments** — the SSE / streamable-http

@@ -44,10 +44,11 @@ Open-Data-Anbieter erreicht.
   akzeptiert. Dieser Server hat kein Auth-Modell und keine Rollen, es gibt also
   serverseitig nichts zu gaten; seine Tool-Definitionen sind versioniert, in-repo
   verfasst und per PR reviewt, ohne dynamische oder Remote-Tool-Registrierung. Als
-  Rug-Pull-Schutz wird ein Hash-Snapshot jedes Tool-Namens, jeder Beschreibung und
-  jedes Input-Schemas in [`tool-definitions.lock.json`](tool-definitions.lock.json)
-  committet und in der CI geprüft (SEC-022) — jede stille Änderung einer
-  Tool-Definition lässt den Build fehlschlagen. Bei Aggregation hinter einem
+  Rug-Pull-Schutz wird ein Hash-Snapshot jedes Tool-Namens und seiner
+  Argument-Oberfläche (Argument-Namen + required-Set) in
+  [`tool-definitions.lock.json`](tool-definitions.lock.json) committet und in der
+  CI geprüft (SEC-022) — jede stille Änderung des Tool-Sets oder eines
+  Tool-Vertrags lässt den Build fehlschlagen. Bei Aggregation hinter einem
   gemeinsamen Gateway dessen Tool-Allow-Listing und Tool-Poisoning-Erkennung
   aktivieren.
 - **Netzwerk-Binding für gehostete Deployments** — der SSE-/streamable-http-

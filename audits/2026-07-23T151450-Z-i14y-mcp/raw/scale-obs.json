@@ -1,0 +1,119 @@
+{
+  "SCALE-001": {
+    "status": "pass",
+    "evidence": [
+      "src/i14y_mcp/server.py:524-532 main() reads I14Y_MCP_TRANSPORT env var; supports stdio (default), sse and streamable-http, and sets mcp.settings.host/port for the HTTP transports",
+      "Dockerfile:24 sets I14Y_MCP_TRANSPORT=sse and compose.yaml:7 sets it for the container — the container deployment uses SSE, not stdio",
+      "No WebSocket implementation: grep for websocket/ws:// in src/ returns nothing",
+      "README.md:151-157 documents remote deployment (Render/Railway) with I14Y_MCP_TRANSPORT=sse and lists stdio/sse/streamable-http as accepted values"
+    ],
+    "gaps": [
+      "Cloud-endpoint HTTP 200 initialize response not runtime-verified (no live endpoint); evidence is code_review + config_check only"
+    ]
+  },
+  "SCALE-002": {
+    "status": "todo",
+    "evidence": [
+      "Single-instance deployment: compose.yaml defines exactly one container (i14y-mcp) with no load balancer and no replicas",
+      "No sticky-session or shared-state session manager: grep for redis/memcached/session_manager/SessionStore/sticky/affinity in src/ and configs returns nothing"
+    ],
+    "gaps": [
+      "No sticky sessions (Mcp-Session-Id) at an edge LB and no Redis/shared-state SessionManager — required before horizontally scaling the SSE/streamable-http transport",
+      "No explicit session TTL defined",
+      "Not currently biting: single-instance, no multi-pod deployment, so mid-session pod switching cannot occur yet; item is open for future horizontal scaling"
+    ]
+  },
+  "SCALE-003": {
+    "status": "todo",
+    "evidence": [
+      "No edge-LB config present: repo has no haproxy.cfg, nginx.conf, ingress*.yaml, k8s/ or helm/ directories",
+      "is_cloud_deployed not demonstrably true: no railway.toml/render.yaml manifest committed, only README prose on Render/Railway (README.md:151-157)"
+    ],
+    "gaps": [
+      "No HAProxy stick-table / NGINX hash / K8s-Ingress affinity reading the Mcp-Session-Id header",
+      "Single-instance server; the check only bites once scaled horizontally behind an LB — deferred until then"
+    ]
+  },
+  "SCALE-004": {
+    "status": "partial",
+    "evidence": [
+      "Dockerfile:3,19 has two FROM stages named 'builder' and 'runtime' (multi-stage build)",
+      "Dockerfile:3,19 both use python:3.14-slim base (slim, not full)",
+      "Dockerfile:28-34 creates a dedicated system user 'mcp' and runs USER mcp (non-root); the venv is copied with --chown=mcp:mcp so the runtime ships no build tools"
+    ],
+    "gaps": [
+      "No HEALTHCHECK directive in Dockerfile (and no healthcheck in compose.yaml) — the pass criterion for LB integration is unmet",
+      "Final image size (<200MB) not verified — no built image measured, though the slim base + venv-only runtime is consistent with the target"
+    ]
+  },
+  "SCALE-006": {
+    "status": "partial",
+    "evidence": [
+      "compose.yaml:16-17 sets mem_limit: 256m and cpus: 0.5 — explicit memory and CPU limits",
+      "compose.yaml:18 pids_limit: 128 caps process count and compose.yaml:19 restart: unless-stopped provides a restart policy for clean recovery after an OOM kill"
+    ],
+    "gaps": [
+      "No FD limit: no ulimits.nofile configured — check calls for nofile >=4096 given the server's outbound HTTP connections (pids_limit caps processes, not file descriptors)",
+      "No reservations (requests) defined, so no burst headroom — the 'requests < limits' criterion is unmet",
+      "OOM/restart behavior not runtime-tested"
+    ]
+  },
+  "OBS-001": {
+    "status": "partial",
+    "evidence": [
+      "src/i14y_mcp/server.py:489-521 api_status catches UpstreamError/NotFoundError and degrades gracefully (returns StatusResult reachable=False) instead of raising — the correct execution-error pattern",
+      "src/i14y_mcp/client.py:35-41,83-104 separates NotFoundError (404) from UpstreamError (5xx/429/network) — distinct, deterministic error taxonomy",
+      "tests/test_tools.py:142-148 (test_api_status_reports_failure_gracefully) covers the execution-error/degradation path; tests/test_client.py:61-84 cover 404 vs 400 vs 429 handling"
+    ],
+    "gaps": [
+      "Other tools (search_catalog, get_dataset, list_*) let UpstreamError/NotFoundError propagate and rely on FastMCP's default exception->isError wrapping rather than returning explicit isError:true results with actionable guidance",
+      "No explicit standardized JSON-RPC error codes (-326xx/-320xx) in src/ (framework-provided only)",
+      "No test asserts a tool returns isError:true, and there is no protocol-error test (unknown tool / invalid args)"
+    ]
+  },
+  "OBS-002": {
+    "status": "partial",
+    "evidence": [
+      "No traceback.format_exc()/sys.exc_info() anywhere in src/ (grep returns nothing) — no stack-trace leakage into tool results",
+      "Read-only, no-auth public-data server: no credentials/tokens exist to leak and no PII is handled, so the disclosure blast radius is minimal"
+    ],
+    "gaps": [
+      "FastMCP is initialized without mask_error_details=True (src/i14y_mcp/server.py:45) — the primary masking control is absent",
+      "Error messages embed raw upstream response bodies: client.py:95 includes exc.response.text[:300] and server.py:509 includes str(exc)[:160]; these propagate to the client unmasked (low risk here since the upstream is public, but it violates the mask principle)"
+    ]
+  },
+  "OBS-003": {
+    "status": "fail",
+    "evidence": [
+      "No structured-logging dependency: pyproject.toml:24-28 lists only mcp, httpx, pydantic — no structlog/loguru",
+      "No logging at all in src/: grep for logging/structlog/logger/loguru across src/ returns nothing"
+    ],
+    "gaps": [
+      "Server emits no structured (JSON/logfmt) logs, no RFC 5424 severity levels, and no per-tool bound context (tool name, session_id, correlation_id)",
+      "Observability into tool invocations is entirely absent — aggregation and correlated search are impossible"
+    ]
+  },
+  "OBS-004": {
+    "status": "pass",
+    "evidence": [
+      "No print() statements in src/ (grep --include=*.py returns nothing) — stdout stays reserved for the JSON-RPC protocol stream",
+      "Nothing logs to stdout (there is no logging configured at all), so no stray writes can corrupt the stdio stream",
+      "No transport-dependent output switch: server.py:524-532 selects the transport without writing to stdout; Dockerfile:21 PYTHONUNBUFFERED=1 only affects the SSE runtime"
+    ],
+    "gaps": [
+      "No explicit stderr logging handler is pinned — currently moot because nothing logs, but any future logging (see OBS-003) must target sys.stderr",
+      "MCP Inspector clean-load not runtime-verified"
+    ]
+  },
+  "OBS-006": {
+    "status": "todo",
+    "evidence": [
+      "No OpenTelemetry anywhere: grep for opentelemetry/otel/tracer in src/ and pyproject.toml returns nothing",
+      "No OTLP configuration (OTEL_EXPORTER_OTLP_ENDPOINT/OTEL_SERVICE_NAME) in compose.yaml or the GitHub workflows"
+    ],
+    "gaps": [
+      "Distributed tracing is entirely absent — no TracerProvider, no OTLP exporter, no httpx auto-instrumentation, no per-tool spans",
+      "Medium / forward-looking: relevant once cloud-deployed for slow-tool and backend-bottleneck forensics; not yet implemented"
+    ]
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "SDK-001": {
+    "status": "fail",
+    "severity": "high",
+    "evidence": [
+      "server.py:53 `mcp = FastMCP(\"i14y-mcp\")` — constructor receives no `lifespan=` argument.",
+      "No `@asynccontextmanager` / `AsyncExitStack` anywhere in src/ (grep returned no matches).",
+      "server.py:64-66 `_get()` does `async with build_client() as http:` — a fresh httpx.AsyncClient is created and torn down per tool call.",
+      "client.py:63-69 `build_client()` returns a new `httpx.AsyncClient(...)` with docstring 'Caller owns the lifecycle.' — no shared/pooled client.",
+      "server.py:api_status also opens its own `async with build_client() as http:` per call."
+    ],
+    "gaps": [
+      "This is exactly the check's documented fail-pattern (new httpx.AsyncClient per call): no connection-pool reuse across requests, cleanup tied to each call instead of a server lifespan.",
+      "No lifespan function with @asynccontextmanager; FastMCP not given lifespan=; no server.state resource holding.",
+      "Single-server setup so AsyncExitStack criterion is N/A, but zero of the applicable pass-criteria are met."
+    ]
+  },
+  "SDK-002": {
+    "status": "pass",
+    "severity": "medium",
+    "evidence": [
+      "pyproject.toml:27 `pydantic>=2.7` in dependencies (>=2.0).",
+      "models.py:1 docstring 'Pydantic v2 models'; models.py:11 imports `BaseModel, ConfigDict, Field`; uses `model_config = ConfigDict(extra=\"forbid\")` (v2 API, not v1 Config class).",
+      "Every tool in server.py has an explicit BaseModel return annotation (e.g. `-> SearchResult`, `-> DatasetListResult`, `-> DistributionsResult`, `-> StatusResult`).",
+      "Consistent response envelope: models.py:22 `I14YResponse` base carries `source`, `provenance`, `retrieved_at`; all result models inherit it and add `returned`/`total_matched`/`hits` (envelope equivalents of results/count).",
+      "models.py:15 `Provenance = Literal[\"live_api\", \"cached\"]` — Literal type for enumerable value; RESOURCE_TYPES/Language also Literals in server.py.",
+      "Defaults use `Field(default_factory=list)` for mutable list fields (models.py:87,131,132,147, etc.) — no bare mutable defaults."
+    ],
+    "gaps": [
+      "Envelope field names differ from the check's illustrative names (`returned`/`hits` rather than `count`/`results`) — cosmetic only; the source+provenance+count+results semantics are all present and applied uniformly."
+    ]
+  },
+  "SDK-003": {
+    "status": "partial",
+    "severity": "medium",
+    "evidence": [
+      "No tool declares a `ctx: Context` parameter; `Context` is never imported from `mcp.server.fastmcp` in server.py.",
+      "No `ctx.report_progress`, `ctx.info`, `ctx.warning`, `ctx.error`, `ctx.elicit`, or `ctx.sample` calls anywhere in src/.",
+      "Positive: no `print()` or direct stdlib `logging` inside tool bodies — so the stdio-transport protocol-crash anti-pattern is avoided.",
+      "Tools are single upstream GETs; the only loop is api_status over 3 fixed endpoints (server.py) — no long iteration / gather over many tasks."
+    ],
+    "gaps": [
+      "Zero Context adoption: no structured logging or client-visible observability via the MCP protocol.",
+      "client.py sets TIMEOUT_S=60 with retry backoff 2s/4s/8s (MAX_ATTEMPTS=4), so a degraded upstream call can plausibly exceed the check's 2s progress threshold with no `ctx.report_progress` feedback to the client.",
+      "Read-only server has no writing tools, so the ctx.elicit (HITL) criterion is N/A; the short single-fetch nature of the tools makes the progress gap low-impact but still unaddressed."
+    ]
+  },
+  "SDK-004": {
+    "status": "fail",
+    "severity": "high",
+    "evidence": [
+      "Transport is dual: server.py main() honours `I14Y_MCP_TRANSPORT` and runs `mcp.run(transport=\"sse\")` or `\"streamable-http\"` — so the HTTP/SSE applies_when is active.",
+      "No CORS configuration exists: grep for `CORSMiddleware|cors|allow_origins|expose_headers|middleware` across src/ returns no matches.",
+      "Server exposes HTTP/SSE via `mcp.run(...)` on `mcp.settings.host`/`port` directly — no custom Starlette/ASGI app, no CORSMiddleware, no `cors_expose_headers` passed to FastMCP.",
+      "No `Access-Control-Expose-Headers: Mcp-Session-Id` is configured anywhere."
+    ],
+    "gaps": [
+      "`expose_headers` does not include `Mcp-Session-Id` (not set at all) — browser cross-origin clients cannot read the session id, so stateful SSE sessions break while stdio/server-side curl tests pass.",
+      "`allow_headers` does not include `Mcp-Session-Id`; no `allow_origins` allow-list.",
+      "Mitigating context (not a pass): server is read-only and no-auth, so session-state breakage is less damaging than for an authed stateful server, but none of the applicable pass-criteria are satisfied."
+    ]
+  },
+  "CH-004": {
+    "status": "pass",
+    "severity": "medium",
+    "evidence": [
+      "Attribution is structurally enforced: models.py:22-29 `I14YResponse` (base of every outbound payload) has `source: str = Field(default=ATTRIBUTION)`; docstring notes 'omitting attribution and provenance structurally impossible'.",
+      "client.py:14-19 `ATTRIBUTION` names provider + URL: 'Data: I14Y Interoperability Platform, Swiss Federal Statistical Office (BFS) — https://www.i14y.admin.ch. Licence terms are declared per distribution; check the `licence` field before reuse.'",
+      "Per-distribution licence is surfaced: models.py:116 and :182 `licence: str | None`; get_dataset_distributions (server.py) returns each distribution with its own licence; README.md:108,195-197 document that licences vary per distribution ('Opendata BY ASK', attribution required).",
+      "README documents the data source and licensing: README.md:233 'Data: I14Y Interoperability Platform, Federal Statistical Office (BFS)'; README.md:239 'catalogue data remains subject to the terms declared by each publisher' (MIT applies to code only).",
+      "Provenance retained per record (licence lives on each Distribution, not just globally); provenance field present on every envelope."
+    ],
+    "gaps": [
+      "README has no formal source/licence table as in the check's template; licensing is described in prose + per-distribution field.",
+      "The data is not uniformly CC BY 4.0 — most distributions carry 'Opendata BY ASK' — so the check's CC-BY-4.0 framing is only partially applicable; the server correctly surfaces the real per-distribution licence rather than hardcoding a licence code, which satisfies the attribution intent.",
+      "The global `source`/ATTRIBUTION string names provider+URL but defers the licence code to the per-distribution `licence` field rather than stating one globally (appropriate here since licences vary)."
+    ]
+  }
+}

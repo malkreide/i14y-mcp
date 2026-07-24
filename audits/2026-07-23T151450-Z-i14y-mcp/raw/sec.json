@@ -1,0 +1,176 @@
+{
+  "SEC-004": {
+    "status": "pass",
+    "evidence": [
+      "src/i14y_mcp/client.py:15 — BASE_URL fixed to 'https://api.i14y.admin.ch/api', hardcoded HTTPS, not user-supplied",
+      "src/i14y_mcp/client.py:57-62 — httpx.AsyncClient uses fixed base_url; tools only pass relative paths (server.py:183 f'/datasets/{dataset_id}' etc.), no user-controlled scheme/host reaches the client",
+      "src/i14y_mcp/server.py:61-63 — _get() builds client per call with the fixed base; no tool accepts a URL argument, so there is no SSRF surface (no metadata/private-IP fetch possible)",
+      "SECURITY.md:22 — documents 'Fixed HTTPS base URL to api.i14y.admin.ch only; no user-supplied URLs, so no SSRF surface'"
+    ],
+    "gaps": [
+      "client.py:61 follow_redirects=True — a redirect from the (trusted) upstream could in theory retarget the client to another host; no IP blocklist/DNS-pinning exists, but this is residual since the destination is a single trusted gov API and no user URL is accepted"
+    ]
+  },
+  "SEC-005": {
+    "status": "pass",
+    "evidence": [
+      "src/i14y_mcp/client.py:15 — single fixed hostname api.i14y.admin.ch; hostname is never user-supplied, so there is no DNS-rebinding/TOCTOU surface to pin against",
+      "src/i14y_mcp/server.py:71-521 — all 13 tools take IDs/enums/pagination only; none accept a hostname or URL",
+      "SECURITY.md:22-24 — no user-supplied URLs; TLS verification on by default and never disabled"
+    ],
+    "gaps": [
+      "No explicit DNS-pinning/custom transport (not required: fixed trusted host, no attacker-controlled hostname). follow_redirects=True (client.py:61) is the only theoretical rebinding-adjacent vector."
+    ]
+  },
+  "SEC-006": {
+    "status": "pass",
+    "evidence": [
+      "src/i14y_mcp/server.py:526 — transport = os.getenv('I14Y_MCP_TRANSPORT', 'stdio'); default is stdio (no network surface)",
+      "src/i14y_mcp/server.py:527-532 — SSE/streamable-http only activate when the env var is explicitly set; else mcp.run(transport='stdio')",
+      "claude_desktop_config.json:1-8 — local install uses stdio (command python -m i14y_mcp.server, no port)",
+      "README.md:157 — 'I14Y_MCP_TRANSPORT accepts stdio (default), sse or streamable-http'; README.md:124-167 documents local (uvx/Claude Desktop) primary and Docker/SSE separately"
+    ],
+    "gaps": []
+  },
+  "SEC-007": {
+    "status": "pass",
+    "evidence": [
+      "Dockerfile:3-19 — multi-stage build (builder + slim runtime)",
+      "Dockerfile:28-34 — creates non-root user 'mcp' and runs USER mcp (not root)",
+      "compose.yaml:12-14 — read_only: true, cap_drop: [ALL], security_opt: [no-new-privileges:true]",
+      "compose.yaml:16-18 — resource limits mem_limit 256m, cpus 0.5, pids_limit 128",
+      "server has no filesystem tools, so no data-volume mount surface (server.py: all tools are HTTP-read only)"
+    ],
+    "gaps": [
+      "Dockerfile USER 'mcp' is a --system account (low UID), not the check's recommended UID >= 10000",
+      "seccompProfile not explicitly declared (Docker applies RuntimeDefault implicitly); read_only rootfs is set in compose.yaml, not enforced in the Dockerfile itself, and no explicit tmpfs /tmp mount"
+    ]
+  },
+  "SEC-008": {
+    "status": "pass",
+    "evidence": [
+      "pyproject.toml:1-3,38-39 — hatchling build backend; only a regular [project.scripts] entry-point (i14y-mcp = i14y_mcp.server:main); no pre/postinstall hooks, no custom cmdclass, no dynamic code loading",
+      "README.md:124-146 — shows the full ungated install command transparently (uvx i14y-mcp / pip install -e '.[dev]' / claude_desktop uvx args)",
+      ".github/workflows/publish.yml:44-57 — PyPI Trusted Publisher via OIDC (permissions: id-token: write, pypa/gh-action-pypi-publish@release/v1), no long-lived API token",
+      "CONTRIBUTING.md present documenting the build process"
+    ],
+    "gaps": []
+  },
+  "SEC-009": {
+    "status": "pass",
+    "evidence": [
+      "No custom session handling in src/ — server has no OAuth/auth model and no per-user state, so there is no user identity to cryptographically bind a session to",
+      "src/i14y_mcp/server.py:489-521 — api_status note: 'read endpoints require no authentication'; all tools are stateless public reads",
+      "SECURITY.md:37-38 — explicitly documents session crypto-binding as not applicable (no user identity, public data, no auth)",
+      "SECURITY.md:50-54 — re-evaluation trigger: if an auth model is added, implement bound/TTL'd/server-side-invalidated session IDs before merge"
+    ],
+    "gaps": [
+      "For SSE transport, session-id generation is delegated to the MCP SDK's default (uuid4-class); not independently hardened in-repo, but there is no user context to bind and no write/state to hijack"
+    ]
+  },
+  "SEC-013": {
+    "status": "pass",
+    "evidence": [
+      "No secret loading anywhere in src/ — grep for os.environ shows only I14Y_MCP_TRANSPORT/HOST/PORT (server.py:526-529); no KEY/SECRET/TOKEN/PASSWORD env reads",
+      "src/i14y_mcp/client.py — no Authorization header, no API key; upstream public read API requires none",
+      "Dockerfile:21-26,37 — ENV layer contains only PATH/transport/HOST/PORT; comment 'no secrets required at runtime'; no secret baked into image",
+      "SECURITY.md:24 — 'no API keys, tokens or secrets are stored or forwarded'"
+    ],
+    "gaps": []
+  },
+  "SEC-014": {
+    "status": "partial",
+    "evidence": [
+      "SECURITY.md:39-41,56 — tool allow-listing / gateway controls explicitly documented as a gateway/host-layer responsibility (accepted portfolio-level risk)",
+      "src/i14y_mcp/server.py:50,71+ — all 13 tools annotated readOnlyHint:true, destructiveHint:false; there are no sensitive/destructive tools to gate",
+      "No auth model exists, so there are no roles/groups to build a server-side allow-list on"
+    ],
+    "gaps": [
+      "No tool allow-list artifact (gateway-config / team YAML) present in the repo",
+      "No server-side group/role check (require_group) — not implementable without an auth model; deferred to the gateway and documented as accepted"
+    ]
+  },
+  "SEC-015": {
+    "status": "partial",
+    "evidence": [
+      "SECURITY.md:39-41 — tool-poisoning detection documented as a gateway/host responsibility; this server's tool definitions are version-controlled, in-repo, and PR-reviewed with no dynamic or remote tool registration",
+      "src/i14y_mcp/server.py:71-521 — tool descriptions are static in-repo docstrings; no injection markers, no dynamic/remote registration",
+      "This server is a single first-party trusted source, not a gateway aggregating untrusted servers (check's own note: low risk for own-server portfolios)"
+    ],
+    "gaps": [
+      "No pre-flight tool-poisoning detection layer in the repo (correctly a gateway concern; this server is not a gateway) — control absent but appropriately deferred and documented"
+    ]
+  },
+  "SEC-016": {
+    "status": "partial",
+    "evidence": [
+      "src/i14y_mcp/server.py:526 — default transport is stdio (no port opened at all unless SSE is explicitly enabled), which removes the network surface in the default path",
+      "Dockerfile:24-26 — MCP transport/HOST=0.0.0.0 set explicitly at the container layer (correct place)",
+      "SECURITY.md:29,42-46 — documents that SSE/streamable-http binds HOST default 0.0.0.0, intended for container deployment behind a reverse proxy / gateway; default stdio has no network surface"
+    ],
+    "gaps": [
+      "src/i14y_mcp/server.py:528 — os.getenv('HOST', '0.0.0.0'): the CODE default for SSE binding is 0.0.0.0, not 127.0.0.1 (matches the check's fail-pattern for the default). Setting HOST=127.0.0.1 is possible but is not the default",
+      "compose.yaml:5 — ports '8000:8000' publishes on all host interfaces (no 127.0.0.1: bind prefix)",
+      "No warning logged when binding to 0.0.0.0 outside a container context"
+    ]
+  },
+  "SEC-018": {
+    "status": "partial",
+    "evidence": [
+      "src/i14y_mcp/server.py:47-48 — Language and ResourceType are Literal enums, so language/type args are enum-constrained in the FastMCP-generated JSON schema",
+      "src/i14y_mcp/server.py:57-58,102,150,241,294,339,394,438,473 — _clamp() bounds every pagination/limit value into a valid range (1..100/200/SEARCH_HARD_CAP), preventing negative/huge-range abuse",
+      "src/i14y_mcp/models.py:25 etc. — output models use ConfigDict(extra='forbid'); FastMCP derives input schemas from the typed tool signatures",
+      "src/i14y_mcp/client.py:82 — params passed via httpx (URL-encoded); no SQL/shell sink"
+    ],
+    "gaps": [
+      "Tool inputs are plain str/int params, not strict Pydantic argument models: no min_length/max_length/pattern on free-text (query) or UUID (dataset_id, concept_id) strings, and no ge/le Field constraints (numeric bounds are silently clamped rather than schema-rejected)",
+      "No input-side strict=True / extra='forbid' schema; whitelist patterns absent (path IDs like dataset_id flow into f'/datasets/{id}' relying on httpx encoding)"
+    ]
+  },
+  "SEC-019": {
+    "status": "pass",
+    "evidence": [
+      "Trifecta score ~0-1/3: (1) private data — NO, public open catalogue metadata only (SECURITY.md:16-18); (2) external comms/send — NO, read-only, grep found no send_mail/smtplib/requests.post/webhook in src/; (3) untrusted content — limited, only the fixed trusted api.i14y.admin.ch, no user uploads/web-scraping",
+      "src/i14y_mcp/server.py:50,71+ — all 13 tools annotated readOnlyHint:true, destructiveHint:false",
+      "SECURITY.md:16-17 — 'no write, send, or filesystem capabilities'; SECURITY.md:50-52 re-eval trigger if write/PII is ever added"
+    ],
+    "gaps": [
+      "Posture is documented thoroughly in SECURITY.md but not as an explicitly labelled 'Lethal Trifecta' table/ADR; not material given the server holds at most one of the three capabilities"
+    ]
+  },
+  "SEC-020": {
+    "status": "pass",
+    "evidence": [
+      "grep over src/ for os.system|shell=True|eval(|exec(|os.popen|subprocess|child_process — no matches (zero shell/eval/subprocess sinks)",
+      "src/i14y_mcp/client.py:65-104 — only outbound work is httpx.AsyncClient.get(); no OS command execution anywhere",
+      "No filesystem/path operations on user input (no pathlib file writes/reads driven by tool args)"
+    ],
+    "gaps": []
+  },
+  "SEC-021": {
+    "status": "partial",
+    "evidence": [
+      "src/i14y_mcp/client.py:15,57-58 — BASE_URL is hardcoded to a single host and set as httpx base_url; effectively a single-destination egress constraint at the code layer (no other host is reachable via user input)",
+      "SECURITY.md:22 — documents 'Fixed HTTPS base URL to api.i14y.admin.ch only'",
+      "server.py tools pass only relative paths, so egress targets are constrained to one host by construction"
+    ],
+    "gaps": [
+      "No explicit code-layer allow-list frozenset / assert_host_allowed() pre-request check (grep: none in src/)",
+      "No network-layer egress control (no Kubernetes NetworkPolicy / security-group egress; compose.yaml has no egress restriction)",
+      "client.py:61 follow_redirects=True is not constrained to the allowed host, so a redirect could reach another host; no docs/network-egress.md",
+      "Check requires 4 evidence items across both code- and network-layers; only the code-layer single-host constraint is present"
+    ]
+  },
+  "SEC-022": {
+    "status": "partial",
+    "evidence": [
+      "SECURITY.md:39-41,55-57 — documents that tool definitions are version-controlled, authored in-repo and PR-reviewed, with no dynamic or remote tool registration (mitigates rug-pull); shadowing/allow-listing deferred to gateway",
+      "src/i14y_mcp/server.py:45 — single FastMCP server identity 'i14y-mcp'; all tools declared statically in one reviewed file"
+    ],
+    "gaps": [
+      "No namespace prefix on tool names (server.py: search_catalog, list_datasets, get_dataset, ... are generic, not i14y__search_catalog etc.) — matches the check's fail-pattern and leaves cross-server shadowing possible in a multi-server gateway",
+      ".github/workflows/publish.yml — no tool-definition SHA-256 hash snapshot generated at release; no tool-hashes.json in repo",
+      "CHANGELOG.md has no 'Tool Definition Changes' discipline (initial release only) and no per-tool hash / re-approval notes"
+    ]
+  }
+}

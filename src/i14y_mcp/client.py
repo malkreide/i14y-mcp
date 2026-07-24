@@ -8,6 +8,8 @@ from __future__ import annotations
 
 import asyncio
 import datetime as _dt
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
 from typing import Any
 
 import httpx
@@ -62,6 +64,41 @@ def build_client() -> httpx.AsyncClient:
     )
 
 
+# A single client is installed by the server lifespan (SDK-001). When present,
+# tools reuse it instead of building a fresh client per call, so the httpx
+# connection pool and TLS sessions survive across requests.
+_SHARED: dict[str, httpx.AsyncClient] = {}
+
+
+def set_shared_client(client: httpx.AsyncClient | None) -> None:
+    """Install (or, with None, remove) the process-wide shared client."""
+    if client is None:
+        _SHARED.pop("client", None)
+    else:
+        _SHARED["client"] = client
+
+
+def get_shared_client() -> httpx.AsyncClient | None:
+    return _SHARED.get("client")
+
+
+@asynccontextmanager
+async def client_session() -> AsyncIterator[httpx.AsyncClient]:
+    """Yield the shared client if the lifespan installed one, otherwise a
+    short-lived client.
+
+    This lets tools run both under the server lifespan (pooled, long-lived
+    client) and in direct unit tests that call them without a running lifespan
+    (fresh client per call).
+    """
+    shared = get_shared_client()
+    if shared is not None:
+        yield shared
+        return
+    async with build_client() as http:
+        yield http
+
+
 async def fetch_json(
     http: httpx.AsyncClient,
     path: str,
@@ -91,8 +128,10 @@ async def fetch_json(
             last_error = exc
             status = exc.response.status_code
             if 400 <= status < 500 and status != 429:
+                # OBS-002: surface a categorised error, not the raw upstream
+                # response body — the LLM never sees stray provider internals.
                 raise UpstreamError(
-                    f"I14Y rejected the request ({status}) for {path}: {exc.response.text[:300]}"
+                    f"I14Y rejected the request with HTTP {status} for {path}."
                 ) from exc
         except httpx.RequestError as exc:
             last_error = exc

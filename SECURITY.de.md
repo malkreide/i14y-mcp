@@ -28,7 +28,7 @@ Server stellt ausschliesslich Katalog-Metadaten bereit.
 | Tools | Alle mit `readOnlyHint: true`, `destructiveHint: false` annotiert; keine dynamische oder Remote-Tool-Registrierung |
 | Fehler | Upstream-RFC-7807-Fehlerbodies werden als strukturierte Daten offengelegt, nie stillschweigend verschluckt; `api_status` liefert immer einen auswertbaren Zustand |
 | Stdout | Reserviert für den JSON-RPC-Stream; der Server gibt kein Fremd-Logging auf stdout aus |
-| Binding | `stdio` als Default (keine Netzwerk-Angriffsfläche). SSE / streamable-http bindet an `HOST` (Default `0.0.0.0`), gedacht für Container-Deployment hinter einem Reverse-Proxy / Gateway |
+| Binding | `stdio` als Default (keine Netzwerk-Angriffsfläche). SSE / streamable-http bindet an `HOST`, **Default `127.0.0.1` (Loopback)**; `0.0.0.0` ist ein expliziter Opt-in (das Container-Image setzt es bewusst) und warnt ausserhalb eines Containers auf stderr |
 
 ## Akzeptierte Risiken (Kontrollen auf Portfolio-Ebene)
 
@@ -43,10 +43,13 @@ Open-Data-Anbieter erreicht.
   Die Tool-Definitionen dieses Servers sind versioniert, in-repo verfasst und per
   PR reviewt; es gibt keine dynamische oder Remote-Tool-Registrierung.
 - **Netzwerk-Binding für gehostete Deployments** — der SSE-/streamable-http-
-  Transport bindet an `HOST` (Default `0.0.0.0`), damit der publizierte Port aus
-  dem Container erreichbar ist. Dann mit einem Reverse-Proxy / Gateway betreiben,
-  das TLS und Zugriffskontrolle erzwingt; der Default-Transport (`stdio`) hat gar
-  keine Netzwerk-Angriffsfläche.
+  Transport bindet an `HOST`, standardmässig `127.0.0.1` (Loopback). Ein Binding
+  an `0.0.0.0` ist ein expliziter Opt-in (das Container-Image setzt es bewusst)
+  und warnt ausserhalb eines Containers auf stderr. Jedes `0.0.0.0`-Deployment mit
+  einem Reverse-Proxy / Gateway betreiben, das TLS und Zugriffskontrolle erzwingt;
+  der Default-Transport (`stdio`) hat gar keine Netzwerk-Angriffsfläche. Über HTTP
+  exponiert CORS ausschliesslich den `Mcp-Session-Id`-Response-Header (den
+  Browser-MCP-Clients benötigen).
 
 ## Re-Evaluations-Trigger
 

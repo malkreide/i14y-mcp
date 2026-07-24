@@ -34,5 +34,11 @@ COPY --from=builder --chown=mcp:mcp /app/.venv /app/.venv
 USER mcp
 EXPOSE 8000
 
+# SCALE-004: let orchestrators/load balancers detect an unhealthy container.
+# The SSE runtime opens PORT; a successful TCP connect means the server is up.
+# Uses stdlib only (no curl in the slim image).
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+    CMD python -c "import os,socket; socket.create_connection(('127.0.0.1', int(os.getenv('PORT','8000'))), 3).close()" || exit 1
+
 # Read-only, no-auth public-data server — no secrets required at runtime.
 CMD ["python", "-m", "i14y_mcp.server"]

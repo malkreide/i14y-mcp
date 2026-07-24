@@ -26,7 +26,7 @@ no personal data is processed — the server exposes catalogue metadata only.
 | Tools | All annotated `readOnlyHint: true`, `destructiveHint: false`; no dynamic or remote tool registration |
 | Errors | Upstream RFC 7807 error bodies are surfaced as structured data, never silently swallowed; `api_status` always returns an evaluable state |
 | Stdout | Reserved for the JSON-RPC stream; the server emits no stray stdout logging |
-| Binding | `stdio` by default (no network surface). SSE / streamable-http binds to `HOST` (default `0.0.0.0`), intended for container deployment behind a reverse proxy / gateway |
+| Binding | `stdio` by default (no network surface). SSE / streamable-http binds to `HOST`, **default `127.0.0.1` (loopback)**; `0.0.0.0` is an explicit opt-in (the container image sets it deliberately) and prints a stderr warning outside a container |
 
 ## Accepted risks (portfolio-level controls)
 
@@ -40,10 +40,13 @@ unauthenticated, and reaches only one trusted public-data provider.
   server's tool definitions are version-controlled, authored in-repo, and
   reviewed via PR; there is no dynamic or remote tool registration.
 - **Network binding for hosted deployments** — the SSE / streamable-http
-  transport binds to `HOST` (default `0.0.0.0`) so the published port is
-  reachable from inside a container. Front it with a reverse proxy / gateway that
-  enforces TLS and access control; the default transport (`stdio`) has no network
-  surface at all.
+  transport binds to `HOST`, defaulting to `127.0.0.1` (loopback). Binding to
+  `0.0.0.0` is an explicit opt-in (the container image sets it on purpose) and
+  emits a stderr warning outside a container. Front any `0.0.0.0` deployment with
+  a reverse proxy / gateway that enforces TLS and access control; the default
+  transport (`stdio`) has no network surface at all. When served over HTTP, CORS
+  exposes only the `Mcp-Session-Id` response header (required by browser MCP
+  clients).
 
 ## Re-evaluation triggers
 

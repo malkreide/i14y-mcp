@@ -1,0 +1,114 @@
+{
+  "SCALE-001": {
+    "status": "pass",
+    "evidence": [
+      "src/i14y_mcp/server.py:704-722 main() reads I14Y_MCP_TRANSPORT and branches: stdio via mcp.run(transport='stdio') else sse/streamable-http/http via _run_http()",
+      "src/i14y_mcp/server.py:707-720 sets host/port from HOST/PORT env for the HTTP transports (loopback default, 0.0.0.0 opt-in)",
+      "Dockerfile:24 sets I14Y_MCP_TRANSPORT=sse (+HOST=0.0.0.0, PORT=8000) so the cloud/container default is HTTP, not stdio; compose.yaml:7 mirrors this",
+      "README.md:174-183 documents remote deployment (Render/Railway) with I14Y_MCP_TRANSPORT=sse|streamable-http; no WebSocket transport anywhere in src/"
+    ],
+    "gaps": []
+  },
+  "SCALE-002": {
+    "status": "todo",
+    "evidence": [
+      "Transport is dual (stdio + sse/streamable-http) so this check applies",
+      "src/i14y_mcp/server.py:684-692 CORS exposes Mcp-Session-Id so browser clients can hold a session (SDK-004 prerequisite), but that is server-side only"
+    ],
+    "gaps": [
+      "No sticky-session / affinity config and no shared-state (Redis/Durable Objects) session manager exists — grep for redis/sessionAffinity/stick-table across repo returns nothing",
+      "Deployed single-instance (no LB), as expected/acknowledged; no session TTL and no failover test",
+      "None of the SCALE-002 pass criteria (sticky-on-Mcp-Session-Id OR shared-state store, explicit TTL, failover behaviour) are implemented"
+    ]
+  },
+  "SCALE-003": {
+    "status": "todo",
+    "evidence": [
+      "No haproxy.cfg / nginx.conf / ingress*.yaml / k8s manifests in repo (find across repo returns only .github workflows, compose.yaml, pyproject.toml)",
+      "server.py:691 lists Mcp-Session-Id in CORS expose_headers, but that is application-layer, not an edge-LB routing rule"
+    ],
+    "gaps": [
+      "No edge load-balancer reads Mcp-Session-Id for routing; no stick-table / consistent-hash config",
+      "Single-instance deployment (no cloud LB layer) — SCALE-003 unmet by design; stick-table capacity/TTL/failover criteria all absent"
+    ]
+  },
+  "SCALE-004": {
+    "status": "pass",
+    "evidence": [
+      "Dockerfile:3 and :19 — two FROM statements with named stages (AS builder, AS runtime), multi-stage build",
+      "Dockerfile:3,19 base is python:3.14-slim (slim runtime); venv from builder copied at :32, no build toolchain in final image",
+      "Dockerfile:28-34 creates system user 'mcp' and runs USER mcp (non-root)",
+      "Dockerfile:40-41 HEALTHCHECK present (stdlib TCP connect to PORT, no curl needed in slim image)"
+    ],
+    "gaps": [
+      "Final image size not measured in this audit, but slim base + venv-only copy makes <200 MB expected"
+    ]
+  },
+  "SCALE-006": {
+    "status": "pass",
+    "evidence": [
+      "compose.yaml:16 mem_limit: 256m (explicit memory cap)",
+      "compose.yaml:17 mem_reservation: 128m — request < limit gives burst head-room",
+      "compose.yaml:18 cpus: 0.5 (CPU cap); :19 pids_limit: 128",
+      "compose.yaml:20-23 ulimits.nofile soft 4096 / hard 8192 (>= 4096 for outbound HTTP)",
+      "compose.yaml:24 restart: unless-stopped (clean OOM restart policy)"
+    ],
+    "gaps": []
+  },
+  "OBS-001": {
+    "status": "pass",
+    "evidence": [
+      "Execution errors: client.py fetch_json raises categorised UpstreamError/NotFoundError (client.py:146-189) which FastMCP converts to an isError tool-result, not a JSON-RPC protocol error; messages are actionable and point at api_status (client.py:186-188)",
+      "api_status tool (server.py:582-617) never raises — it catches UpstreamError/NotFoundError and returns an evaluable StatusResult so the agent can tell 'no match' from 'source down'",
+      "Protocol errors handled by SDK: unknown tool / bad schema surface as ToolError — tests/test_tools.py:226-231 (unknown tool) and :217-223 (malformed id rejected at schema boundary)",
+      "Execution-error test tests/test_tools.py:234-239 (upstream 500 surfaces as UpstreamError, not swallowed); graceful-failure test :142-148"
+    ],
+    "gaps": [
+      "No explicit -326xx/-320xx error-code constants in src/ — protocol codes are delegated to the FastMCP/JSON-RPC framework rather than defined in-repo (acceptable; SDK provides -32601/-32602)"
+    ]
+  },
+  "OBS-002": {
+    "status": "partial",
+    "evidence": [
+      "No raw upstream body, stacktrace, SQL or path leaks: fetch_json categorises 4xx/5xx into clean UpstreamError text (client.py:163-172, OBS-002 comment at :168-169); no traceback.format_exc / sys.exc_info anywhere in src/",
+      "Execution errors carry user-friendly, internals-free messages (client.py:148-151, 184-189)",
+      "Logs are stderr-only structured JSON with no tokens/PII (no-auth server; logging_config.py)"
+    ],
+    "gaps": [
+      "FastMCP is initialised without mask_error_details=True (server.py:72) — the headline OBS-002 pass criterion is unmet; an unexpected/unhandled exception (a code bug outside the categorised UpstreamError path) would have its str() surfaced to the LLM by the FastMCP default"
+    ]
+  },
+  "OBS-003": {
+    "status": "pass",
+    "evidence": [
+      "structlog>=24.1 declared in pyproject.toml:28 (dependencies)",
+      "logging_config.py:27-40 configures structlog with add_log_level + ISO TimeStamper + JSONRenderer (JSON output, RFC 5424-style level field)",
+      "Severity filtering via make_filtering_bound_logger; >=4 levels actively used in client.py: logger.debug (:140), .info (:147,159), .warning (:169,173,176), .error (:183)",
+      "Per HTTP request the logger binds context: path, status, ms (client.py:159) — plus server.start/stop lifecycle events (server.py:64,69)"
+    ],
+    "gaps": [
+      "Bound context is per upstream HTTP request (endpoint path) rather than per tool-call — no tool-name / session_id / correlation_id binding; acceptable but the richest OBS-003 sub-criterion is only partially met"
+    ]
+  },
+  "OBS-004": {
+    "status": "pass",
+    "evidence": [
+      "logging_config.py:35 structlog logger_factory=structlog.PrintLoggerFactory(file=sys.stderr) — all logs to stderr, never stdout",
+      "logging_config.py:44 configure_logging() called eagerly at import so any stray log before main() is already stderr-bound",
+      "No print() in any tool body; the only print() in src/ (server.py:713-717, the 0.0.0.0 bind warning) explicitly passes file=sys.stderr, so stdout stays clean for the JSON-RPC stream"
+    ],
+    "gaps": [
+      "No CI grep-guard against future print()-to-stdout regressions (remediation suggests one); current code is compliant"
+    ]
+  },
+  "OBS-006": {
+    "status": "todo",
+    "evidence": [
+      "Server is container/cloud-deployable (Dockerfile + compose.yaml, HTTP transports) so this check applies",
+      "grep for opentelemetry/otel/tracer across src/ and pyproject.toml returns nothing"
+    ],
+    "gaps": [
+      "No OpenTelemetry SDK dependency, no TracerProvider/OTLP exporter, no per-tool-call spans, no httpx auto-instrumentation, no OTEL_* env config — none of the OBS-006 criteria implemented (unchanged, as noted)"
+    ]
+  }
+}

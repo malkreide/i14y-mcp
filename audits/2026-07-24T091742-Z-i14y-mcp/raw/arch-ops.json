@@ -1,0 +1,163 @@
+{
+  "ARCH-001": {
+    "status": "pass",
+    "evidence": [
+      "All 13 tools use consistent snake_case function names (server.py:126 search_catalog, :200 list_datasets, :245 get_dataset, :268 get_dataset_distributions, :300 list_data_services, :343 get_data_service, :360 list_public_services, :403 list_concepts, :445 get_concept, :462 search_codelist_entries, :507 list_publishers, :551 list_catalogs, :583 api_status).",
+      "No spaces, dots, brackets or special characters in any tool name; no mixed conventions.",
+      "Descriptions are multi-sentence and carry use-case context, not just a function label (e.g. server.py:135-156 'The primary entry point: use this to find out *who* publishes data on a topic before looking for a specific dataset', server.py:307-318 'Use this to discover whether an interface already exists before building a scraper')."
+    ],
+    "gaps": []
+  },
+  "ARCH-002": {
+    "status": "pass",
+    "evidence": [
+      "Tool descriptions are well over 100 chars in the median; none is a bare one-liner (server.py docstrings for all 13 tools).",
+      "Use-case framing present in prose for essentially every tool (server.py:137 'The primary entry point', :271 'This is the «where do I actually get the data» tool', :311 'The strategic payload of this server').",
+      "Caveats/important-notes are inline in docstrings where relevant (server.py:141-145 search index covers Datasets only; :275-278 licences differ per distribution; :410-414 concepts not reachable via search_catalog).",
+      "Differentiation between similar tools is explicit (search_catalog vs list_datasets at :209-212; get_dataset vs get_dataset_distributions at :249-254 and :275-278)."
+    ],
+    "gaps": [
+      "Use-case/important-notes information is written as prose, not as literal <use_case>/<important_notes> XML tags — accepted here under the 'oder Aequivalent' clause, but the structured-tag convention from the check example is not used."
+    ]
+  },
+  "ARCH-003": {
+    "status": "pass",
+    "evidence": [
+      "search_catalog never returns a bare empty result: on total==0 it sets match_type='none' and an actionable hint pointing at the alternative registers (server.py:173-196).",
+      "SearchResult model carries match_type: Literal['exact','none'] and hint fields (models.py:101-108).",
+      "hint text is actionable — tells the agent the index covers Datasets only and to call list_datasets/list_concepts/list_data_services (server.py:177-182).",
+      "Covered by test test_search_empty_returns_actionable_hint (tests/test_tools.py:206-214). Data is non-sensitive public open data, so the sensitive-lookup exception does not apply."
+    ],
+    "gaps": [
+      "Only search_catalog carries match_type/hint; match_type has no 'fuzzy' tier, but the upstream search offers no fuzzy capability so a partial-match fallback is not available (documented limitation)."
+    ]
+  },
+  "ARCH-004": {
+    "status": "pass",
+    "evidence": [
+      "Tool handlers take only ctx: Context for client/session info; no handler touches request.headers, websocket, stdin or stdout (server.py tool signatures; ctx used only for ctx.debug/report_progress at :114-115, :598-599).",
+      "Dual transport selectable at runtime via I14Y_MCP_TRANSPORT env var — stdio, sse and streamable-http all supported (server.py:706-722).",
+      "Shared setup (single pooled httpx client) lives in a FastMCP lifespan common to all transports (server.py:55-72, _lifespan / build_client / set_shared_client).",
+      "Tool bodies are transport-agnostic and produce identical results regardless of transport; HTTP CORS wrapping is isolated in build_http_app (server.py:674-693)."
+    ],
+    "gaps": [
+      "Configuration is read via scattered os.getenv() calls in main() rather than a Pydantic BaseSettings object; acceptable under the 'o.ae.' clause since config is trivial (transport/host/port/log_level) and read function-locally, not via mutable global module vars — but no formal Settings object exists."
+    ]
+  },
+  "ARCH-005": {
+    "status": "pass",
+    "evidence": [
+      "No API keys, passwords, tokens or connection strings in source — the I14Y read API is unauthenticated (server.py:613-616, client.py has no auth headers).",
+      "No os.environ.get(..., default=secret) patterns; the only env vars are non-secret config: I14Y_MCP_TRANSPORT, LOG_LEVEL, HOST, PORT (server.py:64,705-711).",
+      "No secrets emitted to logs; structured logging only records paths/status/timings (client.py:140-189).",
+      ".gitignore contains .env (.gitignore:12); no .env file is committed."
+    ],
+    "gaps": [
+      "No CI secret-scanning workflow (gitleaks/trufflehog) runs on PRs — an explicit pass-criterion, though the server has zero secret surface so the residual risk is only accidental future commits.",
+      "No .env.example present (there is nothing secret to configure, so effectively N/A)."
+    ]
+  },
+  "ARCH-006": {
+    "status": "pass",
+    "evidence": [
+      "13 tools exposed (server.py; README.md:107-123 tool table), within the 9-15 'review the clustering' band rather than the >15 API-mapping anti-pattern zone.",
+      "Not a 1:1 REST-endpoint mapping: get_dataset aggregates the full record incl. distributions in one call so the anchor query is answered in two calls (server.py:245-264).",
+      "Tools are use-case oriented (discovery, interfaces, semantics, actors, ops groups) rather than CRUD-per-endpoint.",
+      "Anchor demo query documented as answerable via search_catalog -> get_dataset, i.e. <=2 tool calls (README.md:33-53, server.py:249-254)."
+    ],
+    "gaps": [
+      "13 tools is one above the 'idealerweise <=12' guideline; justified by the distinct entity registers (datasets, data services, public services, concepts, publishers, catalogs) each needing list/detail access."
+    ]
+  },
+  "ARCH-007": {
+    "status": "pass",
+    "evidence": [
+      "get_dataset is a genuinely aggregated tool: one call returns contact point, temporal/spatial coverage, documentation links and every distribution with its licence (server.py:245-264; models.py DatasetDetail:148-155 includes distributions).",
+      "Tools return thought-complete results, not opaque IDs requiring follow-up calls — list results carry titles/publishers/themes/landing pages (models.py summaries).",
+      "The aggregated character is called out explicitly in the description and CHANGELOG (server.py:249-254 'a single call returns ... so search_catalog -> get_dataset answers ... in two calls'; CHANGELOG Unreleased ARCH-007 entry)."
+    ],
+    "gaps": [
+      "No asyncio.gather parallelism, but it is unnecessary here: the upstream /datasets/{id} endpoint already returns the full aggregated record in a single HTTP call, so there is nothing to fan out.",
+      "get_dataset_distributions overlaps with get_dataset; documented as such (server.py:275-278), a minor convenience-tool redundancy rather than a chaining requirement."
+    ]
+  },
+  "ARCH-008": {
+    "status": "pass",
+    "evidence": [
+      "Server exposes Tools only (no @mcp.resource or @mcp.prompt anywhere in src/).",
+      "README documents the tools-only choice with an explicit, reasoned justification under a 'MCP primitives' heading (README.md:128-135): free-text + opaque-UUID access means no small stable set of addressable URIs, and no opinionated prompt templates ship.",
+      "README.de.md carries the parallel 'MCP-Primitive' section (README.de.md:128).",
+      "Rationale notes tools are read-only/idempotent and flags a future Resource candidate if a stable entry point emerges — meeting the 'documented, justified tools-only' pass path."
+    ],
+    "gaps": []
+  },
+  "ARCH-009": {
+    "status": "pass",
+    "evidence": [
+      "server.py:77-83 — READ_ONLY now sets all four hints: readOnlyHint, destructiveHint:false, idempotentHint:true, openWorldHint:true",
+      "Verified live: get_dataset annotations include idempotentHint=True openWorldHint=True",
+      "All 13 tools are GET-only reads against an external API"
+    ],
+    "gaps": []
+  },
+  "ARCH-011": {
+    "status": "partial",
+    "evidence": [
+      "All mandatory top-level files present: README.md, README.de.md, CHANGELOG.md, LICENSE, pyproject.toml.",
+      "Mandatory directories present: src/, tests/, .github/workflows/.",
+      "Correct src-layout: code under src/i14y_mcp/, and pyproject declares packages = ['src/i14y_mcp'] (pyproject.toml:49-50).",
+      "CI workflows present beyond the minimum: ci.yml (test+lint, 3.10-3.13 matrix), publish.yml (PyPI), live.yml (nightly live).",
+      "README.de.md holds the same top-level section inventory as README.md (verified: matching ## headings for Why/Architecture/Tools/Installation/Join keys/Known limitations/Testing/Contributing/Credits)."
+    ],
+    "gaps": [
+      "With 13 tools (>5) the check expects a tools/ package split with server.py < ~200 lines, or a documented justification; instead all 13 tool bodies live inline in a single 726-line server.py (server.py:1-726) and no deviation rationale is given in the README."
+    ]
+  },
+  "ARCH-012": {
+    "status": "partial",
+    "evidence": [
+      "CHANGELOG.md present and in Keep-a-Changelog format with SemVer statement and Unreleased/0.1.0 sections (CHANGELOG.md:1-105).",
+      "README has an 'MCP protocol version' section describing the SDK floor pin and update policy (README.md:137-143).",
+      "SDK floor pinned in pyproject (mcp>=1.28.1, pyproject.toml:25) and Dependabot configured for monthly pip + actions update PRs (.github/dependabot.yml).",
+      "Update policy documented: monthly Dependabot PRs and CHANGELOG call-out on any negotiated-spec change (README.md:139-143)."
+    ],
+    "gaps": [
+      "protocolVersion is NOT explicitly pinned in server code — mcp = FastMCP('i14y-mcp', lifespan=_lifespan) (server.py:72) sets no protocol_version; the README makes a deliberate choice to rely on SDK-negotiated version + floor pin instead, which does not satisfy the check's explicit-pin criterion.",
+      "The README 'MCP protocol version' section names no concrete supported spec date (e.g. 2025-06-18); CHANGELOG entries reference SDK/tooling but no explicit spec-version bump line yet (acceptable while still on floor-pin, but the explicit-version criterion is unmet)."
+    ]
+  },
+  "OPS-001": {
+    "status": "pass",
+    "evidence": [
+      "Clean unit/live separation: tests/test_client.py + tests/test_tools.py hold respx-mocked unit tests; live tests are marked @pytest.mark.live (tests/test_tools.py:165,172,179).",
+      "respx used for HTTP mocking throughout (tests/test_client.py:24-133, tests/test_tools.py:92-241).",
+      "live marker registered in pyproject (markers = ['live: hits the real I14Y API (excluded from CI)'], pyproject.toml:54).",
+      "CI runs pytest -m 'not live' and lints (.github/workflows/ci.yml); a separate scheduled/on-demand live workflow runs pytest -m live (.github/workflows/live.yml). No production credentials are involved (unauthenticated API)."
+    ],
+    "gaps": [
+      "Coverage depth below the letter of the criterion: ~26 unit tests across 13 tools (roughly 2/tool, not the '>=5 per tool' target) and only 3 live tests (test_live_search/data_services/status), not one live test per tool. The strategy and infrastructure are fully in place; per-tool test counts are not."
+    ]
+  },
+  "OPS-002": {
+    "status": "pass",
+    "evidence": [
+      "All mandatory README sections present: Anchor Demo Query (README.md:33), Installation (:147), Tools overview (:107), Configuration (env vars at :174-183), Security (Contributing & security :248 + SECURITY.md + no-auth/no-personal-data notes :86-103), ASCII architecture diagram (:56-80), Known limitations (:209-229), License/Credits (:257-263 + LICENSE).",
+      "Anchor demo query is concrete and natural-language with a decomposition into tool calls (README.md:33-53).",
+      "ASCII box-drawing architecture diagram present with data-flow labels (README.md:56-80).",
+      "Known limitations section is explicit with 6 items (>=3 required) (README.md:213-229). CHANGELOG in Keep-a-Changelog format; CONTRIBUTING.md and CONTRIBUTING.de.md both present (bilingual). README.de.md keeps the parallel section inventory."
+    ],
+    "gaps": []
+  },
+  "OPS-003": {
+    "status": "pass",
+    "evidence": [
+      "Current phase explicitly declared in README: 'Phase 1 (read-only)' with rationale (README.md:98-103).",
+      "Phase matches tool annotations: all 13 tools readOnlyHint:true, destructiveHint:false, GET-only, no destructive tools (docs/roadmap.md:9-14, server.py:77).",
+      "docs/roadmap.md present with a phase table (1 read-only / 2 write / 3 multi-agent) and phase-specific scope/status (docs/roadmap.md:16-20).",
+      "Phase-transition prerequisites documented: Phase 2 needs auth model, HITL, strict input validation, fresh audit with no open critical/high; Phase 3 adds tool namespacing/hash-pinning and gateway allow-listing/poisoning detection (docs/roadmap.md:22-36)."
+    ],
+    "gaps": [
+      "No CHANGELOG phase-transition entries yet, but the server is still in Phase 1 so none are due (criterion is N/A at this stage)."
+    ]
+  }
+}

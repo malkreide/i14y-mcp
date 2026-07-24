@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.2.0] — 2026-07-24
+
+First production-ready release. Aligns the repository with the Swiss Public Data
+MCP portfolio, runs a full MCP best-practice audit, and remediates all findings.
+
+**Audit verification:** production-ready ✅ — run-id
+`2026-07-24T091742-Z-i14y-mcp`, catalog hash `091f446b2796…`, results 36 pass ·
+0 fail · 5 non-blocking partials · 3 todo. Details under
+[`audits/`](audits/2026-07-24T091742-Z-i14y-mcp/audit-report.md).
+
 ### Added
 - Portfolio-standard repository scaffolding to align with the other Swiss Public
   Data MCP servers: `Dockerfile`, `compose.yaml`, `claude_desktop_config.json`,
@@ -106,5 +116,6 @@ server in the portfolio does not have to rediscover them.
 - **Read endpoints need no authentication**, despite the OpenAPI document
   declaring a Bearer scheme. Write endpoints do.
 
-[Unreleased]: https://github.com/malkreide/i14y-mcp/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/malkreide/i14y-mcp/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/malkreide/i14y-mcp/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/malkreide/i14y-mcp/releases/tag/v0.1.0

@@ -11,6 +11,9 @@ from __future__ import annotations
 
 import datetime as _dt
 import os
+import sys
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
 from typing import Any, Literal
 
 from mcp.server.fastmcp import FastMCP
@@ -22,8 +25,10 @@ from .client import (
     NotFoundError,
     UpstreamError,
     build_client,
+    client_session,
     fetch_json,
     last_success,
+    set_shared_client,
     unwrap,
 )
 from .models import (
@@ -42,7 +47,23 @@ from .models import (
     StatusResult,
 )
 
-mcp = FastMCP("i14y-mcp")
+
+@asynccontextmanager
+async def _lifespan(_server: FastMCP) -> AsyncIterator[None]:
+    """Build one shared httpx client for the whole process (SDK-001).
+
+    A single pooled client keeps TCP connections and TLS sessions alive across
+    tool calls instead of paying a fresh handshake per request.
+    """
+    async with build_client() as http:
+        set_shared_client(http)
+        try:
+            yield
+        finally:
+            set_shared_client(None)
+
+
+mcp = FastMCP("i14y-mcp", lifespan=_lifespan)
 
 Language = Literal["de", "fr", "it", "rm", "en"]
 ResourceType = Literal["Dataset", "DataService", "PublicService", "Concept", "MappingTable"]
@@ -59,7 +80,7 @@ def _clamp(value: int, low: int, high: int) -> int:
 
 
 async def _get(path: str, params: dict[str, Any] | None = None) -> Any:
-    async with build_client() as http:
+    async with client_session() as http:
         return unwrap(await fetch_json(http, path, params))
 
 
@@ -495,7 +516,7 @@ async def api_status() -> StatusResult:
     """
     checks: dict[str, str] = {}
     reachable = False
-    async with build_client() as http:
+    async with client_session() as http:
         for name, path in (
             ("datasets", "/datasets"),
             ("dataservices", "/dataservices"),
@@ -521,13 +542,52 @@ async def api_status() -> StatusResult:
     )
 
 
+def build_http_app(transport: str) -> Any:
+    """Build the SSE / streamable-http ASGI app with CORS configured.
+
+    FastMCP.run() serves the ASGI app without CORS, so browser clients cannot
+    read the `Mcp-Session-Id` response header and lose their session (SDK-004).
+    We build the app ourselves and expose that header via CORS.
+    """
+    from starlette.middleware.cors import CORSMiddleware
+
+    app = mcp.sse_app() if transport == "sse" else mcp.streamable_http_app()
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_methods=["GET", "POST", "DELETE", "OPTIONS"],
+        allow_headers=["*", "Mcp-Session-Id"],
+        # The critical line: browsers only read a response header if it is
+        # listed here, and MCP clients need Mcp-Session-Id to keep a session.
+        expose_headers=["Mcp-Session-Id"],
+    )
+    return app
+
+
+def _run_http(transport: str, host: str, port: int) -> None:
+    """Serve the CORS-wrapped SSE / streamable-http app with uvicorn."""
+    import uvicorn
+
+    uvicorn.run(build_http_app(transport), host=host, port=port, log_level="info")
+
+
 def main() -> None:
     """Entry point. Transport is selected via the I14Y_MCP_TRANSPORT env var."""
     transport = os.getenv("I14Y_MCP_TRANSPORT", "stdio").lower()
     if transport in {"sse", "streamable-http", "http"}:
-        mcp.settings.host = os.getenv("HOST", "0.0.0.0")
-        mcp.settings.port = int(os.getenv("PORT", "8000"))
-        mcp.run(transport="sse" if transport == "sse" else "streamable-http")
+        # SEC-016: default to loopback. Binding to all interfaces is an
+        # explicit opt-in (the container image sets HOST=0.0.0.0 on purpose).
+        host = os.getenv("HOST", "127.0.0.1")
+        port = int(os.getenv("PORT", "8000"))
+        if host == "0.0.0.0":  # noqa: S104 — intentional, warned about below
+            print(
+                "i14y-mcp: binding to 0.0.0.0 exposes the server on all network "
+                "interfaces; run it only behind a reverse proxy / firewall.",
+                file=sys.stderr,
+            )
+        mcp.settings.host = host
+        mcp.settings.port = port
+        _run_http("sse" if transport == "sse" else "streamable-http", host, port)
     else:
         mcp.run(transport="stdio")
 

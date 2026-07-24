@@ -189,3 +189,15 @@ def test_keywords_unwrap_the_label_envelope():
     raw = {"keywords": [{"label": {"de": "Vorsorge", "fr": "Retraite"}}, {"de": "Schule"}]}
     assert _keywords(raw, "de") == ["Vorsorge", "Schule"]
     assert _keywords(raw, "fr") == ["Retraite", "Schule"]
+
+
+@pytest.mark.parametrize("transport", ["sse", "streamable-http"])
+def test_http_app_exposes_session_id_via_cors(transport):
+    """SDK-004: browser MCP clients can only keep a session if CORS exposes
+    the Mcp-Session-Id response header."""
+    from starlette.middleware.cors import CORSMiddleware
+
+    app = server.build_http_app(transport)
+    cors = [m for m in app.user_middleware if m.cls is CORSMiddleware]
+    assert cors, "CORS middleware is not configured on the HTTP app"
+    assert "Mcp-Session-Id" in cors[0].kwargs.get("expose_headers", [])

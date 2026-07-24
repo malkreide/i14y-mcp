@@ -96,6 +96,13 @@ Consequences:
 
 Full probe report: [`docs/probe-i14y.md`](docs/probe-i14y.md).
 
+### Project phase
+
+This server is in **Phase 1 (read-only)** of the portfolio's «Read-only First»
+phase architecture: all tools are read-only, there is no authentication and no
+personal data. See [`docs/roadmap.md`](docs/roadmap.md) for the phase model and
+the prerequisites for any future write capability.
+
 ---
 
 ## Tools
@@ -151,10 +158,13 @@ pip install -e ".[dev]"
 ### Remote deployment (Render, Railway)
 
 ```bash
-I14Y_MCP_TRANSPORT=sse PORT=8000 i14y-mcp
+I14Y_MCP_TRANSPORT=sse HOST=0.0.0.0 PORT=8000 i14y-mcp
 ```
 
-`I14Y_MCP_TRANSPORT` accepts `stdio` (default), `sse` or `streamable-http`.
+`I14Y_MCP_TRANSPORT` accepts `stdio` (default), `sse` or `streamable-http`. The
+HTTP transports bind to `HOST`, which defaults to `127.0.0.1` (loopback); set
+`HOST=0.0.0.0` to expose the port on a PaaS (the Docker image already does).
+CORS exposes the `Mcp-Session-Id` header so browser MCP clients keep their session.
 
 ### Docker
 

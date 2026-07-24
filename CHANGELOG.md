@@ -15,6 +15,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
   plus `.github/dependabot.yml`.
 - Contributor and security documentation: `CONTRIBUTING.md` / `CONTRIBUTING.de.md`,
   `SECURITY.md` / `SECURITY.de.md`, and `PUBLISHING.md`.
+- MCP best-practice audit results under `audits/` (44 checks, 19 findings).
+- `docs/roadmap.md` documenting the Read-only-First phase architecture (OPS-003).
+- `HEALTHCHECK` in the Docker image so orchestrators can detect an unhealthy
+  container (SCALE-004).
+- Tests for the shared client, error masking and CORS session-header exposure.
+
+### Changed
+- **HTTP transports now default to `HOST=127.0.0.1` (loopback)** instead of
+  `0.0.0.0`; binding to all interfaces is an explicit opt-in and warns on stderr
+  outside a container (SEC-016). The Docker image sets `HOST=0.0.0.0` on purpose;
+  remote/PaaS deployments must set it explicitly.
+- A single pooled `httpx.AsyncClient` is now created once in a FastMCP lifespan and
+  reused across tool calls instead of being rebuilt per call (SDK-001).
+
+### Fixed
+- SSE / streamable-http now sets CORS to expose the `Mcp-Session-Id` header, so
+  browser MCP clients keep their session (SDK-004).
+
+### Security
+- Upstream 4xx error bodies are no longer embedded verbatim in client-facing
+  errors; a categorised message (HTTP status + path) is surfaced instead (OBS-002).
 
 ## [0.1.0] — 2026-07-21
 

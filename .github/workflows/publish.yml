@@ -3,6 +3,9 @@ name: Publish to PyPI
 on:
   release:
     types: [published]
+  # Manual re-run, e.g. to (re)publish to the MCP Registry after a metadata fix
+  # without cutting a new version. PyPI upload is a no-op (skip-existing).
+  workflow_dispatch:
 
 jobs:
   build:
@@ -67,7 +70,11 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      # On a release, force server.json to the tag version. On a manual
+      # workflow_dispatch run there is no tag, so the committed version is used
+      # as-is (mcp-publisher reads server.json's own version field).
       - name: Sync server.json version to the release tag
+        if: github.event_name == 'release'
         run: |
           VERSION="${GITHUB_REF_NAME#v}"
           jq --arg v "$VERSION" '.version = $v | .packages[0].version = $v' \

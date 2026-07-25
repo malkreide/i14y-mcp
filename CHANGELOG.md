@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+- Shortened the `server.json` description to ≤100 characters so the MCP Registry
+  publish passes its metadata validation (the v0.2.0 registry publish had failed
+  on this; PyPI publish succeeded).
+
+### Changed
+- `publish.yml` now also accepts `workflow_dispatch`, so the MCP Registry publish
+  can be re-run manually (PyPI upload is a no-op via `skip-existing`).
+
 ## [0.2.0] — 2026-07-24
 
 First production-ready release. Aligns the repository with the Swiss Public Data

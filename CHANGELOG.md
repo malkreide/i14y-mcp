@@ -6,10 +6,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.2.1] — 2026-07-25
+
+Patch release to complete the MCP Registry publish (0.2.0 shipped to PyPI but its
+registry entry failed validation).
+
 ### Fixed
 - Shortened the `server.json` description to ≤100 characters so the MCP Registry
   publish passes its metadata validation (the v0.2.0 registry publish had failed
   on this; PyPI publish succeeded).
+- Added the `mcp-name: io.github.malkreide/i14y-mcp` ownership marker to
+  `README.md` (the PyPI long-description) so the MCP Registry can validate that
+  the PyPI package and the GitHub namespace share an owner. PyPI READMEs are
+  immutable per version, so this required a new release to reach PyPI.
 
 ### Changed
 - `publish.yml` now also accepts `workflow_dispatch`, so the MCP Registry publish
@@ -125,6 +134,7 @@ server in the portfolio does not have to rediscover them.
 - **Read endpoints need no authentication**, despite the OpenAPI document
   declaring a Bearer scheme. Write endpoints do.
 
-[Unreleased]: https://github.com/malkreide/i14y-mcp/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/malkreide/i14y-mcp/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/malkreide/i14y-mcp/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/malkreide/i14y-mcp/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/malkreide/i14y-mcp/releases/tag/v0.1.0

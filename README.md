@@ -264,3 +264,14 @@ the unit tests were already green.
 
 Licence: MIT. The catalogue data remains subject to the terms declared by each
 publisher.
+
+---
+
+## MCP Registry
+
+Ownership marker used by the [MCP Registry](https://registry.modelcontextprotocol.io)
+to link this PyPI package to the GitHub namespace:
+
+```
+mcp-name: io.github.malkreide/i14y-mcp
+```

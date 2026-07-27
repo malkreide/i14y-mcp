@@ -49,6 +49,10 @@ Two tool calls turn a vague topic into a named authority, a download URL and a
 licence you can act on — `get_dataset` aggregates the distributions, licences
 and contact point into one record.
 
+### Demo
+
+![Demo: Claude using search_catalog and get_dataset](docs/assets/demo.svg)
+
 ---
 
 ## Architecture
@@ -245,12 +249,31 @@ the unit tests were already green.
 
 ---
 
-## Contributing & security
+## Contributing
 
-- [`CONTRIBUTING.md`](CONTRIBUTING.md) — ground rules (read-only, one egress
-  host, no secrets) and the local dev loop.
-- [`SECURITY.md`](SECURITY.md) — security posture and how to report a vulnerability.
-- [`PUBLISHING.md`](PUBLISHING.md) — the PyPI / MCP Registry release process.
+See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the ground rules (read-only, one
+egress host, no secrets) and the local dev loop. Maintainers: [`PUBLISHING.md`](PUBLISHING.md)
+covers the PyPI / MCP Registry release process.
+
+---
+
+## Security
+
+See [`SECURITY.md`](SECURITY.md) for the security posture and how to report a
+vulnerability.
+
+---
+
+## License
+
+MIT License — see [LICENSE](LICENSE). The catalogue data remains subject to the
+terms declared by each publisher.
+
+---
+
+## Author
+
+**Hayal Oezkan** · [github.com/malkreide](https://github.com/malkreide)
 
 ---
 

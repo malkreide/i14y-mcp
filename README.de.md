@@ -49,6 +49,10 @@ Zwei Tool-Aufrufe verwandeln ein vages Thema in eine benannte Behörde, eine
 Download-URL und eine handlungsrelevante Lizenz — `get_dataset` aggregiert
 Distributionen, Lizenzen und Kontaktstelle in einem Datensatz.
 
+### Demo
+
+![Demo: Claude nutzt search_catalog und get_dataset](docs/assets/demo.svg)
+
 ---
 
 ## Architektur
@@ -249,13 +253,32 @@ gefunden, nachdem die Unit-Tests bereits grün waren.
 
 ---
 
-## Mitwirken & Sicherheit
+## Mitwirken
 
-- [`CONTRIBUTING.de.md`](CONTRIBUTING.de.md) — Grundregeln (read-only, ein
-  Egress-Host, keine Secrets) und der lokale Entwicklungs-Loop.
-- [`SECURITY.de.md`](SECURITY.de.md) — Sicherheits-Posture und wie Schwachstellen
-  gemeldet werden.
-- [`PUBLISHING.md`](PUBLISHING.md) — der Release-Prozess für PyPI / MCP-Registry.
+Siehe [`CONTRIBUTING.de.md`](CONTRIBUTING.de.md) für die Grundregeln (read-only,
+ein Egress-Host, keine Secrets) und den lokalen Entwicklungs-Loop. Für
+Maintainer beschreibt [`PUBLISHING.md`](PUBLISHING.md) den Release-Prozess für
+PyPI und MCP-Registry.
+
+---
+
+## Sicherheit
+
+Siehe [`SECURITY.de.md`](SECURITY.de.md) für die Sicherheits-Posture und die
+Meldung von Schwachstellen.
+
+---
+
+## Lizenz
+
+MIT-Lizenz — siehe [LICENSE](LICENSE). Die Katalogdaten unterliegen weiterhin den
+Bedingungen der jeweiligen Publisher.
+
+---
+
+## Autor
+
+**Hayal Oezkan** · [github.com/malkreide](https://github.com/malkreide)
 
 ---
 

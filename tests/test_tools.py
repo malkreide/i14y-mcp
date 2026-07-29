@@ -217,7 +217,7 @@ async def test_search_empty_returns_actionable_hint():
 async def test_invalid_id_is_rejected_at_the_boundary():
     """SEC-018 / OBS-001: a malformed id is rejected by the schema before the
     tool body runs, surfaced as a protocol-level tool error."""
-    from mcp.server.fastmcp.exceptions import ToolError
+    from mcp.server.mcpserver.exceptions import ToolError
 
     with pytest.raises(ToolError):
         await server.mcp.call_tool("get_dataset", {"dataset_id": "../etc/passwd"})
@@ -225,7 +225,7 @@ async def test_invalid_id_is_rejected_at_the_boundary():
 
 async def test_unknown_tool_is_a_protocol_error():
     """OBS-001: calling an unknown tool is a protocol error, not a crash."""
-    from mcp.server.fastmcp.exceptions import ToolError
+    from mcp.server.mcpserver.exceptions import ToolError
 
     with pytest.raises(ToolError):
         await server.mcp.call_tool("does_not_exist", {})

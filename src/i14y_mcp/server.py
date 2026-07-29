@@ -18,7 +18,7 @@ from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from typing import Annotated, Any, Literal
 
-from mcp.server.fastmcp import Context, FastMCP
+from mcp.server.mcpserver import Context, MCPServer
 from pydantic import Field
 
 from . import mappers
@@ -53,7 +53,7 @@ from .models import (
 
 
 @asynccontextmanager
-async def _lifespan(_server: FastMCP) -> AsyncIterator[None]:
+async def _lifespan(_server: MCPServer) -> AsyncIterator[None]:
     """Build one shared httpx client for the whole process (SDK-001).
 
     A single pooled client keeps TCP connections and TLS sessions alive across
@@ -69,7 +69,7 @@ async def _lifespan(_server: FastMCP) -> AsyncIterator[None]:
             logger.info("server.stop")
 
 
-mcp = FastMCP("i14y-mcp", lifespan=_lifespan)
+mcp = MCPServer("i14y-mcp", lifespan=_lifespan)
 
 Language = Literal["de", "fr", "it", "rm", "en"]
 ResourceType = Literal["Dataset", "DataService", "PublicService", "Concept", "MappingTable"]
@@ -84,7 +84,7 @@ READ_ONLY: dict[str, Any] = {
 }
 
 # SEC-018: strict, whitelist-based argument constraints applied at the tool
-# boundary. Pydantic (via FastMCP) rejects out-of-range, oversized or malformed
+# boundary. Pydantic (via MCPServer) rejects out-of-range, oversized or malformed
 # input *before* a tool body runs; `_clamp()` stays as defence in depth for
 # direct/programmatic calls that bypass the schema layer.
 PathId = Annotated[
@@ -659,7 +659,7 @@ async def tool_manifest() -> dict[str, Any]:
     """
     tools = sorted(await mcp.list_tools(), key=lambda t: t.name)
     entries = [
-        {"name": tool.name, **_stable_signature(tool.inputSchema or {})}
+        {"name": tool.name, **_stable_signature(tool.input_schema or {})}
         for tool in tools
     ]
     combined = hashlib.sha256(
@@ -719,7 +719,7 @@ def build_transport_security(host: str, port: int):
 def build_http_app(transport: str) -> Any:
     """Build the SSE / streamable-http ASGI app with CORS configured.
 
-    FastMCP.run() serves the ASGI app without CORS, so browser clients cannot
+    MCPServer.run() serves the ASGI app without CORS, so browser clients cannot
     read the `Mcp-Session-Id` response header and lose their session (SDK-004).
     We build the app ourselves and expose that header via CORS.
     """

@@ -1,6 +1,6 @@
 """i14y-mcp — MCP server for Switzerland's national metadata catalogue (I14Y)."""
 
-__version__ = "0.2.1"
+__version__ = "0.3.0"
 
 from .server import main, mcp
 

@@ -1,7 +1,6 @@
 """i14y-mcp — MCP server for Switzerland's national metadata catalogue (I14Y)."""
 
-__version__ = "0.3.1"
-
+from ._version import __version__
 from .server import main, mcp
 
 __all__ = ["main", "mcp", "__version__"]

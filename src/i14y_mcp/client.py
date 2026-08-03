@@ -16,6 +16,7 @@ from urllib.parse import urlsplit
 
 import httpx
 
+from ._version import __version__
 from .logging_config import logger
 
 BASE_URL = "https://api.i14y.admin.ch/api"
@@ -33,7 +34,11 @@ ATTRIBUTION = (
     "check the `licence` field before reuse."
 )
 
-USER_AGENT = "i14y-mcp (+https://github.com/malkreide/i14y-mcp)"
+# Mit Version, damit der Betreiber der Datenquelle erkennt, welches Release ihn
+# anruft. Vorher stand hier ein nacktes Produkt-Token: nichts daran war falsch,
+# aber bei Fehlverhalten liess sich nicht sagen, welche Fassung es zeigt.
+# Interpoliert aus den Paket-Metadaten, nie aus einem Literal.
+USER_AGENT = f"i14y-mcp/{__version__} (+https://github.com/malkreide/i14y-mcp)"
 
 # Retry policy: 3 retries, 2s / 4s / 8s.
 MAX_ATTEMPTS = 4

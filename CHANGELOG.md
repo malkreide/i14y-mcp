@@ -6,6 +6,48 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.3.2] - 2026-08-02
+
+### Fixed
+
+- **The User-Agent named no version.** Outbound requests carried
+
+  ```
+  i14y-mcp (+https://github.com/malkreide/i14y-mcp)
+  ```
+
+  Nothing about it was wrong — it claimed no false number — but the operator of
+  the data source could not tell which release was calling, which is half the
+  reason to send a custom User-Agent at all. It now reads
+  `i14y-mcp/<version> (+…)`, interpolated from the package metadata.
+
+  This was the last such case in the portfolio. A fleet-wide probe reported it
+  as `unverified`: a User-Agent was present but no value could be compared
+  against the installed version. That is explicitly not a pass — "I could not
+  resolve it" and "there is nothing wrong" are different claims.
+
+- **`__version__` was a literal beside the one in `pyproject.toml`.** Two copies
+  of a number the build decides. The same arrangement in `hn-tech-signal-mcp`
+  led to `__version__` reporting `0.2.1` while the package shipped as `0.2.4`,
+  and in `swiss-procurement-mcp` to a User-Agent announcing `0.4.0` from a
+  package that was `0.18.3`.
+
+  The version now comes from `importlib.metadata` in a module of its own,
+  `_version.py`. A separate module rather than `__init__`, so that `client` can
+  read the version without importing the package root: the root imports
+  `server`, which imports `client`, and taking the version from a
+  partially-initialised root would hold only until somebody reorders two lines.
+  `bag-health-mcp` carries a latent circular import from exactly that shape.
+
+  The fallback for an uninstalled source tree is `0.0.0+source` — a PEP 440
+  local segment that cannot be read as a release.
+
+- **Nothing asserted anything about the User-Agent before.** `tests/test_user_agent.py`
+  now checks that it carries the installed version, that `__version__` equals it,
+  that a version is named at all, and that no version literal returns under
+  `src/`. Verified in the other direction too: with the bare token restored, two
+  of the five tests fail.
+
 ## [0.3.1] - 2026-08-02
 
 ### Fixed

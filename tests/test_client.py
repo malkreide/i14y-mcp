@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import UTC, datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from email.utils import format_datetime
 
 import httpx
@@ -187,7 +187,7 @@ def test_retry_after_reads_both_rfc9110_forms() -> None:
 
     assert c.parse_retry_after(resp(429, {"Retry-After": "120"})) == 120.0
 
-    later = format_datetime(datetime.now(UTC) + timedelta(seconds=90))
+    later = format_datetime(datetime.now(timezone.utc) + timedelta(seconds=90))
     seconds = c.parse_retry_after(resp(503, {"Retry-After": later}))
     assert seconds is not None and 80 < seconds <= 90
 

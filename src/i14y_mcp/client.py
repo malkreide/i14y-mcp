@@ -12,7 +12,7 @@ import random
 import time
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
 from typing import Any
 from urllib.parse import urlsplit
@@ -111,8 +111,8 @@ def parse_retry_after(resp: httpx.Response | None) -> float | None:
     if when is None:
         return None
     if when.tzinfo is None:  # RFC 9110 dates are GMT; a naive one means UTC
-        when = when.replace(tzinfo=UTC)
-    return max(0.0, (when - datetime.now(UTC)).total_seconds())
+        when = when.replace(tzinfo=timezone.utc)
+    return max(0.0, (when - datetime.now(timezone.utc)).total_seconds())
 
 
 def compute_delay(attempt: int, last_error: Exception | None) -> float:
@@ -258,12 +258,11 @@ async def fetch_json(
         started = time.perf_counter()
         try:
             # `time.perf_counter` here times the call for the log line — it
-            # bounds nothing. The budget is the `asyncio.timeout` below: httpx
+            # bounds nothing. The budget is the `asyncio.wait_for` below: httpx
             # limits each operation and restarts its read timeout with every
             # chunk, so a slowly trickling response outlives a per-operation
             # limit without any single read expiring.
-            async with asyncio.timeout(remaining):
-                resp = await http.get(path, params=clean)
+            resp = await asyncio.wait_for(http.get(path, params=clean), remaining)
             elapsed_ms = round((time.perf_counter() - started) * 1000)
             if resp.status_code == 404:
                 logger.info("i14y.not_found", path=path, ms=elapsed_ms)
@@ -293,7 +292,7 @@ async def fetch_json(
                     f"I14Y rejected the request with HTTP {status} for {path}."
                 ) from exc
             logger.warning("i14y.server_error", path=path, status=status, attempt=attempt)
-        except TimeoutError as exc:  # the budget is gone, not just this try
+        except asyncio.TimeoutError as exc:  # budget gone, not just this try
             last_error = exc
             logger.warning("i14y.budget_spent", path=path, attempt=attempt)
             break

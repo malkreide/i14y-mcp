@@ -31,10 +31,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
      upstream that takes 30s to time out is two minutes inside one tool call,
      and an attempt count never says so. Now 25s for the whole call, anchored
      on the MCP SDK's `MCP_DEFAULT_TIMEOUT = 30.0`.
-  5. **Nothing held that budget.** It is now an `asyncio.timeout` wall-clock
+  5. **Nothing held that budget.** It is now an `asyncio.wait_for` wall-clock
      deadline rather than an httpx timeout: httpx bounds each *operation*, and
      its read timeout restarts with every chunk, so a slowly trickling response
-     outlived the budget without any single read expiring.
+     outlived the budget without any single read expiring. `asyncio.timeout`
+     would read better here, but it needs 3.11 and `requires-python` is
+     `>=3.10`; the paired `except asyncio.TimeoutError` is 3.10-safe for the
+     same reason, since the builtin only became an alias for it in 3.11.
   6. **The wrapper hid the failure mode.** `UpstreamError` stays — OBS-002
      keeps raw upstream detail away from the model, and it is a type a caller
      can branch on. What changed is what the message carries. It interpolated

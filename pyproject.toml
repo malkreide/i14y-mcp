@@ -65,3 +65,15 @@ target-version = "py310"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
+# Beide Regeln modernisieren auf 3.11-Aliasse, die es unter 3.10 nicht gibt.
+# `requires-python` ist ">=3.10" und die CI-Matrix testet 3.10; still sind sie heute
+# nur, weil `target-version = "py310"` gesetzt ist. Diese Ignores entkoppeln sie
+# davon, damit ein `target-version`-Bump nicht per `--fix` die Fixes aus 3deea6c
+# zurueckdreht. Duerfen raus, sobald `requires-python` auf ">=3.11" steht.
+#
+# UP017: `timezone.utc` -> `datetime.UTC`. Der Alias existiert erst ab 3.11, unter
+#   3.10 ist das ein ImportError beim Sammeln der Tests.
+# UP041: `asyncio.TimeoutError` -> `TimeoutError`. Erst ab 3.11 dasselbe Objekt;
+#   unter 3.10 sind es zwei Klassen, d.h. `asyncio.wait_for` liefe in ein nicht
+#   gefangenes Timeout und das Retry-Budget in client.py griffe still nicht mehr.
+ignore = ["UP017", "UP041"]

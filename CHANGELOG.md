@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- **Counter-check rule in `CLAUDE.md` sharpened.** Neutralising an assurance
+  and getting only a symptom back — runtime, log noise, empty fields — means
+  the assurance is still missing, not that it held. Both defects found in this
+  cycle read that way first: the mapper mismatch surfaced as null titles, and
+  removing the backoff seam failed nothing at all, it just made the suite 29x
+  slower.
+
 - **The offline tests no longer disarm `asyncio.sleep` process-wide.** All three
   test modules collapsed the retry backoff with
   `monkeypatch.setattr(client.asyncio, "sleep", ...)`, which reads as a local

@@ -18,6 +18,10 @@ Gegenprobe ist Pflicht. Ein Test, der grün bleibt, wenn man die
 Implementierung entfernt, prüft nichts. Jede neue Zusicherung einzeln
 neutralisieren und zeigen, dass genau die zugehörigen Tests fallen.
 
+Fällt dabei kein Test, sondern zeigt sich nur ein Symptom — Laufzeit,
+Log-Rauschen, leere Felder —, dann fehlt die Zusicherung noch. Ein 29× längerer
+Lauf ist kein Signal, das jemand liest.
+
 Zwei Fallen, die beide grün blieben:
 
 - Eine Fake-Uhr, die nur beim Schlafen vorrückt, kann eine Zusicherung über

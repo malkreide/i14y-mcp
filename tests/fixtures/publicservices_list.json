@@ -1,730 +1,717 @@
 {
-  "_recording": {
-    "recorded_at": "2026-08-14T10:42:15+00:00",
-    "source": "https://api.i14y.admin.ch/api",
-    "endpoint": "/publicservices",
-    "params": {
-      "page": 1,
-      "pageSize": 2
-    },
-    "status": 200,
-    "recorded_by": "scripts/record_fixtures.py"
-  },
-  "body": {
-    "data": [
-      {
-        "businessEvents": [
-          {
-            "code": "BE-Admin",
-            "name": {
-              "de": "Administrative Voraussetzungen schaffen ",
-              "en": "Establishing administrative conditions",
-              "fr": "Créer des conditions administratives",
-              "it": "Stabilire condizioni amministrative"
-            }
-          },
-          {
-            "code": "BE-Notification",
-            "name": {
-              "de": "Meldung an die Behörden",
-              "en": "Notification to the authorities",
-              "fr": "Notification aux autorités",
-              "it": "Notifica alle autorità"
-            }
-          },
-          {
-            "code": "BE-Information",
-            "name": {
-              "de": "Von Behörden bereitgestellte Informationen nutzen",
-              "en": "Use information provided by authorities",
-              "fr": "Utiliser les informations fournies par les autorités",
-              "it": "Utilizzare le informazioni fornite dalle autorità"
-            }
-          }
-        ],
-        "channels": [
-          {
-            "description": {
-              "de": "TravelAdmin Web-Seite",
-              "en": "TravelAdmin Website",
-              "fr": "TravelAdmin Site web",
-              "it": "TravelAdmin Sito web"
-            },
-            "id": "8baab212-550a-4c50-9fcf-22ec5d26fb5e",
-            "identifier": "EDA-KD-TravelAdmin_Web",
-            "ownedBy": [],
-            "type": {
-              "code": "b37115f83e",
-              "name": {
-                "de": "Internet",
-                "en": "Web",
-                "fr": "Web",
-                "it": "Sito web"
-              },
-              "uri": "http://data.europa.eu/snb/com-channel/b37115f83e"
-            },
-            "url": "https://www.traveladmin.ch/"
-          },
-          {
-            "description": {
-              "de": "TravelAdmin App für Iphone",
-              "en": "TravelAdmin App for Iphone",
-              "fr": "TravelAdmin App pour Iphone",
-              "it": "TravelAdmin App per Iphone"
-            },
-            "id": "d61da001-debf-4606-9a88-15ec989998bb",
-            "identifier": "EDA-KD-TravelAdmin_IOS",
-            "ownedBy": [],
-            "type": {
-              "code": "b37115f83e",
-              "name": {
-                "de": "Internet",
-                "en": "Web",
-                "fr": "Web",
-                "it": "Sito web"
-              },
-              "uri": "http://data.europa.eu/snb/com-channel/b37115f83e"
-            },
-            "url": "https://apps.apple.com/ch/app/travel-admin-reisehinweise/id1468260065"
-          },
-          {
-            "description": {
-              "de": "TravelAdmin App für Android",
-              "en": "TravelAdmin App for Android",
-              "fr": "TravelAdmin App pour Android",
-              "it": "TravelAdmin App per Android"
-            },
-            "id": "f3d9ed01-c3b1-4cdc-9cfd-d19b3af396dd",
-            "identifier": "EDA-KD-TravelAdmin_Android",
-            "ownedBy": [],
-            "type": {
-              "code": "b37115f83e",
-              "name": {
-                "de": "Internet",
-                "en": "Web",
-                "fr": "Web",
-                "it": "Sito web"
-              },
-              "uri": "http://data.europa.eu/snb/com-channel/b37115f83e"
-            },
-            "url": "https://play.google.com/store/apps/details?id=ch.erni.itinerisapp&pli=1"
-          }
-        ],
-        "description": {
-          "de": "Sicher und entspannt reisen mit Travel Admin, der Reise-App des EDA. Die Travel Admin App unterstützt optimal bei der Vorbereitung einer Reise. Auch für unterwegs hält die App nützliche Informationen und Dienstleistungen bereit, die nicht nur im Krisenfall weiterhelfen. Tritt die Krise aber einmal ein, kann die App zu einem besonders wertvollen Hilfsmittel werden: Sehr bewährt hat sich die App beispielsweise bei der Organisation der Rückreise von blockierten Schweizer Reisenden im Zusammenhang mit der Corona-Pandemie.",
-          "en": "Travel safe and worry-free with Travel Admin, the FDFA's travel app. Travel Admin helps you prepare for your trip, and provides useful information and services on the go – not just in the event of an emergency. But if there is a crisis abroad, the app can be a valuable tool: such as during the COVID-19 pandemic, when it proved particularly useful in organising return journeys for Swiss travellers stranded abroad.",
-          "fr": "Voyagez en toute sécurité et en toute détente avec Travel Admin, l'application pour le voyage du DFAE. L'application Travel Admin offre un soutien idéal dans la préparation d'un voyage. Elle fournit également des informations et des services utiles aux personnes en déplacement, et pas uniquement en cas de crise. Mais si la crise se produit, l'application peut devenir un outil particulièrement précieux. L'application a, par exemple, fait ses preuves dans le contexte du COVID-19, en facilitant l'organisation du retour des voyageurs et voyageuses suisses bloqués.",
-          "it": "Viaggi sicuri e senza troppi pensieri con Travel Admin, l'app di viaggio del DFAE. L'app Travel Admin fornisce un supporto ottimale nella preparazione di un viaggio, nonché informazioni e servizi utili per le persone in movimento, non solo in caso di crisi. È però vero che in contesti di crisi l'app può diventare uno strumento particolarmente prezioso: per esempio, l’app si è rivelata molto utile nel quadro dell’organizzazione del viaggio di ritorno delle viaggiatrici e dei viaggiatori svizzeri bloccati durante la pandemia di Coronavirus."
-        },
-        "id": "013f9b30-5756-49e1-bf60-addfcd784e11",
-        "identifiers": [
-          "EDA-KD-TravelAdmin"
-        ],
-        "isDescribedAt": [],
-        "keywords": [
-          {
-            "label": {
-              "de": "Reisehinweise",
-              "en": "Travel Advice",
-              "fr": "Conseils aux voyageurs",
-              "it": "Consigli di viaggio"
-            }
-          },
-          {
-            "label": {
-              "de": "Sicherheitslage",
-              "en": "Security situation",
-              "fr": "Situation sécuritaire",
-              "it": "Situazione della sicurezza"
-            }
-          },
-          {
-            "label": {
-              "de": "Krise",
-              "en": "Crisis",
-              "fr": "Crise",
-              "it": "Crisi"
-            }
-          },
-          {
-            "label": {
-              "de": "Rückreise",
-              "en": "Return trip",
-              "fr": "Voyage de retour",
-              "it": "Rientro"
-            }
-          },
-          {
-            "label": {
-              "de": "Reisevorbereitung",
-              "en": "Travel preparation",
-              "fr": "Préparation du voyage",
-              "it": "Preparazione del viaggio"
-            }
-          },
-          {
-            "label": {
-              "de": "Notfalladresse des Reiselands",
-              "en": "Emergency contact of the destination country",
-              "fr": "Contact d’urgence du pays de destination",
-              "it": "Contatto d’emergenza del Paese di destinazione"
-            }
-          },
-          {
-            "label": {
-              "de": "Hilfe im Ausland",
-              "en": "Assistance abroad",
-              "fr": "Aide à l’étranger",
-              "it": "Aiuto all’estero"
-            }
-          },
-          {
-            "label": {
-              "de": "Krisenfall",
-              "en": "Crisis situation",
-              "fr": "Situation de crise",
-              "it": "Situazione di crisi"
-            }
-          },
-          {
-            "label": {
-              "de": "Schweizer Botschaft- und Konsulatsadressen",
-              "en": "Swiss embassy and consulate addresses",
-              "fr": "Adresses des ambassades et consulats suisses",
-              "it": "Indirizzi delle ambasciate e dei consolati svizzeri"
-            }
-          }
-        ],
-        "languages": [
-          {
-            "code": "de",
-            "name": {
-              "de": "Deutsch",
-              "en": "German",
-              "fr": "allemand",
-              "it": "Tedesco"
-            },
-            "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=de"
-          },
-          {
-            "code": "en",
-            "name": {
-              "de": "Englisch",
-              "en": "English",
-              "fr": "anglais",
-              "it": "Inglese"
-            },
-            "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=en"
-          },
-          {
-            "code": "fr",
-            "name": {
-              "de": "Französisch",
-              "en": "French",
-              "fr": "français",
-              "it": "Francese"
-            },
-            "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=fr"
-          },
-          {
-            "code": "it",
-            "name": {
-              "de": "Italienisch",
-              "en": "Italian",
-              "fr": "italien",
-              "it": "Italiano"
-            },
-            "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=it"
-          }
-        ],
-        "lifeEvents": [
-          {
-            "code": "LE-Admin-01",
-            "name": {
-              "de": "Administrative Voraussetzungen schaffen ",
-              "en": "Establishing administrative conditions",
-              "fr": "Créer des conditions administratives",
-              "it": "Stabilire condizioni amministrative"
-            }
-          },
-          {
-            "code": "LE-Notification",
-            "name": {
-              "de": "Meldung an die Behörden",
-              "en": "Notification to the authorities",
-              "fr": "Déclaration aux autorités",
-              "it": "Notifica alle autorità"
-            }
-          },
-          {
-            "code": "LE-Travel-01",
-            "name": {
-              "de": "Reisen",
-              "en": "Travel",
-              "fr": "Voyager",
-              "it": "Viaggiare"
-            }
-          },
-          {
-            "code": "LE-Information-01",
-            "name": {
-              "de": "Von Behörden bereitgestellte Informationen nutzen",
-              "en": "Use information provided by authorities",
-              "fr": "Utiliser les informations fournies par les autorités",
-              "it": "Utilizzare le informazioni fornite dalle autorità"
-            }
-          }
-        ],
-        "name": {
-          "de": "Travel Admin : Die App für Ihre Reisevorbereitung",
-          "en": "Travel Admin : the app to prepare your trip",
-          "fr": "Travel Admin : l’application pour préparer votre voyage",
-          "it": "Travel Admin : l’app per preparare il tuo viaggio"
-        },
-        "publicationLevel": "Public",
-        "publisher": {
-          "classification": {
-            "code": "0220",
-            "name": {
-              "de": "Verwaltungseinheit des Bundes",
-              "en": "Administrative unit of the Confederation",
-              "fr": "Unité de l’administration fédérale",
-              "it": "Unità amministrativa della Confederazione"
-            }
-          },
-          "description": {
-            "de": "Das EDA wahrt die aussenpolitischen Interessen der Schweiz. Es pflegt Beziehungen zu anderen Staaten und zu internationalen Organisationen wie der EU oder der UNO. Es bietet Dienstleistungen für Schweizerinnen und Schweizer im Ausland an. Auch die Entwicklungszusammenarbeit und die humanitäre Hilfe gehören zu seinen Aufgaben. Mit ihren rund 170 Vertretungen ist die Schweiz rund um den Globus präsent.",
-            "en": "The FDFA safeguards Switzerland's foreign policy interests. It maintains relations with other states and international organisations such as the EU and UN, and provides services for Swiss citizens abroad. It is also responsible for Switzerland's development cooperation and humanitarian aid. Switzerland maintains a global presence through its approximately 170 representations.",
-            "fr": "Le DFAE sauvegarde les intérêts de la Suisse en matière de politique extérieure. Il entretient des relations avec d’autres États et des organisations internationales telles que l’UE et l’ONU. Il propose des prestations aux citoyennes et citoyens suisses à l’étranger. La coopération au développement et l’aide humanitaire entrent également dans son champ d’activités. La Suisse est présente dans le monde entier grâce à un réseau comptant quelque 170 représentations.",
-            "it": "Il DFAE tutela gli interessi della Svizzera in materia di politica estera. Cura le relazioni con altri Stati e con organizzazioni internazionali come l’UE e l’ONU. Offre servizi alle Svizzere e agli Svizzeri che vivono o si trovano all’estero. I suoi compiti comprendono anche la cooperazione allo sviluppo e l’aiuto umanitario. Grazie alle sue circa 170 rappresentanze, la Svizzera è presente in tutto il mondo."
-          },
-          "homePage": "https://www.eda.admin.ch",
-          "id": "eb61770b-d6b0-43a9-b5e5-c6c6e99edd80",
-          "identifier": "CH_EDA",
-          "images": [],
+  "data": [
+    {
+      "businessEvents": [
+        {
+          "code": "BE-Admin",
           "name": {
-            "de": "Eidgenössisches Departement für auswärtige Angelegenheiten (EDA)",
-            "en": "Federal Department of Foreign Affairs (FDFA)",
-            "fr": "Département fédéral des affaires étrangères (DFAE)",
-            "it": "Dipartimento federale degli affari esteri (DFAE)"
-          },
-          "prefLabel": {
-            "de": "EDA",
-            "en": "FDFA",
-            "fr": "DFAE",
-            "it": "DFAE"
-          },
-          "system": {
-            "createdAt": "2024-04-24T12:48:49.814985+00:00",
-            "modifiedAt": "2025-07-16T08:18:33.790564+00:00"
-          },
-          "spatial": [
-            "CH"
-          ],
-          "spatialCH": [
-            {
-              "code": "8100",
-              "name": {
-                "de": "Schweiz",
-                "en": "Switzerland",
-                "fr": "Suisse",
-                "it": "Svizzera",
-                "rm": "Svizra"
-              }
-            }
-          ],
-          "subAgents": [],
-          "uid": "CHE335670007"
-        },
-        "registrationStatus": "Recorded",
-        "relations": [],
-        "requires": [],
-        "sectors": [
-          {
-            "code": "104",
-            "name": {
-              "de": "Aussenbeziehungen",
-              "en": "External relations",
-              "fr": "Relations extérieures",
-              "it": "Relazioni esterne"
-            }
-          },
-          {
-            "code": "119",
-            "name": {
-              "de": "Behörden",
-              "en": "Authorities",
-              "fr": "Autorités",
-              "it": "Autorità"
-            }
-          },
-          {
-            "code": "122",
-            "name": {
-              "de": "Geoinformationen",
-              "en": "Geoinformation",
-              "fr": "Géo-informations",
-              "it": "Geoinformazione"
-            }
-          },
-          {
-            "code": "116",
-            "name": {
-              "de": "Mobilität",
-              "en": "Mobility",
-              "fr": "Mobilité",
-              "it": "Mobilità"
-            }
-          },
-          {
-            "code": "111",
-            "name": {
-              "de": "Sicherheit",
-              "en": "Security",
-              "fr": "Sécurité",
-              "it": "Sicurezza"
-            }
+            "de": "Administrative Voraussetzungen schaffen ",
+            "en": "Establishing administrative conditions",
+            "fr": "Créer des conditions administratives",
+            "it": "Stabilire condizioni amministrative"
           }
-        ],
-        "system": {
-          "createdAt": "2025-10-09T13:11:25.811194+00:00",
-          "modifiedAt": "2025-11-25T10:49:16.858139+00:00"
         },
-        "spatial": [
-          "Weltweit"
-        ],
-        "thematicAreas": [
-          {
-            "code": "104",
-            "name": {
-              "de": "Aussenbeziehungen",
-              "en": "External relations",
-              "fr": "Relations extérieures",
-              "it": "Relazioni esterne"
-            }
-          },
-          {
-            "code": "119",
-            "name": {
-              "de": "Behörden",
-              "en": "Authorities",
-              "fr": "Autorités",
-              "it": "Autorità"
-            }
-          },
-          {
-            "code": "122",
-            "name": {
-              "de": "Geoinformationen",
-              "en": "Geoinformation",
-              "fr": "Géo-informations",
-              "it": "Geoinformazione"
-            }
-          },
-          {
-            "code": "116",
-            "name": {
-              "de": "Mobilität",
-              "en": "Mobility",
-              "fr": "Mobilité",
-              "it": "Mobilità"
-            }
-          },
-          {
-            "code": "111",
-            "name": {
-              "de": "Sicherheit",
-              "en": "Security",
-              "fr": "Sécurité",
-              "it": "Sicurezza"
-            }
+        {
+          "code": "BE-Notification",
+          "name": {
+            "de": "Meldung an die Behörden",
+            "en": "Notification to the authorities",
+            "fr": "Notification aux autorités",
+            "it": "Notifica alle autorità"
           }
-        ],
-        "spatialCH": []
+        },
+        {
+          "code": "BE-Information",
+          "name": {
+            "de": "Von Behörden bereitgestellte Informationen nutzen",
+            "en": "Use information provided by authorities",
+            "fr": "Utiliser les informations fournies par les autorités",
+            "it": "Utilizzare le informazioni fornite dalle autorità"
+          }
+        }
+      ],
+      "channels": [
+        {
+          "description": {
+            "de": "TravelAdmin Web-Seite",
+            "en": "TravelAdmin Website",
+            "fr": "TravelAdmin Site web",
+            "it": "TravelAdmin Sito web"
+          },
+          "id": "8baab212-550a-4c50-9fcf-22ec5d26fb5e",
+          "identifier": "EDA-KD-TravelAdmin_Web",
+          "ownedBy": [],
+          "type": {
+            "code": "b37115f83e",
+            "name": {
+              "de": "Internet",
+              "en": "Web",
+              "fr": "Web",
+              "it": "Sito web"
+            },
+            "uri": "http://data.europa.eu/snb/com-channel/b37115f83e"
+          },
+          "url": "https://www.traveladmin.ch/"
+        },
+        {
+          "description": {
+            "de": "TravelAdmin App für Iphone",
+            "en": "TravelAdmin App for Iphone",
+            "fr": "TravelAdmin App pour Iphone",
+            "it": "TravelAdmin App per Iphone"
+          },
+          "id": "d61da001-debf-4606-9a88-15ec989998bb",
+          "identifier": "EDA-KD-TravelAdmin_IOS",
+          "ownedBy": [],
+          "type": {
+            "code": "b37115f83e",
+            "name": {
+              "de": "Internet",
+              "en": "Web",
+              "fr": "Web",
+              "it": "Sito web"
+            },
+            "uri": "http://data.europa.eu/snb/com-channel/b37115f83e"
+          },
+          "url": "https://apps.apple.com/ch/app/travel-admin-reisehinweise/id1468260065"
+        },
+        {
+          "description": {
+            "de": "TravelAdmin App für Android",
+            "en": "TravelAdmin App for Android",
+            "fr": "TravelAdmin App pour Android",
+            "it": "TravelAdmin App per Android"
+          },
+          "id": "f3d9ed01-c3b1-4cdc-9cfd-d19b3af396dd",
+          "identifier": "EDA-KD-TravelAdmin_Android",
+          "ownedBy": [],
+          "type": {
+            "code": "b37115f83e",
+            "name": {
+              "de": "Internet",
+              "en": "Web",
+              "fr": "Web",
+              "it": "Sito web"
+            },
+            "uri": "http://data.europa.eu/snb/com-channel/b37115f83e"
+          },
+          "url": "https://play.google.com/store/apps/details?id=ch.erni.itinerisapp&pli=1"
+        }
+      ],
+      "description": {
+        "de": "Sicher und entspannt reisen mit Travel Admin, der Reise-App des EDA. Die Travel Admin App unterstützt optimal bei der Vorbereitung einer Reise. Auch für unterwegs hält die App nützliche Informationen und Dienstleistungen bereit, die nicht nur im Krisenfall weiterhelfen. Tritt die Krise aber einmal ein, kann die App zu einem besonders wertvollen Hilfsmittel werden: Sehr bewährt hat sich die App beispielsweise bei der Organisation der Rückreise von blockierten Schweizer Reisenden im Zusammenhang mit der Corona-Pandemie.",
+        "en": "Travel safe and worry-free with Travel Admin, the FDFA's travel app. Travel Admin helps you prepare for your trip, and provides useful information and services on the go – not just in the event of an emergency. But if there is a crisis abroad, the app can be a valuable tool: such as during the COVID-19 pandemic, when it proved particularly useful in organising return journeys for Swiss travellers stranded abroad.",
+        "fr": "Voyagez en toute sécurité et en toute détente avec Travel Admin, l'application pour le voyage du DFAE. L'application Travel Admin offre un soutien idéal dans la préparation d'un voyage. Elle fournit également des informations et des services utiles aux personnes en déplacement, et pas uniquement en cas de crise. Mais si la crise se produit, l'application peut devenir un outil particulièrement précieux. L'application a, par exemple, fait ses preuves dans le contexte du COVID-19, en facilitant l'organisation du retour des voyageurs et voyageuses suisses bloqués.",
+        "it": "Viaggi sicuri e senza troppi pensieri con Travel Admin, l'app di viaggio del DFAE. L'app Travel Admin fornisce un supporto ottimale nella preparazione di un viaggio, nonché informazioni e servizi utili per le persone in movimento, non solo in caso di crisi. È però vero che in contesti di crisi l'app può diventare uno strumento particolarmente prezioso: per esempio, l’app si è rivelata molto utile nel quadro dell’organizzazione del viaggio di ritorno delle viaggiatrici e dei viaggiatori svizzeri bloccati durante la pandemia di Coronavirus."
       },
-      {
-        "businessEvents": [
-          {
-            "code": "BE-ImportExport",
-            "name": {
-              "de": "Import und Export",
-              "en": "Importing and exporting",
-              "fr": "Importation et exportation",
-              "it": "Importazione ed esportazione"
-            }
+      "id": "013f9b30-5756-49e1-bf60-addfcd784e11",
+      "identifiers": [
+        "EDA-KD-TravelAdmin"
+      ],
+      "isDescribedAt": [],
+      "keywords": [
+        {
+          "label": {
+            "de": "Reisehinweise",
+            "en": "Travel Advice",
+            "fr": "Conseils aux voyageurs",
+            "it": "Consigli di viaggio"
           }
-        ],
-        "channels": [
-          {
-            "description": {
-              "de": "Quota",
-              "en": "Quota",
-              "fr": "Quota",
-              "it": "Quota"
-            },
-            "id": "c2cd5e98-dcb9-487c-8256-ddb3a2d483b7",
-            "identifier": "Quota_BAZG",
-            "ownedBy": [
-              {
-                "classification": {
-                  "code": "0220",
-                  "name": {
-                    "de": "Verwaltungseinheit des Bundes",
-                    "en": "Administrative unit of the Confederation",
-                    "fr": "Unité de l’administration fédérale",
-                    "it": "Unità amministrativa della Confederazione"
-                  }
-                },
-                "description": {
-                  "de": "Das Bundesamt für Zoll und Grenzsicherheit sorgt für umfassende Sicherheit an der Grenze – zum Wohl von Bevölkerung, Wirtschaft und Staat. Es ist national und international gut vernetzt. Zu seinen Kernaufgaben gehören das sachgerechte und rasche Abfertigen von Handelswaren, der zügige Ablauf des Reiseverkehrs, die Bereiche Sicherheitspolizei und Migration und es verfügt mit der Strafverfolgung über eine eigene Ermittlungsbehörde.",
-                  "en": "The Federal Customs and Border Security Office (FOCBS) ensures comprehensive border security for the population, the economy and the state and is well connected nationally and internationally. Its main tasks include the correct and speedy taxation of tradable goods, the rapid handling of tourist traffic as well as the areas of migration and security police. The FOCBS has its own prosecuting authority.",
-                  "fr": "L'Office fédéral de la douane et de la sécurité des frontières (OFDF) assure la sécurité globale à la frontière au profit de la population, de l'économie et de l'État. Il collabore étroitement avec d'autres autorités nationales et internationales. Parmi ses tâches principales figurent le dédouanement adéquat et rapide des marchandises de commerce, la gestion fluide du trafic touristique ainsi que les domaines de la police de sécurité et des migrations. Avec le domaine de direction Poursuites pénales, il dispose de sa propre autorité d'enquête.",
-                  "it": "L'Ufficio federale della dogana e della sicurezza dei confini (UDSC) garantisce la sicurezza globale al confine a favore di popolazione, economia e Stato ed è ben interconnesso a livello nazionale e internazionale. Tra i suoi compiti principali rientrano la corretta e celere imposizione delle merci commerciabili, la rapida gestione del traffico turistico nonché gli ambiti della migrazione e della polizia di sicurezza. Con il Perseguimento penale l'UDSC dispone di una propria autorità inquirente.",
-                  "rm": ""
-                },
-                "homePage": "https://www.bazg.admin.ch/",
-                "id": "4e590552-11c9-42f3-96ce-918bda9244cc",
-                "identifier": "CH_BAZG",
-                "images": [],
-                "name": {
-                  "de": "Bundesamt für Zoll und Grenzsicherheit (BAZG)",
-                  "en": "Federal Office for Customs and Border Security (FOCBS)",
-                  "fr": "Office fédéral de la douane et de la sécurité des frontières (OFDF)",
-                  "it": "Ufficio federale della dogana e della sicurezza dei confini (UDSC)",
-                  "rm": ""
-                },
-                "prefLabel": {
-                  "de": "BAZG",
-                  "en": "FOCBS",
-                  "fr": "OFDF",
-                  "it": "UDSC",
-                  "rm": ""
-                },
-                "system": {
-                  "createdAt": "0001-01-01T00:00:00+00:00",
-                  "modifiedAt": "2026-07-10T07:29:11.402126+00:00"
-                },
-                "spatial": [
-                  "CH"
-                ],
-                "spatialCH": [
-                  {
-                    "code": "8100",
-                    "name": {
-                      "de": "Schweiz",
-                      "en": "Switzerland",
-                      "fr": "Suisse",
-                      "it": "Svizzera",
-                      "rm": "Svizra"
-                    }
-                  }
-                ],
-                "subAgents": [],
-                "uid": "CHE226598037"
-              }
-            ],
-            "type": {
-              "code": "b37115f83e",
-              "name": {
-                "de": "Internet",
-                "en": "Web",
-                "fr": "Web",
-                "it": "Sito web"
-              },
-              "uri": "http://data.europa.eu/snb/com-channel/b37115f83e"
-            },
-            "url": "https://quota.bazg.admin.ch/home"
-          }
-        ],
-        "description": {
-          "de": "Quota ist die Fachanwendung zur Ansicht des Stands von Zollkontingenten im Agrarbereich. Zollkontingente erlauben die Einfuhr bestimmter Mengen von Erzeugnissen zu reduzierten Zollsätzen. Quota unterstützt eine transparente und effiziente Übersicht dieser Kontingente.",
-          "en": "Quota is the specialized application for viewing the status of customs quotas in the agricultural sector. Customs quotas allow the import of certain quantities of products at reduced tariff rates. Quota provides a transparent and efficient overview of these quotas.",
-          "fr": "Quota est l’application spécialisée pour la consultation de l’état des contingents douaniers dans le domaine agricole. Les contingents douaniers permettent l’importation de certaines quantités de produits à des taux de droits de douane réduits. Quota offre une vue transparente et efficace de ces contingents.",
-          "it": "Quota è l’applicazione specializzata per la visualizzazione dello stato delle quote doganali nel settore agricolo. Le quote doganali consentono l’importazione di determinate quantità di prodotti a tariffe doganali ridotte. Quota supporta una panoramica trasparente ed efficiente di queste quote."
         },
-        "id": "047ec30c-1d79-4ea8-928a-5a66e07bf7f7",
-        "identifiers": [
-          "Quota_BAZG"
-        ],
-        "isDescribedAt": [],
-        "keywords": [],
-        "languages": [
-          {
-            "code": "de",
-            "name": {
-              "de": "Deutsch",
-              "en": "German",
-              "fr": "allemand",
-              "it": "Tedesco"
-            },
-            "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=de"
-          },
-          {
-            "code": "fr",
-            "name": {
-              "de": "Französisch",
-              "en": "French",
-              "fr": "français",
-              "it": "Francese"
-            },
-            "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=fr"
-          },
-          {
-            "code": "it",
-            "name": {
-              "de": "Italienisch",
-              "en": "Italian",
-              "fr": "italien",
-              "it": "Italiano"
-            },
-            "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=it"
+        {
+          "label": {
+            "de": "Sicherheitslage",
+            "en": "Security situation",
+            "fr": "Situation sécuritaire",
+            "it": "Situazione della sicurezza"
           }
-        ],
-        "lifeEvents": [
-          {
-            "code": "LE-ImportExport-01",
-            "name": {
-              "de": "Waren importieren oder exportieren ",
-              "en": "Import or export goods",
-              "fr": "Importer ou exporter des marchandises",
-              "it": "Importazione o esportazione di merci"
-            }
-          }
-        ],
-        "name": {
-          "de": "Quota: Zollkontingente im Agrarbereich",
-          "en": "Quota: Tariff quotas in the agricultural sector",
-          "fr": "Quota : contingents tarifaires dans le domaine agricole",
-          "it": "Quota: contingenti tariffari nel settore agricolo"
         },
-        "publicationLevel": "Public",
-        "publisher": {
-          "classification": {
-            "code": "0220",
-            "name": {
-              "de": "Verwaltungseinheit des Bundes",
-              "en": "Administrative unit of the Confederation",
-              "fr": "Unité de l’administration fédérale",
-              "it": "Unità amministrativa della Confederazione"
-            }
-          },
-          "description": {
-            "de": "Das Bundesamt für Zoll und Grenzsicherheit sorgt für umfassende Sicherheit an der Grenze – zum Wohl von Bevölkerung, Wirtschaft und Staat. Es ist national und international gut vernetzt. Zu seinen Kernaufgaben gehören das sachgerechte und rasche Abfertigen von Handelswaren, der zügige Ablauf des Reiseverkehrs, die Bereiche Sicherheitspolizei und Migration und es verfügt mit der Strafverfolgung über eine eigene Ermittlungsbehörde.",
-            "en": "The Federal Customs and Border Security Office (FOCBS) ensures comprehensive border security for the population, the economy and the state and is well connected nationally and internationally. Its main tasks include the correct and speedy taxation of tradable goods, the rapid handling of tourist traffic as well as the areas of migration and security police. The FOCBS has its own prosecuting authority.",
-            "fr": "L'Office fédéral de la douane et de la sécurité des frontières (OFDF) assure la sécurité globale à la frontière au profit de la population, de l'économie et de l'État. Il collabore étroitement avec d'autres autorités nationales et internationales. Parmi ses tâches principales figurent le dédouanement adéquat et rapide des marchandises de commerce, la gestion fluide du trafic touristique ainsi que les domaines de la police de sécurité et des migrations. Avec le domaine de direction Poursuites pénales, il dispose de sa propre autorité d'enquête.",
-            "it": "L'Ufficio federale della dogana e della sicurezza dei confini (UDSC) garantisce la sicurezza globale al confine a favore di popolazione, economia e Stato ed è ben interconnesso a livello nazionale e internazionale. Tra i suoi compiti principali rientrano la corretta e celere imposizione delle merci commerciabili, la rapida gestione del traffico turistico nonché gli ambiti della migrazione e della polizia di sicurezza. Con il Perseguimento penale l'UDSC dispone di una propria autorità inquirente.",
-            "rm": ""
-          },
-          "homePage": "https://www.bazg.admin.ch/",
-          "id": "4e590552-11c9-42f3-96ce-918bda9244cc",
-          "identifier": "CH_BAZG",
-          "images": [],
+        {
+          "label": {
+            "de": "Krise",
+            "en": "Crisis",
+            "fr": "Crise",
+            "it": "Crisi"
+          }
+        },
+        {
+          "label": {
+            "de": "Rückreise",
+            "en": "Return trip",
+            "fr": "Voyage de retour",
+            "it": "Rientro"
+          }
+        },
+        {
+          "label": {
+            "de": "Reisevorbereitung",
+            "en": "Travel preparation",
+            "fr": "Préparation du voyage",
+            "it": "Preparazione del viaggio"
+          }
+        },
+        {
+          "label": {
+            "de": "Notfalladresse des Reiselands",
+            "en": "Emergency contact of the destination country",
+            "fr": "Contact d’urgence du pays de destination",
+            "it": "Contatto d’emergenza del Paese di destinazione"
+          }
+        },
+        {
+          "label": {
+            "de": "Hilfe im Ausland",
+            "en": "Assistance abroad",
+            "fr": "Aide à l’étranger",
+            "it": "Aiuto all’estero"
+          }
+        },
+        {
+          "label": {
+            "de": "Krisenfall",
+            "en": "Crisis situation",
+            "fr": "Situation de crise",
+            "it": "Situazione di crisi"
+          }
+        },
+        {
+          "label": {
+            "de": "Schweizer Botschaft- und Konsulatsadressen",
+            "en": "Swiss embassy and consulate addresses",
+            "fr": "Adresses des ambassades et consulats suisses",
+            "it": "Indirizzi delle ambasciate e dei consolati svizzeri"
+          }
+        }
+      ],
+      "languages": [
+        {
+          "code": "de",
           "name": {
-            "de": "Bundesamt für Zoll und Grenzsicherheit (BAZG)",
-            "en": "Federal Office for Customs and Border Security (FOCBS)",
-            "fr": "Office fédéral de la douane et de la sécurité des frontières (OFDF)",
-            "it": "Ufficio federale della dogana e della sicurezza dei confini (UDSC)",
-            "rm": ""
+            "de": "Deutsch",
+            "en": "German",
+            "fr": "allemand",
+            "it": "Tedesco"
           },
-          "prefLabel": {
-            "de": "BAZG",
-            "en": "FOCBS",
-            "fr": "OFDF",
-            "it": "UDSC",
-            "rm": ""
-          },
-          "system": {
-            "createdAt": "0001-01-01T00:00:00+00:00",
-            "modifiedAt": "2026-07-10T07:29:11.402126+00:00"
-          },
-          "spatial": [
-            "CH"
-          ],
-          "spatialCH": [
-            {
-              "code": "8100",
-              "name": {
-                "de": "Schweiz",
-                "en": "Switzerland",
-                "fr": "Suisse",
-                "it": "Svizzera",
-                "rm": "Svizra"
-              }
-            }
-          ],
-          "subAgents": [],
-          "uid": "CHE226598037"
+          "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=de"
         },
-        "registrationStatus": "Candidate",
-        "relations": [],
-        "requires": [],
-        "sectors": [
-          {
-            "code": "125",
-            "name": {
-              "de": "Öffentliche Statistik",
-              "en": "Official statistics",
-              "fr": "Statistique publique",
-              "it": "Statistica pubblica"
-            }
+        {
+          "code": "en",
+          "name": {
+            "de": "Englisch",
+            "en": "English",
+            "fr": "anglais",
+            "it": "Inglese"
           },
-          {
-            "code": "118",
-            "name": {
-              "de": "Unternehmen",
-              "en": "Businesses",
-              "fr": "Entreprises",
-              "it": "Imprese"
-            }
+          "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=en"
+        },
+        {
+          "code": "fr",
+          "name": {
+            "de": "Französisch",
+            "en": "French",
+            "fr": "français",
+            "it": "Francese"
           },
-          {
-            "code": "115",
-            "name": {
-              "de": "Wirtschaft",
-              "en": "Economy",
-              "fr": "Économie",
-              "it": "Economia"
-            }
+          "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=fr"
+        },
+        {
+          "code": "it",
+          "name": {
+            "de": "Italienisch",
+            "en": "Italian",
+            "fr": "italien",
+            "it": "Italiano"
+          },
+          "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=it"
+        }
+      ],
+      "lifeEvents": [
+        {
+          "code": "LE-Admin-01",
+          "name": {
+            "de": "Administrative Voraussetzungen schaffen ",
+            "en": "Establishing administrative conditions",
+            "fr": "Créer des conditions administratives",
+            "it": "Stabilire condizioni amministrative"
           }
-        ],
+        },
+        {
+          "code": "LE-Notification",
+          "name": {
+            "de": "Meldung an die Behörden",
+            "en": "Notification to the authorities",
+            "fr": "Déclaration aux autorités",
+            "it": "Notifica alle autorità"
+          }
+        },
+        {
+          "code": "LE-Travel-01",
+          "name": {
+            "de": "Reisen",
+            "en": "Travel",
+            "fr": "Voyager",
+            "it": "Viaggiare"
+          }
+        },
+        {
+          "code": "LE-Information-01",
+          "name": {
+            "de": "Von Behörden bereitgestellte Informationen nutzen",
+            "en": "Use information provided by authorities",
+            "fr": "Utiliser les informations fournies par les autorités",
+            "it": "Utilizzare le informazioni fornite dalle autorità"
+          }
+        }
+      ],
+      "name": {
+        "de": "Travel Admin : Die App für Ihre Reisevorbereitung",
+        "en": "Travel Admin : the app to prepare your trip",
+        "fr": "Travel Admin : l’application pour préparer votre voyage",
+        "it": "Travel Admin : l’app per preparare il tuo viaggio"
+      },
+      "publicationLevel": "Public",
+      "publisher": {
+        "classification": {
+          "code": "0220",
+          "name": {
+            "de": "Verwaltungseinheit des Bundes",
+            "en": "Administrative unit of the Confederation",
+            "fr": "Unité de l’administration fédérale",
+            "it": "Unità amministrativa della Confederazione"
+          }
+        },
+        "description": {
+          "de": "Das EDA wahrt die aussenpolitischen Interessen der Schweiz. Es pflegt Beziehungen zu anderen Staaten und zu internationalen Organisationen wie der EU oder der UNO. Es bietet Dienstleistungen für Schweizerinnen und Schweizer im Ausland an. Auch die Entwicklungszusammenarbeit und die humanitäre Hilfe gehören zu seinen Aufgaben. Mit ihren rund 170 Vertretungen ist die Schweiz rund um den Globus präsent.",
+          "en": "The FDFA safeguards Switzerland's foreign policy interests. It maintains relations with other states and international organisations such as the EU and UN, and provides services for Swiss citizens abroad. It is also responsible for Switzerland's development cooperation and humanitarian aid. Switzerland maintains a global presence through its approximately 170 representations.",
+          "fr": "Le DFAE sauvegarde les intérêts de la Suisse en matière de politique extérieure. Il entretient des relations avec d’autres États et des organisations internationales telles que l’UE et l’ONU. Il propose des prestations aux citoyennes et citoyens suisses à l’étranger. La coopération au développement et l’aide humanitaire entrent également dans son champ d’activités. La Suisse est présente dans le monde entier grâce à un réseau comptant quelque 170 représentations.",
+          "it": "Il DFAE tutela gli interessi della Svizzera in materia di politica estera. Cura le relazioni con altri Stati e con organizzazioni internazionali come l’UE e l’ONU. Offre servizi alle Svizzere e agli Svizzeri che vivono o si trovano all’estero. I suoi compiti comprendono anche la cooperazione allo sviluppo e l’aiuto umanitario. Grazie alle sue circa 170 rappresentanze, la Svizzera è presente in tutto il mondo."
+        },
+        "homePage": "https://www.eda.admin.ch",
+        "id": "eb61770b-d6b0-43a9-b5e5-c6c6e99edd80",
+        "identifier": "CH_EDA",
+        "images": [],
+        "name": {
+          "de": "Eidgenössisches Departement für auswärtige Angelegenheiten (EDA)",
+          "en": "Federal Department of Foreign Affairs (FDFA)",
+          "fr": "Département fédéral des affaires étrangères (DFAE)",
+          "it": "Dipartimento federale degli affari esteri (DFAE)"
+        },
+        "prefLabel": {
+          "de": "EDA",
+          "en": "FDFA",
+          "fr": "DFAE",
+          "it": "DFAE"
+        },
         "system": {
-          "createdAt": "2025-10-28T10:41:54.469708+00:00",
-          "modifiedAt": "2025-12-19T10:04:26.391404+00:00"
+          "createdAt": "2024-04-24T12:48:49.814985+00:00",
+          "modifiedAt": "2025-07-16T08:18:33.790564+00:00"
         },
         "spatial": [
-          "Ganze Schweiz"
+          "CH"
         ],
-        "thematicAreas": [
+        "spatialCH": [
           {
-            "code": "125",
+            "code": "8100",
             "name": {
-              "de": "Öffentliche Statistik",
-              "en": "Official statistics",
-              "fr": "Statistique publique",
-              "it": "Statistica pubblica"
-            }
-          },
-          {
-            "code": "118",
-            "name": {
-              "de": "Unternehmen",
-              "en": "Businesses",
-              "fr": "Entreprises",
-              "it": "Imprese"
-            }
-          },
-          {
-            "code": "115",
-            "name": {
-              "de": "Wirtschaft",
-              "en": "Economy",
-              "fr": "Économie",
-              "it": "Economia"
+              "de": "Schweiz",
+              "en": "Switzerland",
+              "fr": "Suisse",
+              "it": "Svizzera",
+              "rm": "Svizra"
             }
           }
         ],
-        "spatialCH": []
-      }
-    ]
-  }
+        "subAgents": [],
+        "uid": "CHE335670007"
+      },
+      "registrationStatus": "Recorded",
+      "relations": [],
+      "requires": [],
+      "sectors": [
+        {
+          "code": "104",
+          "name": {
+            "de": "Aussenbeziehungen",
+            "en": "External relations",
+            "fr": "Relations extérieures",
+            "it": "Relazioni esterne"
+          }
+        },
+        {
+          "code": "119",
+          "name": {
+            "de": "Behörden",
+            "en": "Authorities",
+            "fr": "Autorités",
+            "it": "Autorità"
+          }
+        },
+        {
+          "code": "122",
+          "name": {
+            "de": "Geoinformationen",
+            "en": "Geoinformation",
+            "fr": "Géo-informations",
+            "it": "Geoinformazione"
+          }
+        },
+        {
+          "code": "116",
+          "name": {
+            "de": "Mobilität",
+            "en": "Mobility",
+            "fr": "Mobilité",
+            "it": "Mobilità"
+          }
+        },
+        {
+          "code": "111",
+          "name": {
+            "de": "Sicherheit",
+            "en": "Security",
+            "fr": "Sécurité",
+            "it": "Sicurezza"
+          }
+        }
+      ],
+      "system": {
+        "createdAt": "2025-10-09T13:11:25.811194+00:00",
+        "modifiedAt": "2025-11-25T10:49:16.858139+00:00"
+      },
+      "spatial": [
+        "Weltweit"
+      ],
+      "thematicAreas": [
+        {
+          "code": "104",
+          "name": {
+            "de": "Aussenbeziehungen",
+            "en": "External relations",
+            "fr": "Relations extérieures",
+            "it": "Relazioni esterne"
+          }
+        },
+        {
+          "code": "119",
+          "name": {
+            "de": "Behörden",
+            "en": "Authorities",
+            "fr": "Autorités",
+            "it": "Autorità"
+          }
+        },
+        {
+          "code": "122",
+          "name": {
+            "de": "Geoinformationen",
+            "en": "Geoinformation",
+            "fr": "Géo-informations",
+            "it": "Geoinformazione"
+          }
+        },
+        {
+          "code": "116",
+          "name": {
+            "de": "Mobilität",
+            "en": "Mobility",
+            "fr": "Mobilité",
+            "it": "Mobilità"
+          }
+        },
+        {
+          "code": "111",
+          "name": {
+            "de": "Sicherheit",
+            "en": "Security",
+            "fr": "Sécurité",
+            "it": "Sicurezza"
+          }
+        }
+      ],
+      "spatialCH": []
+    },
+    {
+      "businessEvents": [
+        {
+          "code": "BE-ImportExport",
+          "name": {
+            "de": "Import und Export",
+            "en": "Importing and exporting",
+            "fr": "Importation et exportation",
+            "it": "Importazione ed esportazione"
+          }
+        }
+      ],
+      "channels": [
+        {
+          "description": {
+            "de": "Quota",
+            "en": "Quota",
+            "fr": "Quota",
+            "it": "Quota"
+          },
+          "id": "c2cd5e98-dcb9-487c-8256-ddb3a2d483b7",
+          "identifier": "Quota_BAZG",
+          "ownedBy": [
+            {
+              "classification": {
+                "code": "0220",
+                "name": {
+                  "de": "Verwaltungseinheit des Bundes",
+                  "en": "Administrative unit of the Confederation",
+                  "fr": "Unité de l’administration fédérale",
+                  "it": "Unità amministrativa della Confederazione"
+                }
+              },
+              "description": {
+                "de": "Das Bundesamt für Zoll und Grenzsicherheit sorgt für umfassende Sicherheit an der Grenze – zum Wohl von Bevölkerung, Wirtschaft und Staat. Es ist national und international gut vernetzt. Zu seinen Kernaufgaben gehören das sachgerechte und rasche Abfertigen von Handelswaren, der zügige Ablauf des Reiseverkehrs, die Bereiche Sicherheitspolizei und Migration und es verfügt mit der Strafverfolgung über eine eigene Ermittlungsbehörde.",
+                "en": "The Federal Customs and Border Security Office (FOCBS) ensures comprehensive border security for the population, the economy and the state and is well connected nationally and internationally. Its main tasks include the correct and speedy taxation of tradable goods, the rapid handling of tourist traffic as well as the areas of migration and security police. The FOCBS has its own prosecuting authority.",
+                "fr": "L'Office fédéral de la douane et de la sécurité des frontières (OFDF) assure la sécurité globale à la frontière au profit de la population, de l'économie et de l'État. Il collabore étroitement avec d'autres autorités nationales et internationales. Parmi ses tâches principales figurent le dédouanement adéquat et rapide des marchandises de commerce, la gestion fluide du trafic touristique ainsi que les domaines de la police de sécurité et des migrations. Avec le domaine de direction Poursuites pénales, il dispose de sa propre autorité d'enquête.",
+                "it": "L'Ufficio federale della dogana e della sicurezza dei confini (UDSC) garantisce la sicurezza globale al confine a favore di popolazione, economia e Stato ed è ben interconnesso a livello nazionale e internazionale. Tra i suoi compiti principali rientrano la corretta e celere imposizione delle merci commerciabili, la rapida gestione del traffico turistico nonché gli ambiti della migrazione e della polizia di sicurezza. Con il Perseguimento penale l'UDSC dispone di una propria autorità inquirente.",
+                "rm": ""
+              },
+              "homePage": "https://www.bazg.admin.ch/",
+              "id": "4e590552-11c9-42f3-96ce-918bda9244cc",
+              "identifier": "CH_BAZG",
+              "images": [],
+              "name": {
+                "de": "Bundesamt für Zoll und Grenzsicherheit (BAZG)",
+                "en": "Federal Office for Customs and Border Security (FOCBS)",
+                "fr": "Office fédéral de la douane et de la sécurité des frontières (OFDF)",
+                "it": "Ufficio federale della dogana e della sicurezza dei confini (UDSC)",
+                "rm": ""
+              },
+              "prefLabel": {
+                "de": "BAZG",
+                "en": "FOCBS",
+                "fr": "OFDF",
+                "it": "UDSC",
+                "rm": ""
+              },
+              "system": {
+                "createdAt": "0001-01-01T00:00:00+00:00",
+                "modifiedAt": "2026-07-10T07:29:11.402126+00:00"
+              },
+              "spatial": [
+                "CH"
+              ],
+              "spatialCH": [
+                {
+                  "code": "8100",
+                  "name": {
+                    "de": "Schweiz",
+                    "en": "Switzerland",
+                    "fr": "Suisse",
+                    "it": "Svizzera",
+                    "rm": "Svizra"
+                  }
+                }
+              ],
+              "subAgents": [],
+              "uid": "CHE226598037"
+            }
+          ],
+          "type": {
+            "code": "b37115f83e",
+            "name": {
+              "de": "Internet",
+              "en": "Web",
+              "fr": "Web",
+              "it": "Sito web"
+            },
+            "uri": "http://data.europa.eu/snb/com-channel/b37115f83e"
+          },
+          "url": "https://quota.bazg.admin.ch/home"
+        }
+      ],
+      "description": {
+        "de": "Quota ist die Fachanwendung zur Ansicht des Stands von Zollkontingenten im Agrarbereich. Zollkontingente erlauben die Einfuhr bestimmter Mengen von Erzeugnissen zu reduzierten Zollsätzen. Quota unterstützt eine transparente und effiziente Übersicht dieser Kontingente.",
+        "en": "Quota is the specialized application for viewing the status of customs quotas in the agricultural sector. Customs quotas allow the import of certain quantities of products at reduced tariff rates. Quota provides a transparent and efficient overview of these quotas.",
+        "fr": "Quota est l’application spécialisée pour la consultation de l’état des contingents douaniers dans le domaine agricole. Les contingents douaniers permettent l’importation de certaines quantités de produits à des taux de droits de douane réduits. Quota offre une vue transparente et efficace de ces contingents.",
+        "it": "Quota è l’applicazione specializzata per la visualizzazione dello stato delle quote doganali nel settore agricolo. Le quote doganali consentono l’importazione di determinate quantità di prodotti a tariffe doganali ridotte. Quota supporta una panoramica trasparente ed efficiente di queste quote."
+      },
+      "id": "047ec30c-1d79-4ea8-928a-5a66e07bf7f7",
+      "identifiers": [
+        "Quota_BAZG"
+      ],
+      "isDescribedAt": [],
+      "keywords": [],
+      "languages": [
+        {
+          "code": "de",
+          "name": {
+            "de": "Deutsch",
+            "en": "German",
+            "fr": "allemand",
+            "it": "Tedesco"
+          },
+          "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=de"
+        },
+        {
+          "code": "fr",
+          "name": {
+            "de": "Französisch",
+            "en": "French",
+            "fr": "français",
+            "it": "Francese"
+          },
+          "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=fr"
+        },
+        {
+          "code": "it",
+          "name": {
+            "de": "Italienisch",
+            "en": "Italian",
+            "fr": "italien",
+            "it": "Italiano"
+          },
+          "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=it"
+        }
+      ],
+      "lifeEvents": [
+        {
+          "code": "LE-ImportExport-01",
+          "name": {
+            "de": "Waren importieren oder exportieren ",
+            "en": "Import or export goods",
+            "fr": "Importer ou exporter des marchandises",
+            "it": "Importazione o esportazione di merci"
+          }
+        }
+      ],
+      "name": {
+        "de": "Quota: Zollkontingente im Agrarbereich",
+        "en": "Quota: Tariff quotas in the agricultural sector",
+        "fr": "Quota : contingents tarifaires dans le domaine agricole",
+        "it": "Quota: contingenti tariffari nel settore agricolo"
+      },
+      "publicationLevel": "Public",
+      "publisher": {
+        "classification": {
+          "code": "0220",
+          "name": {
+            "de": "Verwaltungseinheit des Bundes",
+            "en": "Administrative unit of the Confederation",
+            "fr": "Unité de l’administration fédérale",
+            "it": "Unità amministrativa della Confederazione"
+          }
+        },
+        "description": {
+          "de": "Das Bundesamt für Zoll und Grenzsicherheit sorgt für umfassende Sicherheit an der Grenze – zum Wohl von Bevölkerung, Wirtschaft und Staat. Es ist national und international gut vernetzt. Zu seinen Kernaufgaben gehören das sachgerechte und rasche Abfertigen von Handelswaren, der zügige Ablauf des Reiseverkehrs, die Bereiche Sicherheitspolizei und Migration und es verfügt mit der Strafverfolgung über eine eigene Ermittlungsbehörde.",
+          "en": "The Federal Customs and Border Security Office (FOCBS) ensures comprehensive border security for the population, the economy and the state and is well connected nationally and internationally. Its main tasks include the correct and speedy taxation of tradable goods, the rapid handling of tourist traffic as well as the areas of migration and security police. The FOCBS has its own prosecuting authority.",
+          "fr": "L'Office fédéral de la douane et de la sécurité des frontières (OFDF) assure la sécurité globale à la frontière au profit de la population, de l'économie et de l'État. Il collabore étroitement avec d'autres autorités nationales et internationales. Parmi ses tâches principales figurent le dédouanement adéquat et rapide des marchandises de commerce, la gestion fluide du trafic touristique ainsi que les domaines de la police de sécurité et des migrations. Avec le domaine de direction Poursuites pénales, il dispose de sa propre autorité d'enquête.",
+          "it": "L'Ufficio federale della dogana e della sicurezza dei confini (UDSC) garantisce la sicurezza globale al confine a favore di popolazione, economia e Stato ed è ben interconnesso a livello nazionale e internazionale. Tra i suoi compiti principali rientrano la corretta e celere imposizione delle merci commerciabili, la rapida gestione del traffico turistico nonché gli ambiti della migrazione e della polizia di sicurezza. Con il Perseguimento penale l'UDSC dispone di una propria autorità inquirente.",
+          "rm": ""
+        },
+        "homePage": "https://www.bazg.admin.ch/",
+        "id": "4e590552-11c9-42f3-96ce-918bda9244cc",
+        "identifier": "CH_BAZG",
+        "images": [],
+        "name": {
+          "de": "Bundesamt für Zoll und Grenzsicherheit (BAZG)",
+          "en": "Federal Office for Customs and Border Security (FOCBS)",
+          "fr": "Office fédéral de la douane et de la sécurité des frontières (OFDF)",
+          "it": "Ufficio federale della dogana e della sicurezza dei confini (UDSC)",
+          "rm": ""
+        },
+        "prefLabel": {
+          "de": "BAZG",
+          "en": "FOCBS",
+          "fr": "OFDF",
+          "it": "UDSC",
+          "rm": ""
+        },
+        "system": {
+          "createdAt": "0001-01-01T00:00:00+00:00",
+          "modifiedAt": "2026-07-10T07:29:11.402126+00:00"
+        },
+        "spatial": [
+          "CH"
+        ],
+        "spatialCH": [
+          {
+            "code": "8100",
+            "name": {
+              "de": "Schweiz",
+              "en": "Switzerland",
+              "fr": "Suisse",
+              "it": "Svizzera",
+              "rm": "Svizra"
+            }
+          }
+        ],
+        "subAgents": [],
+        "uid": "CHE226598037"
+      },
+      "registrationStatus": "Candidate",
+      "relations": [],
+      "requires": [],
+      "sectors": [
+        {
+          "code": "125",
+          "name": {
+            "de": "Öffentliche Statistik",
+            "en": "Official statistics",
+            "fr": "Statistique publique",
+            "it": "Statistica pubblica"
+          }
+        },
+        {
+          "code": "118",
+          "name": {
+            "de": "Unternehmen",
+            "en": "Businesses",
+            "fr": "Entreprises",
+            "it": "Imprese"
+          }
+        },
+        {
+          "code": "115",
+          "name": {
+            "de": "Wirtschaft",
+            "en": "Economy",
+            "fr": "Économie",
+            "it": "Economia"
+          }
+        }
+      ],
+      "system": {
+        "createdAt": "2025-10-28T10:41:54.469708+00:00",
+        "modifiedAt": "2025-12-19T10:04:26.391404+00:00"
+      },
+      "spatial": [
+        "Ganze Schweiz"
+      ],
+      "thematicAreas": [
+        {
+          "code": "125",
+          "name": {
+            "de": "Öffentliche Statistik",
+            "en": "Official statistics",
+            "fr": "Statistique publique",
+            "it": "Statistica pubblica"
+          }
+        },
+        {
+          "code": "118",
+          "name": {
+            "de": "Unternehmen",
+            "en": "Businesses",
+            "fr": "Entreprises",
+            "it": "Imprese"
+          }
+        },
+        {
+          "code": "115",
+          "name": {
+            "de": "Wirtschaft",
+            "en": "Economy",
+            "fr": "Économie",
+            "it": "Economia"
+          }
+        }
+      ],
+      "spatialCH": []
+    }
+  ]
 }

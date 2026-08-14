@@ -8,6 +8,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- **Die Fixture-Ablage folgt jetzt der Portfolio-Konvention.** Die erste
+  Fassung legte Herkunft und Aufnahmedatum in einen `_recording`-Block je
+  JSON-Datei. 21 andere Server des Portfolios — darunter `meteoswiss-mcp` und
+  `swiss-statistics-mcp` — halten dieselben Angaben stattdessen in
+  `tests/fixtures/PROVENANCE.md`, zusammen mit Auswahlregel und SHA-256 je
+  Datei, und laden ueber ein `tests/fixture_data.py`. Diese Abweichung war beim
+  Anlegen unbekannt und ist damit behoben: die Fixtures liegen als rohe
+  Antwortkoerper, `tests/conftest.py` weicht `tests/fixture_data.py`, und die
+  IDs der Detail-Pfade leiten die Tests aus der Aufzeichnung selbst ab statt
+  aus einer zweiten, still veraltenden Stelle. Neu aufgezeichnet am 2026-08-14.
+  Dabei kam eine Zusicherung dazu, die vorher fehlte: eine Fixture ohne Eintrag
+  in `PROVENANCE.md` faellt jetzt auf.
+
 - **Counter-check rule in `CLAUDE.md` sharpened.** Neutralising an assurance
   and getting only a symptom back — runtime, log noise, empty fields — means
   the assurance is still missing, not that it held. Both defects found in this
@@ -45,14 +58,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 - **Recorded response fixtures, one per external endpoint, each dated.**
   `tests/fixtures/` now holds real I14Y responses for all eleven endpoints the
-  server calls, taken by `scripts/record_fixtures.py` and stamped with the
-  recording date in a `_recording` block. `tests/test_recorded_fixtures.py`
-  replays them through the actual tools. Counter-checked by neutralising each
-  new assurance one at a time: reverting either mapper fails exactly its own
-  tests, stripping a recording date fails exactly that fixture's date check,
-  deleting a recording fails the coverage guard, and renaming `title` to
-  `titel` in a recording fails exactly the dataset test — the field-rename
-  scenario that unit tests missed in production.
+  server calls, taken by `scripts/record_fixtures.py`, with source, date,
+  selection rule and SHA-256 per file in `tests/fixtures/PROVENANCE.md`.
+  `tests/test_recorded_fixtures.py` replays them through the actual tools.
+  Counter-checked by neutralising each new assurance one at a time: reverting
+  either mapper fails exactly its own tests, stripping the recording date fails
+  the provenance check, adding a fixture without a provenance entry fails the
+  completeness check, deleting a recording fails the coverage guard, and
+  renaming `title` to `titel` in a recording fails exactly the dataset test —
+  the field-rename scenario that unit tests missed in production.
 
 ### Fixed
 

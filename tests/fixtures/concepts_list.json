@@ -1,0 +1,287 @@
+{
+  "_recording": {
+    "recorded_at": "2026-08-14T10:42:16+00:00",
+    "source": "https://api.i14y.admin.ch/api",
+    "endpoint": "/concepts",
+    "params": {
+      "page": 1,
+      "pageSize": 3
+    },
+    "status": 200,
+    "recorded_by": "scripts/record_fixtures.py"
+  },
+  "body": {
+    "data": [
+      {
+        "codeListEntryValueMaxLength": 30,
+        "codeListEntryValueType": "String",
+        "conceptType": "CodeList",
+        "conformsTo": [],
+        "description": {
+          "de": "Spezialisierung des Autors gemäss Anhang 3.",
+          "en": "Speciality of the author as per Annex 3.",
+          "fr": "Spécialisation de l'auteur selon l'annexe 3.",
+          "it": "Specializzazione dell'autore secondo l' Allegato 3."
+        },
+        "id": "08dd632d-a98d-34ff-9252-123e46d6f053",
+        "identifiers": [
+          "2.16.756.5.30.1.127.3.10.1.1.4"
+        ],
+        "isLocked": false,
+        "keywords": [],
+        "name": {
+          "de": "DocumentEntry.author.authorSpeciality",
+          "en": "DocumentEntry.author.authorSpeciality",
+          "fr": "DocumentEntry.author.authorSpeciality",
+          "it": "DocumentEntry.author.authorSpeciality"
+        },
+        "replaces": [],
+        "isReplacedBy": [],
+        "publicationLevel": "Public",
+        "publisher": {
+          "classification": {
+            "code": "0220",
+            "name": {
+              "de": "Verwaltungseinheit des Bundes",
+              "en": "Administrative unit of the Confederation",
+              "fr": "Unité de l’administration fédérale",
+              "it": "Unità amministrativa della Confederazione"
+            }
+          },
+          "description": {
+            "de": "Die Geschäftsstelle von eHealth Suisse stellt sicher, dass die einzelnen Projekte für die Digitalisierung des Gesundheitswesens zielorientiert und gesetzeskonform sind und dass Synergien genutzt werden – auch international.",
+            "en": "Entdecken Sie die vielfaeltigen digitalen Gesundheitslösungen von eHealth Suisse. Wir gestalten die vernetzte Zukunft der Gesundheitsversorgung.",
+            "fr": "Le secrétariat d’eHealth Suisse s’assure que les différents projets pour la numérisation du système de santé sont bien axés sur les objectifs et conformes à la loi, et qu’ils profitent de synergies, aussi au niveau international.",
+            "it": "La segreteria di eHealth Suisse assicura che i singoli progetti per la digitalizzazione della sanità siano orientati agli obiettivi e siano conformi alla legge e che le sinergie esistenti vengano sfruttate anche a livello internazionale.",
+            "rm": ""
+          },
+          "homePage": "https://www.e-health-suisse.ch",
+          "id": "6fc9ea64-2a0e-44df-8c8b-5fb5528faa16",
+          "identifier": "CH_eHealth",
+          "images": [],
+          "name": {
+            "de": "eHealth Suisse",
+            "en": "eHealth Suisse",
+            "fr": "eHealth Suisse",
+            "it": "eHealth Suisse",
+            "rm": ""
+          },
+          "prefLabel": {
+            "de": "eHealth Suisse",
+            "en": "eHealth Suisse",
+            "fr": "eHealth Suisse",
+            "it": "eHealth Suisse",
+            "rm": ""
+          },
+          "system": {
+            "createdAt": "0001-01-01T00:00:00+00:00",
+            "modifiedAt": "2026-07-10T07:46:18.399941+00:00"
+          },
+          "spatial": [
+            "CH"
+          ],
+          "spatialCH": [
+            {
+              "code": "8100",
+              "name": {
+                "de": "Schweiz",
+                "en": "Switzerland",
+                "fr": "Suisse",
+                "it": "Svizzera",
+                "rm": "Svizra"
+              }
+            }
+          ],
+          "subAgents": []
+        },
+        "registrationStatus": "Recorded",
+        "system": {
+          "createdAt": "2025-05-07T16:16:51.799821+00:00"
+        },
+        "themes": [],
+        "validFrom": "2024-06-01T00:00:00+00:00",
+        "version": "2.0.0"
+      },
+      {
+        "codeListEntryValueMaxLength": 30,
+        "codeListEntryValueType": "String",
+        "conceptType": "CodeList",
+        "conformsTo": [],
+        "description": {
+          "de": "Typ der Gesundheitseinrichtung gemäss Anhang 3 EPDV-EDI.\n          Dieser Code beschreibt den Typ der Gesundheitseinrichtung, in der das Dokument während des Behandlungsprozesses erstellt wurde. Der Patient kann im Zusammenhang mit der Berechtigungsteuerung diese Information nutzen, um beispielsweise in seinen Rechteattributen allen Dokumenten aus einem bestimmten Gesundheitseinrichtungstyp eine bestimmte Vertraulichkeitsstufe zuzuordnen.",
+          "en": "Type of healthcare facility as per Annex 3; EPRO-FDHA.\n      This code describes the type of healthcare facility in which the document was compiled during the treatment process. In conjunction with the authorisation control, the patient can use this information to assign all documents from a specific type of healthcare facility to a specific confidentiality level in their rights and attributes, for example.",
+          "fr": "Type de l'institution de santé selon l'annexe 3 ODEP-DFI. Ce code décrit le type de l'institution de santé qui a élaboré le document pendant le processus thérapeutique. Le patient peut utiliser cette information pour gérer les droits d'accès et définir, dans les règles d'accès, un même niveau de confidentialité pour tous les documents émanant d'un type d'institution donné.",
+          "it": "Tipo di istituzione sanitaria secondo l'allegato 3 OCIP-DFI.\n     Questo codice descrive il tipo di istituzione sanitaria nella quale è stato creato il documento durante il processo terapeutico. Il paziente può utilizzare questa informazione in relazione al controllo delle autorizzazioni, ad esempio per attribuire un determinato grado di riservatezza a tutti i documenti provenienti da un determinato tipo di istituzione sanitaria."
+        },
+        "id": "08dd632d-abd6-c1fd-9468-533a88e19499",
+        "identifiers": [
+          "2.16.756.5.30.1.127.3.10.1.11"
+        ],
+        "isLocked": false,
+        "keywords": [],
+        "name": {
+          "de": "DocumentEntry.healthcareFacilityTypeCode",
+          "en": "DocumentEntry.healthcareFacilityTypeCode",
+          "fr": "DocumentEntry.healthcareFacilityTypeCode",
+          "it": "DocumentEntry.healthcareFacilityTypeCode"
+        },
+        "replaces": [],
+        "isReplacedBy": [],
+        "publicationLevel": "Public",
+        "publisher": {
+          "classification": {
+            "code": "0220",
+            "name": {
+              "de": "Verwaltungseinheit des Bundes",
+              "en": "Administrative unit of the Confederation",
+              "fr": "Unité de l’administration fédérale",
+              "it": "Unità amministrativa della Confederazione"
+            }
+          },
+          "description": {
+            "de": "Die Geschäftsstelle von eHealth Suisse stellt sicher, dass die einzelnen Projekte für die Digitalisierung des Gesundheitswesens zielorientiert und gesetzeskonform sind und dass Synergien genutzt werden – auch international.",
+            "en": "Entdecken Sie die vielfaeltigen digitalen Gesundheitslösungen von eHealth Suisse. Wir gestalten die vernetzte Zukunft der Gesundheitsversorgung.",
+            "fr": "Le secrétariat d’eHealth Suisse s’assure que les différents projets pour la numérisation du système de santé sont bien axés sur les objectifs et conformes à la loi, et qu’ils profitent de synergies, aussi au niveau international.",
+            "it": "La segreteria di eHealth Suisse assicura che i singoli progetti per la digitalizzazione della sanità siano orientati agli obiettivi e siano conformi alla legge e che le sinergie esistenti vengano sfruttate anche a livello internazionale.",
+            "rm": ""
+          },
+          "homePage": "https://www.e-health-suisse.ch",
+          "id": "6fc9ea64-2a0e-44df-8c8b-5fb5528faa16",
+          "identifier": "CH_eHealth",
+          "images": [],
+          "name": {
+            "de": "eHealth Suisse",
+            "en": "eHealth Suisse",
+            "fr": "eHealth Suisse",
+            "it": "eHealth Suisse",
+            "rm": ""
+          },
+          "prefLabel": {
+            "de": "eHealth Suisse",
+            "en": "eHealth Suisse",
+            "fr": "eHealth Suisse",
+            "it": "eHealth Suisse",
+            "rm": ""
+          },
+          "system": {
+            "createdAt": "0001-01-01T00:00:00+00:00",
+            "modifiedAt": "2026-07-10T07:46:18.399941+00:00"
+          },
+          "spatial": [
+            "CH"
+          ],
+          "spatialCH": [
+            {
+              "code": "8100",
+              "name": {
+                "de": "Schweiz",
+                "en": "Switzerland",
+                "fr": "Suisse",
+                "it": "Svizzera",
+                "rm": "Svizra"
+              }
+            }
+          ],
+          "subAgents": []
+        },
+        "registrationStatus": "Recorded",
+        "system": {
+          "createdAt": "2025-05-07T16:16:51.76156+00:00"
+        },
+        "themes": [],
+        "validFrom": "2024-06-01T00:00:00+00:00",
+        "version": "2.0.0"
+      },
+      {
+        "codeListEntryValueMaxLength": 30,
+        "codeListEntryValueType": "String",
+        "conceptType": "CodeList",
+        "conformsTo": [],
+        "description": {
+          "de": "Sprache des Dokumentes gemäss Anhang 3 EPDV-EDI. Definiert die Sprache in welcher das Dokument verfasst wurde.",
+          "en": "Document language as per Annex 3 EPRO-FDHA. Defines the language in which the document was written.",
+          "fr": "Langue du document selon l'annexe 3 ODEP-DFI. Définit la langue dans laquelle est rédigé le document.",
+          "it": "Lingua del documento secondo l'allegato 3 OCIP-DFI. Definisce la lingua nella quale è stato redatto il documento."
+        },
+        "id": "08dd632d-ac4d-977f-a53b-ec0b1af269f8",
+        "identifiers": [
+          "2.16.756.5.30.1.127.3.10.1.13"
+        ],
+        "isLocked": false,
+        "keywords": [],
+        "name": {
+          "de": "DocumentEntry.languageCode",
+          "en": "DocumentEntry.languageCode",
+          "fr": "DocumentEntry.languageCode",
+          "it": "DocumentEntry.languageCode"
+        },
+        "replaces": [],
+        "isReplacedBy": [],
+        "publicationLevel": "Public",
+        "publisher": {
+          "classification": {
+            "code": "0220",
+            "name": {
+              "de": "Verwaltungseinheit des Bundes",
+              "en": "Administrative unit of the Confederation",
+              "fr": "Unité de l’administration fédérale",
+              "it": "Unità amministrativa della Confederazione"
+            }
+          },
+          "description": {
+            "de": "Die Geschäftsstelle von eHealth Suisse stellt sicher, dass die einzelnen Projekte für die Digitalisierung des Gesundheitswesens zielorientiert und gesetzeskonform sind und dass Synergien genutzt werden – auch international.",
+            "en": "Entdecken Sie die vielfaeltigen digitalen Gesundheitslösungen von eHealth Suisse. Wir gestalten die vernetzte Zukunft der Gesundheitsversorgung.",
+            "fr": "Le secrétariat d’eHealth Suisse s’assure que les différents projets pour la numérisation du système de santé sont bien axés sur les objectifs et conformes à la loi, et qu’ils profitent de synergies, aussi au niveau international.",
+            "it": "La segreteria di eHealth Suisse assicura che i singoli progetti per la digitalizzazione della sanità siano orientati agli obiettivi e siano conformi alla legge e che le sinergie esistenti vengano sfruttate anche a livello internazionale.",
+            "rm": ""
+          },
+          "homePage": "https://www.e-health-suisse.ch",
+          "id": "6fc9ea64-2a0e-44df-8c8b-5fb5528faa16",
+          "identifier": "CH_eHealth",
+          "images": [],
+          "name": {
+            "de": "eHealth Suisse",
+            "en": "eHealth Suisse",
+            "fr": "eHealth Suisse",
+            "it": "eHealth Suisse",
+            "rm": ""
+          },
+          "prefLabel": {
+            "de": "eHealth Suisse",
+            "en": "eHealth Suisse",
+            "fr": "eHealth Suisse",
+            "it": "eHealth Suisse",
+            "rm": ""
+          },
+          "system": {
+            "createdAt": "0001-01-01T00:00:00+00:00",
+            "modifiedAt": "2026-07-10T07:46:18.399941+00:00"
+          },
+          "spatial": [
+            "CH"
+          ],
+          "spatialCH": [
+            {
+              "code": "8100",
+              "name": {
+                "de": "Schweiz",
+                "en": "Switzerland",
+                "fr": "Suisse",
+                "it": "Svizzera",
+                "rm": "Svizra"
+              }
+            }
+          ],
+          "subAgents": []
+        },
+        "registrationStatus": "Recorded",
+        "system": {
+          "createdAt": "2025-05-07T16:16:51.774191+00:00"
+        },
+        "themes": [],
+        "validFrom": "2024-06-01T00:00:00+00:00",
+        "version": "2.0.0"
+      }
+    ]
+  }
+}

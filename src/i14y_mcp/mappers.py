@@ -205,7 +205,11 @@ def map_public_service(raw: dict[str, Any], language: str) -> PublicServiceSumma
     return PublicServiceSummary(
         id=raw.get("id"),
         identifier=_identifier(raw),
-        title=pick_lang(raw.get("title"), language),
+        # `/publicservices` names its label `name`; datasets and data services
+        # call theirs `title`. Reading only `title` returned None for every
+        # public service in production while the handwritten fixtures — which
+        # invented a `title` key — stayed green. Recorded 2026-08-14.
+        title=pick_lang(raw.get("title") or raw.get("name"), language),
         description=pick_lang(raw.get("description"), language),
         publisher=_publisher_name(raw, language),
         themes=_labels(raw.get("themes"), language),
@@ -217,7 +221,10 @@ def map_concept(raw: dict[str, Any], language: str) -> ConceptSummary:
     return ConceptSummary(
         id=raw.get("id"),
         identifier=_identifier(raw),
-        title=pick_lang(raw.get("title"), language),
+        # Same mismatch as `map_public_service`, and it hit both `list_concepts`
+        # and `get_concept`: `/concepts` labels records `name`, on the list and
+        # the detail endpoint alike. Recorded 2026-08-14.
+        title=pick_lang(raw.get("title") or raw.get("name"), language),
         description=pick_lang(raw.get("description"), language),
         publisher=_publisher_name(raw, language),
         concept_type=raw.get("conceptType"),

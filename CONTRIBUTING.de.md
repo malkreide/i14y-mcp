@@ -26,12 +26,20 @@ pip install -e ".[dev]"
 
 PYTHONPATH=src pytest tests/ -m "not live"   # offline, respx-gemockt
 PYTHONPATH=src pytest tests/ -m live         # gegen die echte API
-ruff check src tests
+ruff check src/ tests/                       # Lint-Gate
+ruff format --check src/ tests/              # Format-Gate
 ```
+
+Das sind wörtlich die drei Gates der CI. Lint und Format sind getrennte
+Prüfungen: `ruff check` belegt kein Format, ein grüner Linter neben einem roten
+`ruff format --check` ist also ein gewöhnlicher Zustand, kein Widerspruch. Die
+in `pyproject.toml` gepinnte ruff-Version verwenden — `pip install -e ".[dev]"`
+installiert sie. Eine andere Version meldet Abweichungen, die niemand
+verursacht hat.
 
 ## Pull Requests
 
-- Tests für nutzersichtbare Änderungen ergänzen; `ruff check` und die
+- Tests für nutzersichtbare Änderungen ergänzen; beide ruff-Gates und die
   Offline-Suite grün halten.
 - Einen `CHANGELOG.md`-Eintrag unter `[Unreleased]` hinzufügen.
 - Bei Doku-Änderungen sowohl `README.md` als auch `README.de.md` aktualisieren.

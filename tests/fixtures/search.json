@@ -1,154 +1,140 @@
 {
-  "_recording": {
-    "recorded_at": "2026-08-14T10:42:18+00:00",
-    "source": "https://api.i14y.admin.ch/api",
-    "endpoint": "/search",
-    "params": {
-      "query": "Sonderpädagogik",
-      "language": "de",
-      "structure": "WithoutStructure"
-    },
-    "status": 200,
-    "recorded_by": "scripts/record_fixtures.py"
-  },
-  "body": {
-    "data": [
-      {
-        "accessRights": {
-          "code": "PUBLIC",
+  "data": [
+    {
+      "accessRights": {
+        "code": "PUBLIC",
+        "name": {
+          "de": "Öffentlich",
+          "en": "Public",
+          "fr": "Public",
+          "it": "Pubblico"
+        },
+        "uri": "http://publications.europa.eu/resource/authority/access-right/PUBLIC"
+      },
+      "businessEvents": [],
+      "description": {
+        "de": "Wie viele Schülerinnen und Schüler in den Regelschulen haben eine verstärkte sonderpädagogische Massnahme? Wie viele Schülerinnen und Schüler besuchen eine Sonderschule? Wie hoch ist der Anteil des sonderpädagogischen Personals in der obligatorischen Schule? Wie ist das Betreuungsverhältnis? Wie sind die Sonderschulen organisiert? Bei der vorliegenden Publikation zur Statistik der Sonderpädagogik handelt es sich um Informationen zu den Lernenden mit einem sonderpädagogischen Bildungsbedarf, dem sonderpädagogischen Personal und den Sonderschulen. Die Ergebnisse beziehen sich auf das Schuljahr 2018/19.",
+        "fr": "Combien d’élèves des écoles ordinaires sont au bénéfice d’une mesure renforcée de pédagogie spécialisée? Combien d’élèves fréquentent une école spécialisée? Quelle est la part du personnel de la pédagogie spécialisée à l’école obligatoire? Quel est le taux d’encadrement? Comment les écoles spécialisées sont-elles organisées? Cette publication relative à la statistique de la pédagogie spécialisée présente des informations sur les élèves ayant des besoins éducatifs particuliers, sur le personnel de la pédagogie spécialisée et sur les écoles spécialisées. Ces résultats se fondent sur les données de l’année scolaire 2018/19."
+      },
+      "formats": [],
+      "id": "019edf23-5c97-7d58-94f3-d3a10e2aaec6",
+      "identifier": "14776867@bundesamt-fur-statistik-bfs",
+      "lifeEvents": [],
+      "publicationLevel": "Public",
+      "publisher": {
+        "classification": {
+          "code": "0220",
           "name": {
-            "de": "Öffentlich",
-            "en": "Public",
-            "fr": "Public",
-            "it": "Pubblico"
-          },
-          "uri": "http://publications.europa.eu/resource/authority/access-right/PUBLIC"
+            "de": "Verwaltungseinheit des Bundes",
+            "en": "Administrative unit of the Confederation",
+            "fr": "Unité de l’administration fédérale",
+            "it": "Unità amministrativa della Confederazione"
+          }
         },
-        "businessEvents": [],
+        "contactPoint": {
+          "hasAddress": {
+            "de": "Espace de l'Europe 10, 2010 Neuchâtel, Neuchâtel, NE",
+            "en": "Espace de l'Europe 10, 2010 Neuchâtel, Neuchâtel, NE",
+            "fr": "Espace de l'Europe 10, 2010 Neuchâtel, Neuchâtel, NE",
+            "it": "Espace de l'Europe 10, 2010 Neuchâtel, Neuchâtel, NE",
+            "rm": ""
+          },
+          "hasEmail": "info@bfs.admin.ch",
+          "hasTelephone": "+41 58 463 60 11",
+          "kind": "Organization"
+        },
         "description": {
-          "de": "Wie viele Schülerinnen und Schüler in den Regelschulen haben eine verstärkte sonderpädagogische Massnahme? Wie viele Schülerinnen und Schüler besuchen eine Sonderschule? Wie hoch ist der Anteil des sonderpädagogischen Personals in der obligatorischen Schule? Wie ist das Betreuungsverhältnis? Wie sind die Sonderschulen organisiert? Bei der vorliegenden Publikation zur Statistik der Sonderpädagogik handelt es sich um Informationen zu den Lernenden mit einem sonderpädagogischen Bildungsbedarf, dem sonderpädagogischen Personal und den Sonderschulen. Die Ergebnisse beziehen sich auf das Schuljahr 2018/19.",
-          "fr": "Combien d’élèves des écoles ordinaires sont au bénéfice d’une mesure renforcée de pédagogie spécialisée? Combien d’élèves fréquentent une école spécialisée? Quelle est la part du personnel de la pédagogie spécialisée à l’école obligatoire? Quel est le taux d’encadrement? Comment les écoles spécialisées sont-elles organisées? Cette publication relative à la statistique de la pédagogie spécialisée présente des informations sur les élèves ayant des besoins éducatifs particuliers, sur le personnel de la pédagogie spécialisée et sur les écoles spécialisées. Ces résultats se fondent sur les données de l’année scolaire 2018/19."
+          "de": "Das BFS ist das nationale Kompetenzzentrum der öffentlichen Statistik der Schweiz. Es produziert und publiziert statistische Informationen über den Stand und die Entwicklung von Bevölkerung, Wirtschaft, Gesellschaft, Bildung, Forschung, Raum und Umwelt. Diese Informationen dienen der Meinungsbildung in der Bevölkerung sowie der Planung und Steuerung von zentralen Politikbereichen. Sie leisten einen wichtigen Beitrag für einen modernen, demokratischen Staat.",
+          "en": "The FSO is Switzerland's national competence centre for official statistics. It produces and publishes statistical information on the status and development of the population, economy, society, education, research, territory and the environment. This information is used for opinion building among the population and for the planning and management of key policy areas. They make an important contribution to a modern, democratic state.",
+          "fr": "L'OFS est le centre de compétence de la statistique publique suisse. Il produit des informations statistiques sur la population, l'économie, la société, la formation et la recherche, le territoire et l'environnement. Ces informations servent à la formation de l’opinion publique. Elles sont un outil de planification et de gouvernance dans tous les domaines de l’action politique et contribuent au bon fonctionnement de notre État moderne et démocratique.",
+          "it": "L’UST è il centro di competenza nazionale per la statistica pubblica della Svizzera. Produce e pubblica informazioni statistiche sullo stato e sull'evoluzione della popolazione, dell'economia, della società, della formazione, della ricerca, del territorio e dell'ambiente. Queste informazioni servono alla formazione dell'opinione pubblica nonché alla pianificazione e alla gestione in ambiti politici di centrale importanza. Forniscono un importante contributo per uno Stato moderno e democratico.",
+          "rm": ""
         },
-        "formats": [],
-        "id": "019edf23-5c97-7d58-94f3-d3a10e2aaec6",
-        "identifier": "14776867@bundesamt-fur-statistik-bfs",
-        "lifeEvents": [],
-        "publicationLevel": "Public",
-        "publisher": {
-          "classification": {
-            "code": "0220",
-            "name": {
-              "de": "Verwaltungseinheit des Bundes",
-              "en": "Administrative unit of the Confederation",
-              "fr": "Unité de l’administration fédérale",
-              "it": "Unità amministrativa della Confederazione"
-            }
-          },
-          "contactPoint": {
-            "hasAddress": {
-              "de": "Espace de l'Europe 10, 2010 Neuchâtel, Neuchâtel, NE",
-              "en": "Espace de l'Europe 10, 2010 Neuchâtel, Neuchâtel, NE",
-              "fr": "Espace de l'Europe 10, 2010 Neuchâtel, Neuchâtel, NE",
-              "it": "Espace de l'Europe 10, 2010 Neuchâtel, Neuchâtel, NE",
+        "homePage": "https://bfs.admin.ch",
+        "id": "a88d610b-62f9-4e45-b288-3b23ff4f1758",
+        "identifier": "CH1",
+        "images": [
+          {
+            "label": {
+              "de": "Bundesamt für Statistik (BFS)",
+              "en": "Federal Statistical Office (FSO)",
+              "fr": "Office Fédéral de la Statistique (OFS)",
+              "it": "Ufficio federale di statistica (UFS)",
               "rm": ""
             },
-            "hasEmail": "info@bfs.admin.ch",
-            "hasTelephone": "+41 58 463 60 11",
-            "kind": "Organization"
-          },
-          "description": {
-            "de": "Das BFS ist das nationale Kompetenzzentrum der öffentlichen Statistik der Schweiz. Es produziert und publiziert statistische Informationen über den Stand und die Entwicklung von Bevölkerung, Wirtschaft, Gesellschaft, Bildung, Forschung, Raum und Umwelt. Diese Informationen dienen der Meinungsbildung in der Bevölkerung sowie der Planung und Steuerung von zentralen Politikbereichen. Sie leisten einen wichtigen Beitrag für einen modernen, demokratischen Staat.",
-            "en": "The FSO is Switzerland's national competence centre for official statistics. It produces and publishes statistical information on the status and development of the population, economy, society, education, research, territory and the environment. This information is used for opinion building among the population and for the planning and management of key policy areas. They make an important contribution to a modern, democratic state.",
-            "fr": "L'OFS est le centre de compétence de la statistique publique suisse. Il produit des informations statistiques sur la population, l'économie, la société, la formation et la recherche, le territoire et l'environnement. Ces informations servent à la formation de l’opinion publique. Elles sont un outil de planification et de gouvernance dans tous les domaines de l’action politique et contribuent au bon fonctionnement de notre État moderne et démocratique.",
-            "it": "L’UST è il centro di competenza nazionale per la statistica pubblica della Svizzera. Produce e pubblica informazioni statistiche sullo stato e sull'evoluzione della popolazione, dell'economia, della società, della formazione, della ricerca, del territorio e dell'ambiente. Queste informazioni servono alla formazione dell'opinione pubblica nonché alla pianificazione e alla gestione in ambiti politici di centrale importanza. Forniscono un importante contributo per uno Stato moderno e democratico.",
-            "rm": ""
-          },
-          "homePage": "https://bfs.admin.ch",
-          "id": "a88d610b-62f9-4e45-b288-3b23ff4f1758",
-          "identifier": "CH1",
-          "images": [
-            {
-              "label": {
-                "de": "Bundesamt für Statistik (BFS)",
-                "en": "Federal Statistical Office (FSO)",
-                "fr": "Office Fédéral de la Statistique (OFS)",
-                "it": "Ufficio federale di statistica (UFS)",
-                "rm": ""
-              },
-              "uri": "https://input-backend.i14y.c.bfs.admin.ch/api/Media/logo_ch.png"
-            }
-          ],
-          "name": {
-            "de": "Bundesamt für Statistik (BFS)",
-            "en": "Federal Statistical Office (FSO)",
-            "fr": "Office Fédéral de la Statistique (OFS)",
-            "it": "Ufficio federale di statistica (UFS)",
-            "rm": ""
-          },
-          "prefLabel": {
-            "de": "BFS",
-            "en": "FSO",
-            "fr": "OFS",
-            "it": "UFS",
-            "rm": ""
-          },
-          "system": {
-            "createdAt": "0001-01-01T00:00:00+00:00",
-            "modifiedAt": "2026-07-10T07:18:44.32979+00:00"
-          },
-          "spatial": [
-            "CH"
-          ],
-          "spatialCH": [
-            {
-              "code": "8100",
-              "name": {
-                "de": "Schweiz",
-                "en": "Switzerland",
-                "fr": "Suisse",
-                "it": "Svizzera",
-                "rm": "Svizra"
-              }
-            }
-          ],
-          "subAgents": [
-            {
-              "name": {
-                "de": "Sektion Politik, Kultur, Medien (POKU) des Bundesamts für Statistik (BFS)",
-                "en": "Politics, Culture and Media Section (POKU) at the Federal Statistical Office (FSO)",
-                "fr": "Section Politique, culture, médias (POKU) de l'Office fédéral de la statistique (OFS)",
-                "it": "Sezione Politica, cultura, media (POKU) presso l'Ufficio federale di statistica (UST)",
-                "rm": ""
-              },
-              "id": "4921cd1e-016e-457c-b6a7-83e6dff443be"
-            }
-          ],
-          "uid": "CHE131608474"
+            "uri": "https://input-backend.i14y.c.bfs.admin.ch/api/Media/logo_ch.png"
+          }
+        ],
+        "name": {
+          "de": "Bundesamt für Statistik (BFS)",
+          "en": "Federal Statistical Office (FSO)",
+          "fr": "Office Fédéral de la Statistique (OFS)",
+          "it": "Ufficio federale di statistica (UFS)",
+          "rm": ""
         },
-        "registrationStatus": "Recorded",
-        "structure": "WithoutStructure",
+        "prefLabel": {
+          "de": "BFS",
+          "en": "FSO",
+          "fr": "OFS",
+          "it": "UFS",
+          "rm": ""
+        },
         "system": {
-          "createdAt": "2026-06-19T09:08:17+00:00",
-          "creationType": "Automated",
-          "modifiedAt": "2026-06-19T09:08:17+00:00"
+          "createdAt": "0001-01-01T00:00:00+00:00",
+          "modifiedAt": "2026-07-10T07:18:44.32979+00:00"
         },
-        "themes": [
+        "spatial": [
+          "CH"
+        ],
+        "spatialCH": [
           {
-            "code": "103",
+            "code": "8100",
             "name": {
-              "de": "Bildung",
-              "en": "Education",
-              "fr": "Education",
-              "it": "Istruzione"
+              "de": "Schweiz",
+              "en": "Switzerland",
+              "fr": "Suisse",
+              "it": "Svizzera",
+              "rm": "Svizra"
             }
           }
         ],
-        "title": {
-          "de": "Statistik der Sonderpädagogik",
-          "fr": "Statistique de la pédagogie spécialisée"
-        },
-        "type": "Dataset"
-      }
-    ]
-  }
+        "subAgents": [
+          {
+            "name": {
+              "de": "Sektion Politik, Kultur, Medien (POKU) des Bundesamts für Statistik (BFS)",
+              "en": "Politics, Culture and Media Section (POKU) at the Federal Statistical Office (FSO)",
+              "fr": "Section Politique, culture, médias (POKU) de l'Office fédéral de la statistique (OFS)",
+              "it": "Sezione Politica, cultura, media (POKU) presso l'Ufficio federale di statistica (UST)",
+              "rm": ""
+            },
+            "id": "4921cd1e-016e-457c-b6a7-83e6dff443be"
+          }
+        ],
+        "uid": "CHE131608474"
+      },
+      "registrationStatus": "Recorded",
+      "structure": "WithoutStructure",
+      "system": {
+        "createdAt": "2026-06-19T09:08:17+00:00",
+        "creationType": "Automated",
+        "modifiedAt": "2026-06-19T09:08:17+00:00"
+      },
+      "themes": [
+        {
+          "code": "103",
+          "name": {
+            "de": "Bildung",
+            "en": "Education",
+            "fr": "Education",
+            "it": "Istruzione"
+          }
+        }
+      ],
+      "title": {
+        "de": "Statistik der Sonderpädagogik",
+        "fr": "Statistique de la pédagogie spécialisée"
+      },
+      "type": "Dataset"
+    }
+  ]
 }

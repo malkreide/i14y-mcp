@@ -31,7 +31,8 @@ ruff format --check src/ tests/ scripts/      # Format-Gate
 ```
 
 Die Offline-Suite spielt echte Antworten aus `tests/fixtures/` ab, eine pro
-externem Endpunkt, jede mit ihrem Aufnahmedatum versehen. Neu aufzeichnen gegen
+externem Endpunkt. Herkunft, Datum, Auswahlregel und SHA-256 stehen je Datei in
+`tests/fixtures/PROVENANCE.md`. Neu aufzeichnen gegen
 die Live-API:
 
 ```bash

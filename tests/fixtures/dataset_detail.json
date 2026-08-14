@@ -1,416 +1,406 @@
 {
-  "_recording": {
-    "recorded_at": "2026-08-14T10:42:19+00:00",
-    "source": "https://api.i14y.admin.ch/api",
-    "endpoint": "/datasets/0091031d-c82c-4861-9ea9-42b9e23451f7",
-    "params": {},
-    "status": 200,
-    "recorded_by": "scripts/record_fixtures.py"
-  },
-  "body": {
-    "data": {
-      "accessRights": {
-        "code": "PUBLIC",
-        "name": {
-          "de": "Öffentlich",
-          "en": "Public",
-          "fr": "Public",
-          "it": "Pubblico"
-        },
-        "uri": "http://publications.europa.eu/resource/authority/access-right/PUBLIC"
+  "data": {
+    "accessRights": {
+      "code": "PUBLIC",
+      "name": {
+        "de": "Öffentlich",
+        "en": "Public",
+        "fr": "Public",
+        "it": "Pubblico"
       },
-      "confidentialityPerson": {
-        "code": "no_person",
-        "name": {
-          "de": "Enthält keine Personendaten",
-          "en": "Does not contain personal data",
-          "fr": "Ne contient pas de données personnelles",
-          "it": "Non contiene dati personali"
-        }
-      },
-      "conformsTo": [],
-      "contactPoints": [
-        {
-          "fn": {
-            "de": "Bundesamt für Zoll und Grenzsicherheit",
-            "en": "Federal Office for Customs and Border Security",
-            "fr": "Office fédéral de la douane et de la sécurité des frontières OFDF"
-          },
-          "hasAddress": {
-            "de": "Taubenstrasse 16\n3003 Bern (Schweiz)",
-            "en": "Taubenstrasse 16\n3003 Bern (Switzerland)",
-            "fr": "Taubenstrasse 16\n3003 Berne (Suisse)"
-          },
-          "hasEmail": "stat@bazg.admin.ch",
-          "hasTelephone": "+41 58 462 66 10",
-          "kind": "Organization"
-        }
-      ],
-      "description": {
-        "de": "Waren: Aussenhandel aggregiert nach Verwendungszweck und Ländern\nMonatliche Daten / Ab 1988 erhältlich",
-        "en": "Goods: Foreign trade aggregated by broad economic category and country\nMonthly data / Available from 1988",
-        "fr": "Marchandises: Commerce extérieur agrégé selon l'emploi des marchandises et pays\nDonnées mensuelles / Disponibles dès 1988"
-      },
-      "distributions": [
-        {
-          "accessServices": [],
-          "accessUrl": {
-            "uri": "https://share.dma.swiss/s/AScjoWiGq3p8qfK"
-          },
-          "conformsTo": [],
-          "coverage": [],
-          "description": {
-            "de": "Importe und Exporte nach Verwendungszweck / Land\nDefinitive Daten ab 1988",
-            "en": "Imports and exports by broad economic category / country\nDefinitive data since 1988",
-            "fr": "Importations et exportations selon l'emploi / pays\nDonnées définitives dès 1988"
-          },
-          "documentation": [],
-          "downloadUrl": {
-            "uri": "https://share.dma.swiss/s/AScjoWiGq3p8qfK"
-          },
-          "format": {
-            "code": "CSV",
-            "name": {
-              "de": "CSV",
-              "en": "CSV",
-              "fr": "CSV",
-              "it": "CSV"
-            },
-            "uri": "http://publications.europa.eu/resource/authority/file-type/CSV"
-          },
-          "id": "0fa2cc19-8c7f-458e-97d4-afe9262ff3f0",
-          "images": [],
-          "languages": [
-            {
-              "code": "de",
-              "name": {
-                "de": "Deutsch",
-                "en": "German",
-                "fr": "allemand",
-                "it": "Tedesco"
-              },
-              "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=de"
-            },
-            {
-              "code": "fr",
-              "name": {
-                "de": "Französisch",
-                "en": "French",
-                "fr": "français",
-                "it": "Francese"
-              },
-              "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=fr"
-            },
-            {
-              "code": "en",
-              "name": {
-                "de": "Englisch",
-                "en": "English",
-                "fr": "anglais",
-                "it": "Inglese"
-              },
-              "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=en"
-            }
-          ],
-          "license": {
-            "code": "terms_by_ask",
-            "name": {
-              "de": "Opendata BY ASK: Freie Nutzung. Quellenangabe ist Pflicht. Kommerzielle Nutzung nur mit Bewilligung des Datenlieferanten zulässig.",
-              "en": "Opendata BY ASK: Open use. Must provide the source. Use for commercial purposes requires permission of the data owner.",
-              "fr": "Opendata BY ASK: Utilisation libre. Obligation d'indiquer la source. Utilisation commerciale uniquement avec l'autorisation du fournisseur des donnés.",
-              "it": "Opendata BY ASK: Libero utilizzo. Indicazione della fonte obbligatoria. Utilizzo a fini commerciali ammesso soltanto previo consenso del titolare dei dati."
-            },
-            "uri": "http://dcat-ap.ch/vocabulary/licenses/terms_by_ask"
-          },
-          "packagingFormat": {
-            "code": "ZIP",
-            "name": {
-              "de": "ZIP",
-              "en": "ZIP",
-              "fr": "ZIP",
-              "it": "ZIP"
-            },
-            "uri": "http://publications.europa.eu/resource/authority/file-type/ZIP"
-          },
-          "title": {
-            "de": "VZ_IMPEXP_DEF",
-            "en": "VZ_IMPEXP_DEF",
-            "fr": "VZ_IMPEXP_DEF"
-          }
+      "uri": "http://publications.europa.eu/resource/authority/access-right/PUBLIC"
+    },
+    "confidentialityPerson": {
+      "code": "no_person",
+      "name": {
+        "de": "Enthält keine Personendaten",
+        "en": "Does not contain personal data",
+        "fr": "Ne contient pas de données personnelles",
+        "it": "Non contiene dati personali"
+      }
+    },
+    "conformsTo": [],
+    "contactPoints": [
+      {
+        "fn": {
+          "de": "Bundesamt für Zoll und Grenzsicherheit",
+          "en": "Federal Office for Customs and Border Security",
+          "fr": "Office fédéral de la douane et de la sécurité des frontières OFDF"
         },
-        {
-          "accessServices": [],
-          "accessUrl": {
-            "uri": "https://share.dma.swiss/s/ZTdb97HRCFrmGdX"
-          },
-          "conformsTo": [],
-          "coverage": [],
-          "description": {
-            "de": "Importe und Exporte nach Verwendungszweck / Land\nProvisorische Daten",
-            "en": "Imports and exports by broad economic category / country\nProvisional data",
-            "fr": "Importations et exportations selon l'emploi des marchandises / pays\nDonnées provisoires"
-          },
-          "documentation": [],
-          "downloadUrl": {
-            "uri": "https://share.dma.swiss/s/ZTdb97HRCFrmGdX"
-          },
-          "format": {
-            "code": "CSV",
-            "name": {
-              "de": "CSV",
-              "en": "CSV",
-              "fr": "CSV",
-              "it": "CSV"
-            },
-            "uri": "http://publications.europa.eu/resource/authority/file-type/CSV"
-          },
-          "id": "6204ccda-8e8f-4599-afcb-f81b2aa9792b",
-          "images": [],
-          "languages": [
-            {
-              "code": "de",
-              "name": {
-                "de": "Deutsch",
-                "en": "German",
-                "fr": "allemand",
-                "it": "Tedesco"
-              },
-              "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=de"
-            },
-            {
-              "code": "fr",
-              "name": {
-                "de": "Französisch",
-                "en": "French",
-                "fr": "français",
-                "it": "Francese"
-              },
-              "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=fr"
-            },
-            {
-              "code": "en",
-              "name": {
-                "de": "Englisch",
-                "en": "English",
-                "fr": "anglais",
-                "it": "Inglese"
-              },
-              "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=en"
-            }
-          ],
-          "license": {
-            "code": "terms_by_ask",
-            "name": {
-              "de": "Opendata BY ASK: Freie Nutzung. Quellenangabe ist Pflicht. Kommerzielle Nutzung nur mit Bewilligung des Datenlieferanten zulässig.",
-              "en": "Opendata BY ASK: Open use. Must provide the source. Use for commercial purposes requires permission of the data owner.",
-              "fr": "Opendata BY ASK: Utilisation libre. Obligation d'indiquer la source. Utilisation commerciale uniquement avec l'autorisation du fournisseur des donnés.",
-              "it": "Opendata BY ASK: Libero utilizzo. Indicazione della fonte obbligatoria. Utilizzo a fini commerciali ammesso soltanto previo consenso del titolare dei dati."
-            },
-            "uri": "http://dcat-ap.ch/vocabulary/licenses/terms_by_ask"
-          },
-          "packagingFormat": {
-            "code": "ZIP",
-            "name": {
-              "de": "ZIP",
-              "en": "ZIP",
-              "fr": "ZIP",
-              "it": "ZIP"
-            },
-            "uri": "http://publications.europa.eu/resource/authority/file-type/ZIP"
-          },
-          "title": {
-            "de": "VZ_IMPEXP_PROV",
-            "en": "VZ_IMPEXP_PROV",
-            "fr": "VZ_IMPEXP_PROV"
-          }
-        }
-      ],
-      "documentation": [],
-      "frequency": {
-        "code": "MONTHLY",
-        "name": {
-          "de": "monatlich",
-          "en": "monthly",
-          "fr": "mensuel",
-          "it": "mensile"
+        "hasAddress": {
+          "de": "Taubenstrasse 16\n3003 Bern (Schweiz)",
+          "en": "Taubenstrasse 16\n3003 Bern (Switzerland)",
+          "fr": "Taubenstrasse 16\n3003 Berne (Suisse)"
         },
-        "uri": "http://publications.europa.eu/resource/authority/frequency/MONTHLY"
-      },
-      "geoIvIds": [],
-      "id": "0091031d-c82c-4861-9ea9-42b9e23451f7",
-      "identifiers": [
-        "BAZG_VZ_LAND"
-      ],
-      "images": [],
-      "isReferencedBy": [],
-      "keywords": [
-        {
-          "label": {
-            "de": "Aussenhandel",
-            "en": "Foreign trade",
-            "fr": "Commerce extérieur"
-          }
+        "hasEmail": "stat@bazg.admin.ch",
+        "hasTelephone": "+41 58 462 66 10",
+        "kind": "Organization"
+      }
+    ],
+    "description": {
+      "de": "Waren: Aussenhandel aggregiert nach Verwendungszweck und Ländern\nMonatliche Daten / Ab 1988 erhältlich",
+      "en": "Goods: Foreign trade aggregated by broad economic category and country\nMonthly data / Available from 1988",
+      "fr": "Marchandises: Commerce extérieur agrégé selon l'emploi des marchandises et pays\nDonnées mensuelles / Disponibles dès 1988"
+    },
+    "distributions": [
+      {
+        "accessServices": [],
+        "accessUrl": {
+          "uri": "https://share.dma.swiss/s/AScjoWiGq3p8qfK"
         },
-        {
-          "label": {
-            "de": "BAZG",
-            "en": "FOCBS",
-            "fr": "OFDF"
-          }
-        },
-        {
-          "label": {
-            "de": "Exporte",
-            "en": "Exports",
-            "fr": "Exportations"
-          }
-        },
-        {
-          "label": {
-            "de": "Importe",
-            "en": "Imports",
-            "fr": "Importations"
-          }
-        },
-        {
-          "label": {
-            "de": "Verwendungszweck",
-            "en": "Broad economic categories",
-            "fr": "Emploi des marchandises"
-          }
-        }
-      ],
-      "landingPages": [],
-      "languages": [
-        {
-          "code": "de",
-          "name": {
-            "de": "Deutsch",
-            "en": "German",
-            "fr": "allemand",
-            "it": "Tedesco"
-          },
-          "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=de"
-        },
-        {
-          "code": "fr",
-          "name": {
-            "de": "Französisch",
-            "en": "French",
-            "fr": "français",
-            "it": "Francese"
-          },
-          "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=fr"
-        },
-        {
-          "code": "en",
-          "name": {
-            "de": "Englisch",
-            "en": "English",
-            "fr": "anglais",
-            "it": "Inglese"
-          },
-          "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=en"
-        }
-      ],
-      "publicationLevel": "Public",
-      "publisher": {
-        "classification": {
-          "code": "0220",
-          "name": {
-            "de": "Verwaltungseinheit des Bundes",
-            "en": "Administrative unit of the Confederation",
-            "fr": "Unité de l’administration fédérale",
-            "it": "Unità amministrativa della Confederazione"
-          }
-        },
+        "conformsTo": [],
+        "coverage": [],
         "description": {
-          "de": "Das Bundesamt für Zoll und Grenzsicherheit sorgt für umfassende Sicherheit an der Grenze – zum Wohl von Bevölkerung, Wirtschaft und Staat. Es ist national und international gut vernetzt. Zu seinen Kernaufgaben gehören das sachgerechte und rasche Abfertigen von Handelswaren, der zügige Ablauf des Reiseverkehrs, die Bereiche Sicherheitspolizei und Migration und es verfügt mit der Strafverfolgung über eine eigene Ermittlungsbehörde.",
-          "en": "The Federal Customs and Border Security Office (FOCBS) ensures comprehensive border security for the population, the economy and the state and is well connected nationally and internationally. Its main tasks include the correct and speedy taxation of tradable goods, the rapid handling of tourist traffic as well as the areas of migration and security police. The FOCBS has its own prosecuting authority.",
-          "fr": "L'Office fédéral de la douane et de la sécurité des frontières (OFDF) assure la sécurité globale à la frontière au profit de la population, de l'économie et de l'État. Il collabore étroitement avec d'autres autorités nationales et internationales. Parmi ses tâches principales figurent le dédouanement adéquat et rapide des marchandises de commerce, la gestion fluide du trafic touristique ainsi que les domaines de la police de sécurité et des migrations. Avec le domaine de direction Poursuites pénales, il dispose de sa propre autorité d'enquête.",
-          "it": "L'Ufficio federale della dogana e della sicurezza dei confini (UDSC) garantisce la sicurezza globale al confine a favore di popolazione, economia e Stato ed è ben interconnesso a livello nazionale e internazionale. Tra i suoi compiti principali rientrano la corretta e celere imposizione delle merci commerciabili, la rapida gestione del traffico turistico nonché gli ambiti della migrazione e della polizia di sicurezza. Con il Perseguimento penale l'UDSC dispone di una propria autorità inquirente.",
-          "rm": ""
+          "de": "Importe und Exporte nach Verwendungszweck / Land\nDefinitive Daten ab 1988",
+          "en": "Imports and exports by broad economic category / country\nDefinitive data since 1988",
+          "fr": "Importations et exportations selon l'emploi / pays\nDonnées définitives dès 1988"
         },
-        "homePage": "https://www.bazg.admin.ch/",
-        "id": "4e590552-11c9-42f3-96ce-918bda9244cc",
-        "identifier": "CH_BAZG",
+        "documentation": [],
+        "downloadUrl": {
+          "uri": "https://share.dma.swiss/s/AScjoWiGq3p8qfK"
+        },
+        "format": {
+          "code": "CSV",
+          "name": {
+            "de": "CSV",
+            "en": "CSV",
+            "fr": "CSV",
+            "it": "CSV"
+          },
+          "uri": "http://publications.europa.eu/resource/authority/file-type/CSV"
+        },
+        "id": "0fa2cc19-8c7f-458e-97d4-afe9262ff3f0",
         "images": [],
-        "name": {
-          "de": "Bundesamt für Zoll und Grenzsicherheit (BAZG)",
-          "en": "Federal Office for Customs and Border Security (FOCBS)",
-          "fr": "Office fédéral de la douane et de la sécurité des frontières (OFDF)",
-          "it": "Ufficio federale della dogana e della sicurezza dei confini (UDSC)",
-          "rm": ""
+        "languages": [
+          {
+            "code": "de",
+            "name": {
+              "de": "Deutsch",
+              "en": "German",
+              "fr": "allemand",
+              "it": "Tedesco"
+            },
+            "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=de"
+          },
+          {
+            "code": "fr",
+            "name": {
+              "de": "Französisch",
+              "en": "French",
+              "fr": "français",
+              "it": "Francese"
+            },
+            "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=fr"
+          },
+          {
+            "code": "en",
+            "name": {
+              "de": "Englisch",
+              "en": "English",
+              "fr": "anglais",
+              "it": "Inglese"
+            },
+            "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=en"
+          }
+        ],
+        "license": {
+          "code": "terms_by_ask",
+          "name": {
+            "de": "Opendata BY ASK: Freie Nutzung. Quellenangabe ist Pflicht. Kommerzielle Nutzung nur mit Bewilligung des Datenlieferanten zulässig.",
+            "en": "Opendata BY ASK: Open use. Must provide the source. Use for commercial purposes requires permission of the data owner.",
+            "fr": "Opendata BY ASK: Utilisation libre. Obligation d'indiquer la source. Utilisation commerciale uniquement avec l'autorisation du fournisseur des donnés.",
+            "it": "Opendata BY ASK: Libero utilizzo. Indicazione della fonte obbligatoria. Utilizzo a fini commerciali ammesso soltanto previo consenso del titolare dei dati."
+          },
+          "uri": "http://dcat-ap.ch/vocabulary/licenses/terms_by_ask"
         },
-        "prefLabel": {
+        "packagingFormat": {
+          "code": "ZIP",
+          "name": {
+            "de": "ZIP",
+            "en": "ZIP",
+            "fr": "ZIP",
+            "it": "ZIP"
+          },
+          "uri": "http://publications.europa.eu/resource/authority/file-type/ZIP"
+        },
+        "title": {
+          "de": "VZ_IMPEXP_DEF",
+          "en": "VZ_IMPEXP_DEF",
+          "fr": "VZ_IMPEXP_DEF"
+        }
+      },
+      {
+        "accessServices": [],
+        "accessUrl": {
+          "uri": "https://share.dma.swiss/s/ZTdb97HRCFrmGdX"
+        },
+        "conformsTo": [],
+        "coverage": [],
+        "description": {
+          "de": "Importe und Exporte nach Verwendungszweck / Land\nProvisorische Daten",
+          "en": "Imports and exports by broad economic category / country\nProvisional data",
+          "fr": "Importations et exportations selon l'emploi des marchandises / pays\nDonnées provisoires"
+        },
+        "documentation": [],
+        "downloadUrl": {
+          "uri": "https://share.dma.swiss/s/ZTdb97HRCFrmGdX"
+        },
+        "format": {
+          "code": "CSV",
+          "name": {
+            "de": "CSV",
+            "en": "CSV",
+            "fr": "CSV",
+            "it": "CSV"
+          },
+          "uri": "http://publications.europa.eu/resource/authority/file-type/CSV"
+        },
+        "id": "6204ccda-8e8f-4599-afcb-f81b2aa9792b",
+        "images": [],
+        "languages": [
+          {
+            "code": "de",
+            "name": {
+              "de": "Deutsch",
+              "en": "German",
+              "fr": "allemand",
+              "it": "Tedesco"
+            },
+            "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=de"
+          },
+          {
+            "code": "fr",
+            "name": {
+              "de": "Französisch",
+              "en": "French",
+              "fr": "français",
+              "it": "Francese"
+            },
+            "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=fr"
+          },
+          {
+            "code": "en",
+            "name": {
+              "de": "Englisch",
+              "en": "English",
+              "fr": "anglais",
+              "it": "Inglese"
+            },
+            "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=en"
+          }
+        ],
+        "license": {
+          "code": "terms_by_ask",
+          "name": {
+            "de": "Opendata BY ASK: Freie Nutzung. Quellenangabe ist Pflicht. Kommerzielle Nutzung nur mit Bewilligung des Datenlieferanten zulässig.",
+            "en": "Opendata BY ASK: Open use. Must provide the source. Use for commercial purposes requires permission of the data owner.",
+            "fr": "Opendata BY ASK: Utilisation libre. Obligation d'indiquer la source. Utilisation commerciale uniquement avec l'autorisation du fournisseur des donnés.",
+            "it": "Opendata BY ASK: Libero utilizzo. Indicazione della fonte obbligatoria. Utilizzo a fini commerciali ammesso soltanto previo consenso del titolare dei dati."
+          },
+          "uri": "http://dcat-ap.ch/vocabulary/licenses/terms_by_ask"
+        },
+        "packagingFormat": {
+          "code": "ZIP",
+          "name": {
+            "de": "ZIP",
+            "en": "ZIP",
+            "fr": "ZIP",
+            "it": "ZIP"
+          },
+          "uri": "http://publications.europa.eu/resource/authority/file-type/ZIP"
+        },
+        "title": {
+          "de": "VZ_IMPEXP_PROV",
+          "en": "VZ_IMPEXP_PROV",
+          "fr": "VZ_IMPEXP_PROV"
+        }
+      }
+    ],
+    "documentation": [],
+    "frequency": {
+      "code": "MONTHLY",
+      "name": {
+        "de": "monatlich",
+        "en": "monthly",
+        "fr": "mensuel",
+        "it": "mensile"
+      },
+      "uri": "http://publications.europa.eu/resource/authority/frequency/MONTHLY"
+    },
+    "geoIvIds": [],
+    "id": "0091031d-c82c-4861-9ea9-42b9e23451f7",
+    "identifiers": [
+      "BAZG_VZ_LAND"
+    ],
+    "images": [],
+    "isReferencedBy": [],
+    "keywords": [
+      {
+        "label": {
+          "de": "Aussenhandel",
+          "en": "Foreign trade",
+          "fr": "Commerce extérieur"
+        }
+      },
+      {
+        "label": {
           "de": "BAZG",
           "en": "FOCBS",
-          "fr": "OFDF",
-          "it": "UDSC",
-          "rm": ""
-        },
-        "system": {
-          "createdAt": "0001-01-01T00:00:00+00:00",
-          "modifiedAt": "2026-07-10T07:29:11.402126+00:00"
-        },
-        "spatial": [
-          "CH"
-        ],
-        "spatialCH": [
-          {
-            "code": "8100",
-            "name": {
-              "de": "Schweiz",
-              "en": "Switzerland",
-              "fr": "Suisse",
-              "it": "Svizzera",
-              "rm": "Svizra"
-            }
-          }
-        ],
-        "subAgents": [],
-        "uid": "CHE226598037"
+          "fr": "OFDF"
+        }
       },
-      "qualifiedAttributions": [],
-      "qualifiedRelations": [],
-      "registrationStatus": "Recorded",
-      "relations": [],
+      {
+        "label": {
+          "de": "Exporte",
+          "en": "Exports",
+          "fr": "Exportations"
+        }
+      },
+      {
+        "label": {
+          "de": "Importe",
+          "en": "Imports",
+          "fr": "Importations"
+        }
+      },
+      {
+        "label": {
+          "de": "Verwendungszweck",
+          "en": "Broad economic categories",
+          "fr": "Emploi des marchandises"
+        }
+      }
+    ],
+    "landingPages": [],
+    "languages": [
+      {
+        "code": "de",
+        "name": {
+          "de": "Deutsch",
+          "en": "German",
+          "fr": "allemand",
+          "it": "Tedesco"
+        },
+        "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=de"
+      },
+      {
+        "code": "fr",
+        "name": {
+          "de": "Französisch",
+          "en": "French",
+          "fr": "français",
+          "it": "Francese"
+        },
+        "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=fr"
+      },
+      {
+        "code": "en",
+        "name": {
+          "de": "Englisch",
+          "en": "English",
+          "fr": "anglais",
+          "it": "Inglese"
+        },
+        "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=en"
+      }
+    ],
+    "publicationLevel": "Public",
+    "publisher": {
+      "classification": {
+        "code": "0220",
+        "name": {
+          "de": "Verwaltungseinheit des Bundes",
+          "en": "Administrative unit of the Confederation",
+          "fr": "Unité de l’administration fédérale",
+          "it": "Unità amministrativa della Confederazione"
+        }
+      },
+      "description": {
+        "de": "Das Bundesamt für Zoll und Grenzsicherheit sorgt für umfassende Sicherheit an der Grenze – zum Wohl von Bevölkerung, Wirtschaft und Staat. Es ist national und international gut vernetzt. Zu seinen Kernaufgaben gehören das sachgerechte und rasche Abfertigen von Handelswaren, der zügige Ablauf des Reiseverkehrs, die Bereiche Sicherheitspolizei und Migration und es verfügt mit der Strafverfolgung über eine eigene Ermittlungsbehörde.",
+        "en": "The Federal Customs and Border Security Office (FOCBS) ensures comprehensive border security for the population, the economy and the state and is well connected nationally and internationally. Its main tasks include the correct and speedy taxation of tradable goods, the rapid handling of tourist traffic as well as the areas of migration and security police. The FOCBS has its own prosecuting authority.",
+        "fr": "L'Office fédéral de la douane et de la sécurité des frontières (OFDF) assure la sécurité globale à la frontière au profit de la population, de l'économie et de l'État. Il collabore étroitement avec d'autres autorités nationales et internationales. Parmi ses tâches principales figurent le dédouanement adéquat et rapide des marchandises de commerce, la gestion fluide du trafic touristique ainsi que les domaines de la police de sécurité et des migrations. Avec le domaine de direction Poursuites pénales, il dispose de sa propre autorité d'enquête.",
+        "it": "L'Ufficio federale della dogana e della sicurezza dei confini (UDSC) garantisce la sicurezza globale al confine a favore di popolazione, economia e Stato ed è ben interconnesso a livello nazionale e internazionale. Tra i suoi compiti principali rientrano la corretta e celere imposizione delle merci commerciabili, la rapida gestione del traffico turistico nonché gli ambiti della migrazione e della polizia di sicurezza. Con il Perseguimento penale l'UDSC dispone di una propria autorità inquirente.",
+        "rm": ""
+      },
+      "homePage": "https://www.bazg.admin.ch/",
+      "id": "4e590552-11c9-42f3-96ce-918bda9244cc",
+      "identifier": "CH_BAZG",
+      "images": [],
+      "name": {
+        "de": "Bundesamt für Zoll und Grenzsicherheit (BAZG)",
+        "en": "Federal Office for Customs and Border Security (FOCBS)",
+        "fr": "Office fédéral de la douane et de la sécurité des frontières (OFDF)",
+        "it": "Ufficio federale della dogana e della sicurezza dei confini (UDSC)",
+        "rm": ""
+      },
+      "prefLabel": {
+        "de": "BAZG",
+        "en": "FOCBS",
+        "fr": "OFDF",
+        "it": "UDSC",
+        "rm": ""
+      },
       "system": {
-        "createdAt": "2025-11-17T16:59:03.675066+00:00",
-        "modifiedAt": "2025-11-17T17:01:16.409195+00:00"
+        "createdAt": "0001-01-01T00:00:00+00:00",
+        "modifiedAt": "2026-07-10T07:29:11.402126+00:00"
       },
       "spatial": [
-        "Schweiz",
-        "Suisse",
-        "Switzerland"
+        "CH"
       ],
-      "temporalCoverage": [],
-      "themes": [
+      "spatialCH": [
         {
-          "code": "125",
+          "code": "8100",
           "name": {
-            "de": "Öffentliche Statistik",
-            "en": "Official statistics",
-            "fr": "Statistique publique",
-            "it": "Statistica pubblica"
-          }
-        },
-        {
-          "code": "115",
-          "name": {
-            "de": "Wirtschaft",
-            "en": "Economy",
-            "fr": "Économie",
-            "it": "Economia"
+            "de": "Schweiz",
+            "en": "Switzerland",
+            "fr": "Suisse",
+            "it": "Svizzera",
+            "rm": "Svizra"
           }
         }
       ],
-      "title": {
-        "de": "Waren: Aussenhandel nach Verwendungszweck / Land",
-        "en": "Goods: Foreign trade by broad economic category / country",
-        "fr": "Marchandises: Commerce extérieur selon emploi / pays"
+      "subAgents": [],
+      "uid": "CHE226598037"
+    },
+    "qualifiedAttributions": [],
+    "qualifiedRelations": [],
+    "registrationStatus": "Recorded",
+    "relations": [],
+    "system": {
+      "createdAt": "2025-11-17T16:59:03.675066+00:00",
+      "modifiedAt": "2025-11-17T17:01:16.409195+00:00"
+    },
+    "spatial": [
+      "Schweiz",
+      "Suisse",
+      "Switzerland"
+    ],
+    "temporalCoverage": [],
+    "themes": [
+      {
+        "code": "125",
+        "name": {
+          "de": "Öffentliche Statistik",
+          "en": "Official statistics",
+          "fr": "Statistique publique",
+          "it": "Statistica pubblica"
+        }
       },
-      "version": "1"
-    }
+      {
+        "code": "115",
+        "name": {
+          "de": "Wirtschaft",
+          "en": "Economy",
+          "fr": "Économie",
+          "it": "Economia"
+        }
+      }
+    ],
+    "title": {
+      "de": "Waren: Aussenhandel nach Verwendungszweck / Land",
+      "en": "Goods: Foreign trade by broad economic category / country",
+      "fr": "Marchandises: Commerce extérieur selon emploi / pays"
+    },
+    "version": "1"
   }
 }

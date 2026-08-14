@@ -30,8 +30,9 @@ ruff format --check src/ tests/ scripts/      # formatting gate
 ```
 
 The offline suite replays real responses from `tests/fixtures/`, one per
-external endpoint, each stamped with the date it was recorded. Re-record them
-against the live API with:
+external endpoint. Source, recording date, selection rule and SHA-256 are listed
+per file in `tests/fixtures/PROVENANCE.md`. Re-record them against the live API
+with:
 
 ```bash
 python scripts/record_fixtures.py

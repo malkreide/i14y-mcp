@@ -1,240 +1,227 @@
 {
-  "_recording": {
-    "recorded_at": "2026-08-14T10:42:18+00:00",
-    "source": "https://api.i14y.admin.ch/api",
-    "endpoint": "/catalogs",
-    "params": {
-      "page": 1,
-      "pageSize": 3
-    },
-    "status": 200,
-    "recorded_by": "scripts/record_fixtures.py"
-  },
-  "body": {
-    "data": [
-      {
-        "description": {
-          "de": "OGD-Katalog für Bundesamt für Landestopografie swisstopo",
-          "en": "Catalog OGD for CH_SWISSTOPO",
-          "fr": "Catalogue OGD pour Office fédéral de topographie swisstopo",
-          "it": "Catalogo OGD per Ufficio federale di topografia swisstopo"
-        },
-        "id": "8ec39bcd-9f7c-4dd5-b0c9-ce69e2aafb39",
-        "publisher": {
-          "classification": {
-            "code": "0220",
-            "name": {
-              "de": "Verwaltungseinheit des Bundes",
-              "en": "Administrative unit of the Confederation",
-              "fr": "Unité de l’administration fédérale",
-              "it": "Unità amministrativa della Confederazione"
-            }
-          },
-          "homePage": "https://www.swisstopo.ch",
-          "id": "66cfc415-1e48-412d-8328-022e04b99095",
-          "identifier": "CH_SWISSTOPO",
-          "images": [],
-          "name": {
-            "de": "Bundesamt für Landestopografie (swisstopo)",
-            "en": "Federal Office of Topography (swisstopo)",
-            "fr": "Office fédéral de topographie (swisstopo)",
-            "it": "Ufficio federale di topografia (swisstopo)"
-          },
-          "prefLabel": {
-            "de": "swisstopo",
-            "en": "swisstopo",
-            "fr": "swisstopo",
-            "it": "swisstopo"
-          },
-          "system": {
-            "createdAt": "0001-01-01T00:00:00+00:00",
-            "modifiedAt": "2025-10-15T10:11:44.901142+00:00"
-          },
-          "spatial": [
-            "CH"
-          ],
-          "spatialCH": [
-            {
-              "code": "8100",
-              "name": {
-                "de": "Schweiz",
-                "en": "Switzerland",
-                "fr": "Suisse",
-                "it": "Svizzera",
-                "rm": "Svizra"
-              }
-            }
-          ],
-          "subAgents": [],
-          "uid": "CHE208913684"
-        },
-        "system": {
-          "createdAt": "2025-05-09T09:09:32.26067+00:00"
-        },
-        "themeTaxonomy": [
-          "VOCAB_EU_DATA_THEME"
-        ],
-        "title": {
-          "de": "Bundesamt für Landestopografie swisstopo Opendata.swiss",
-          "en": "Federal Office of Topography swisstopo Opendata.swiss",
-          "fr": "Office fédéral de topographie swisstopo Opendata.swiss",
-          "it": "Ufficio federale di topografia swisstopo Opendata.swiss"
-        }
+  "data": [
+    {
+      "description": {
+        "de": "OGD-Katalog für Bundesamt für Landestopografie swisstopo",
+        "en": "Catalog OGD for CH_SWISSTOPO",
+        "fr": "Catalogue OGD pour Office fédéral de topographie swisstopo",
+        "it": "Catalogo OGD per Ufficio federale di topografia swisstopo"
       },
-      {
-        "description": {
-          "de": "OGD-Katalog für eHealth Suisse",
-          "en": "Catalog OGD for CH_eHealth",
-          "fr": "Catalogue OGD pour eHealth Suisse",
-          "it": "Catalogo OGD per eHealth Suisse"
-        },
-        "id": "b1d443a5-535d-4b1d-92d3-9244091a63ca",
-        "publisher": {
-          "classification": {
-            "code": "0220",
-            "name": {
-              "de": "Verwaltungseinheit des Bundes",
-              "en": "Administrative unit of the Confederation",
-              "fr": "Unité de l’administration fédérale",
-              "it": "Unità amministrativa della Confederazione"
-            }
-          },
-          "description": {
-            "de": "Die Geschäftsstelle von eHealth Suisse stellt sicher, dass die einzelnen Projekte für die Digitalisierung des Gesundheitswesens zielorientiert und gesetzeskonform sind und dass Synergien genutzt werden – auch international.",
-            "en": "Entdecken Sie die vielfaeltigen digitalen Gesundheitslösungen von eHealth Suisse. Wir gestalten die vernetzte Zukunft der Gesundheitsversorgung.",
-            "fr": "Le secrétariat d’eHealth Suisse s’assure que les différents projets pour la numérisation du système de santé sont bien axés sur les objectifs et conformes à la loi, et qu’ils profitent de synergies, aussi au niveau international.",
-            "it": "La segreteria di eHealth Suisse assicura che i singoli progetti per la digitalizzazione della sanità siano orientati agli obiettivi e siano conformi alla legge e che le sinergie esistenti vengano sfruttate anche a livello internazionale.",
-            "rm": ""
-          },
-          "homePage": "https://www.e-health-suisse.ch",
-          "id": "6fc9ea64-2a0e-44df-8c8b-5fb5528faa16",
-          "identifier": "CH_eHealth",
-          "images": [],
+      "id": "8ec39bcd-9f7c-4dd5-b0c9-ce69e2aafb39",
+      "publisher": {
+        "classification": {
+          "code": "0220",
           "name": {
-            "de": "eHealth Suisse",
-            "en": "eHealth Suisse",
-            "fr": "eHealth Suisse",
-            "it": "eHealth Suisse",
-            "rm": ""
-          },
-          "prefLabel": {
-            "de": "eHealth Suisse",
-            "en": "eHealth Suisse",
-            "fr": "eHealth Suisse",
-            "it": "eHealth Suisse",
-            "rm": ""
-          },
-          "system": {
-            "createdAt": "0001-01-01T00:00:00+00:00",
-            "modifiedAt": "2026-07-10T07:46:18.399941+00:00"
-          },
-          "spatial": [
-            "CH"
-          ],
-          "spatialCH": [
-            {
-              "code": "8100",
-              "name": {
-                "de": "Schweiz",
-                "en": "Switzerland",
-                "fr": "Suisse",
-                "it": "Svizzera",
-                "rm": "Svizra"
-              }
-            }
-          ],
-          "subAgents": []
+            "de": "Verwaltungseinheit des Bundes",
+            "en": "Administrative unit of the Confederation",
+            "fr": "Unité de l’administration fédérale",
+            "it": "Unità amministrativa della Confederazione"
+          }
+        },
+        "homePage": "https://www.swisstopo.ch",
+        "id": "66cfc415-1e48-412d-8328-022e04b99095",
+        "identifier": "CH_SWISSTOPO",
+        "images": [],
+        "name": {
+          "de": "Bundesamt für Landestopografie (swisstopo)",
+          "en": "Federal Office of Topography (swisstopo)",
+          "fr": "Office fédéral de topographie (swisstopo)",
+          "it": "Ufficio federale di topografia (swisstopo)"
+        },
+        "prefLabel": {
+          "de": "swisstopo",
+          "en": "swisstopo",
+          "fr": "swisstopo",
+          "it": "swisstopo"
         },
         "system": {
-          "createdAt": "2025-05-09T09:09:32.726794+00:00"
+          "createdAt": "0001-01-01T00:00:00+00:00",
+          "modifiedAt": "2025-10-15T10:11:44.901142+00:00"
         },
-        "themeTaxonomy": [
-          "VOCAB_EU_DATA_THEME"
+        "spatial": [
+          "CH"
         ],
-        "title": {
-          "de": "eHealth Suisse Opendata.swiss",
-          "en": "eHealth Suisse Opendata.swiss",
-          "fr": "eHealth Suisse Opendata.swiss",
-          "it": "eHealth Suisse Opendata.swiss"
-        }
+        "spatialCH": [
+          {
+            "code": "8100",
+            "name": {
+              "de": "Schweiz",
+              "en": "Switzerland",
+              "fr": "Suisse",
+              "it": "Svizzera",
+              "rm": "Svizra"
+            }
+          }
+        ],
+        "subAgents": [],
+        "uid": "CHE208913684"
       },
-      {
-        "description": {
-          "de": "OGD-Katalog für Eidgenössische Steuerverwaltung ESTV",
-          "en": "Catalog OGD for CH_ESTV",
-          "fr": "Catalogue OGD pour Administration fédérale des contributions AFC",
-          "it": "Catalogo OGD per Amministrazione federale delle contribuzioni FTA"
-        },
-        "id": "cc98af80-593a-41a5-93e7-99ed454721f0",
-        "publisher": {
-          "classification": {
-            "code": "0223",
-            "name": {
-              "de": "Verwaltungseinheit der Gemeinde",
-              "en": "Administrative unit of the commune",
-              "fr": "Unité de l’administration communale",
-              "it": "Unità amministrativa del comune"
-            }
-          },
-          "description": {
-            "de": "",
-            "en": "",
-            "fr": "",
-            "it": "",
-            "rm": ""
-          },
-          "id": "2d1ce79b-7625-4b19-a597-c5abc55227bb",
-          "identifier": "CH_ESTV",
-          "images": [],
-          "name": {
-            "de": "Eidgenössische Steuerverwaltung (ESTV)",
-            "en": "Federal Tax Administration (AFC)",
-            "fr": "Administration fédérale des contributions (AFC)",
-            "it": "Amministrazione federale delle contribuzioni (FTA)",
-            "rm": ""
-          },
-          "prefLabel": {
-            "de": "ESTV",
-            "en": "AFC",
-            "fr": "AFC",
-            "it": "FTA",
-            "rm": ""
-          },
-          "system": {
-            "createdAt": "0001-01-01T00:00:00+00:00",
-            "modifiedAt": "2026-08-12T15:00:49.059455+00:00"
-          },
-          "spatial": [
-            "CH"
-          ],
-          "spatialCH": [
-            {
-              "code": "8100",
-              "name": {
-                "de": "Schweiz",
-                "en": "Switzerland",
-                "fr": "Suisse",
-                "it": "Svizzera",
-                "rm": "Svizra"
-              }
-            }
-          ],
-          "subAgents": [],
-          "uid": "CHE211403691"
-        },
-        "system": {
-          "createdAt": "2025-05-09T09:13:03.903185+00:00"
-        },
-        "themeTaxonomy": [
-          "VOCAB_EU_DATA_THEME"
-        ],
-        "title": {
-          "de": "Eidgenössische Steuerverwaltung ESTV Opendata.swiss",
-          "en": "Federal Tax Administration AFC Opendata.swiss",
-          "fr": "Administration fédérale des contributions AFC Opendata.swiss",
-          "it": "Amministrazione federale delle contribuzioni FTA Opendata.swiss"
-        }
+      "system": {
+        "createdAt": "2025-05-09T09:09:32.26067+00:00"
+      },
+      "themeTaxonomy": [
+        "VOCAB_EU_DATA_THEME"
+      ],
+      "title": {
+        "de": "Bundesamt für Landestopografie swisstopo Opendata.swiss",
+        "en": "Federal Office of Topography swisstopo Opendata.swiss",
+        "fr": "Office fédéral de topographie swisstopo Opendata.swiss",
+        "it": "Ufficio federale di topografia swisstopo Opendata.swiss"
       }
-    ]
-  }
+    },
+    {
+      "description": {
+        "de": "OGD-Katalog für eHealth Suisse",
+        "en": "Catalog OGD for CH_eHealth",
+        "fr": "Catalogue OGD pour eHealth Suisse",
+        "it": "Catalogo OGD per eHealth Suisse"
+      },
+      "id": "b1d443a5-535d-4b1d-92d3-9244091a63ca",
+      "publisher": {
+        "classification": {
+          "code": "0220",
+          "name": {
+            "de": "Verwaltungseinheit des Bundes",
+            "en": "Administrative unit of the Confederation",
+            "fr": "Unité de l’administration fédérale",
+            "it": "Unità amministrativa della Confederazione"
+          }
+        },
+        "description": {
+          "de": "Die Geschäftsstelle von eHealth Suisse stellt sicher, dass die einzelnen Projekte für die Digitalisierung des Gesundheitswesens zielorientiert und gesetzeskonform sind und dass Synergien genutzt werden – auch international.",
+          "en": "Entdecken Sie die vielfaeltigen digitalen Gesundheitslösungen von eHealth Suisse. Wir gestalten die vernetzte Zukunft der Gesundheitsversorgung.",
+          "fr": "Le secrétariat d’eHealth Suisse s’assure que les différents projets pour la numérisation du système de santé sont bien axés sur les objectifs et conformes à la loi, et qu’ils profitent de synergies, aussi au niveau international.",
+          "it": "La segreteria di eHealth Suisse assicura che i singoli progetti per la digitalizzazione della sanità siano orientati agli obiettivi e siano conformi alla legge e che le sinergie esistenti vengano sfruttate anche a livello internazionale.",
+          "rm": ""
+        },
+        "homePage": "https://www.e-health-suisse.ch",
+        "id": "6fc9ea64-2a0e-44df-8c8b-5fb5528faa16",
+        "identifier": "CH_eHealth",
+        "images": [],
+        "name": {
+          "de": "eHealth Suisse",
+          "en": "eHealth Suisse",
+          "fr": "eHealth Suisse",
+          "it": "eHealth Suisse",
+          "rm": ""
+        },
+        "prefLabel": {
+          "de": "eHealth Suisse",
+          "en": "eHealth Suisse",
+          "fr": "eHealth Suisse",
+          "it": "eHealth Suisse",
+          "rm": ""
+        },
+        "system": {
+          "createdAt": "0001-01-01T00:00:00+00:00",
+          "modifiedAt": "2026-07-10T07:46:18.399941+00:00"
+        },
+        "spatial": [
+          "CH"
+        ],
+        "spatialCH": [
+          {
+            "code": "8100",
+            "name": {
+              "de": "Schweiz",
+              "en": "Switzerland",
+              "fr": "Suisse",
+              "it": "Svizzera",
+              "rm": "Svizra"
+            }
+          }
+        ],
+        "subAgents": []
+      },
+      "system": {
+        "createdAt": "2025-05-09T09:09:32.726794+00:00"
+      },
+      "themeTaxonomy": [
+        "VOCAB_EU_DATA_THEME"
+      ],
+      "title": {
+        "de": "eHealth Suisse Opendata.swiss",
+        "en": "eHealth Suisse Opendata.swiss",
+        "fr": "eHealth Suisse Opendata.swiss",
+        "it": "eHealth Suisse Opendata.swiss"
+      }
+    },
+    {
+      "description": {
+        "de": "OGD-Katalog für Eidgenössische Steuerverwaltung ESTV",
+        "en": "Catalog OGD for CH_ESTV",
+        "fr": "Catalogue OGD pour Administration fédérale des contributions AFC",
+        "it": "Catalogo OGD per Amministrazione federale delle contribuzioni FTA"
+      },
+      "id": "cc98af80-593a-41a5-93e7-99ed454721f0",
+      "publisher": {
+        "classification": {
+          "code": "0223",
+          "name": {
+            "de": "Verwaltungseinheit der Gemeinde",
+            "en": "Administrative unit of the commune",
+            "fr": "Unité de l’administration communale",
+            "it": "Unità amministrativa del comune"
+          }
+        },
+        "description": {
+          "de": "",
+          "en": "",
+          "fr": "",
+          "it": "",
+          "rm": ""
+        },
+        "id": "2d1ce79b-7625-4b19-a597-c5abc55227bb",
+        "identifier": "CH_ESTV",
+        "images": [],
+        "name": {
+          "de": "Eidgenössische Steuerverwaltung (ESTV)",
+          "en": "Federal Tax Administration (AFC)",
+          "fr": "Administration fédérale des contributions (AFC)",
+          "it": "Amministrazione federale delle contribuzioni (FTA)",
+          "rm": ""
+        },
+        "prefLabel": {
+          "de": "ESTV",
+          "en": "AFC",
+          "fr": "AFC",
+          "it": "FTA",
+          "rm": ""
+        },
+        "system": {
+          "createdAt": "0001-01-01T00:00:00+00:00",
+          "modifiedAt": "2026-08-12T15:00:49.059455+00:00"
+        },
+        "spatial": [
+          "CH"
+        ],
+        "spatialCH": [
+          {
+            "code": "8100",
+            "name": {
+              "de": "Schweiz",
+              "en": "Switzerland",
+              "fr": "Suisse",
+              "it": "Svizzera",
+              "rm": "Svizra"
+            }
+          }
+        ],
+        "subAgents": [],
+        "uid": "CHE211403691"
+      },
+      "system": {
+        "createdAt": "2025-05-09T09:13:03.903185+00:00"
+      },
+      "themeTaxonomy": [
+        "VOCAB_EU_DATA_THEME"
+      ],
+      "title": {
+        "de": "Eidgenössische Steuerverwaltung ESTV Opendata.swiss",
+        "en": "Federal Tax Administration AFC Opendata.swiss",
+        "fr": "Administration fédérale des contributions AFC Opendata.swiss",
+        "it": "Amministrazione federale delle contribuzioni FTA Opendata.swiss"
+      }
+    }
+  ]
 }

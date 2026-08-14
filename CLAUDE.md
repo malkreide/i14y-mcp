@@ -70,8 +70,10 @@ per Cron (`17 5 * * 1`, Mo 05:17 UTC) plus `workflow_dispatch` gegen die echte
 I14Y-API. DRIFT-005 ist damit erfüllt, nicht bloss per `-m "not live"` umgangen.
 
 **Fixtures: aufgezeichnet.** `tests/fixtures/` hält eine echte Antwort je
-externem Endpunkt, mit Aufnahmedatum im `_recording`-Block; neu aufzeichnen mit
-`python scripts/record_fixtures.py`. Erfolgs-Payloads nicht mehr von Hand
+externem Endpunkt; Herkunft, Datum, Auswahlregel und SHA-256 stehen je Datei in
+`tests/fixtures/PROVENANCE.md` — Portfolio-Konvention, gleich wie in
+`meteoswiss-mcp` und `swiss-statistics-mcp`. Neu aufzeichnen mit
+`python scripts/record_fixtures.py`, geladen wird über `tests/fixture_data.py`. Erfolgs-Payloads nicht mehr von Hand
 schreiben — die erste Aufzeichnung deckte auf, dass `/concepts` und
 `/publicservices` ihr Label `name` nennen, nicht `title`: drei Tools lieferten
 leere Titel, die Suite blieb grün. Fehlerpfade bleiben handgeschrieben.

@@ -1,204 +1,194 @@
 {
-  "_recording": {
-    "recorded_at": "2026-08-14T10:42:20+00:00",
-    "source": "https://api.i14y.admin.ch/api",
-    "endpoint": "/dataservices/019f3d36-5cb9-7f2f-8128-7a0175a512c8",
-    "params": {},
-    "status": 200,
-    "recorded_by": "scripts/record_fixtures.py"
-  },
-  "body": {
-    "data": {
-      "accessRights": {
-        "code": "PUBLIC",
-        "name": {
-          "de": "Öffentlich",
-          "en": "Public",
-          "fr": "Public",
-          "it": "Pubblico"
-        },
-        "uri": "http://publications.europa.eu/resource/authority/access-right/PUBLIC"
+  "data": {
+    "accessRights": {
+      "code": "PUBLIC",
+      "name": {
+        "de": "Öffentlich",
+        "en": "Public",
+        "fr": "Public",
+        "it": "Pubblico"
       },
-      "conformsTo": [
-        {
-          "label": {
-            "de": "ISO20022",
-            "en": "ISO20022",
-            "fr": "ISO20022",
-            "it": "ISO20022"
-          },
-          "uri": "https://www.iso20022.org"
+      "uri": "http://publications.europa.eu/resource/authority/access-right/PUBLIC"
+    },
+    "conformsTo": [
+      {
+        "label": {
+          "de": "ISO20022",
+          "en": "ISO20022",
+          "fr": "ISO20022",
+          "it": "ISO20022"
+        },
+        "uri": "https://www.iso20022.org"
+      }
+    ],
+    "contactPoints": [
+      {
+        "fn": {
+          "de": "Swiss Fintech Innovations (SFTI)",
+          "en": "Swiss Fintech Innovations (SFTI)",
+          "fr": "Swiss Fintech Innovations (SFTI)",
+          "it": "Swiss Fintech Innovations (SFTI)"
+        },
+        "hasAddress": {
+          "de": "Rämistrasse 5\nP.O. Box\n8024 Zurich",
+          "en": "Rämistrasse 5\nP.O. Box\n8024 Zurich",
+          "fr": "Rämistrasse 5\nP.O. Box\n8024 Zurich",
+          "it": "Rämistrasse 5\nP.O. Box\n8024 Zurich"
+        },
+        "hasEmail": "info@common-api.ch",
+        "kind": "Organization"
+      }
+    ],
+    "description": {
+      "de": "Die Pension API wurde in breiter Zusammenarbeit  mit dem VVS, dem Verband bvg-digital, VVS-Mitgliedern sowie den Swiss Fintech Innovations-Communities «Open Pension» und «Common API» entwickelt. Mit der Ausweitung des digitalen Vorsorgeausweises auf Freizügigkeitsguthaben und Säule-3a-Guthaben unternimmt die Schweiz einen weiteren Schritt hin zu besser zugänglichen und digital nutzbaren Vorsorgeinformationen. Der QR-Code-Standard ermöglicht es, wichtige Informationen aus Vorsorgeausweisen in einem strukturierten und maschinenlesbaren Format darzustellen und in digitalen Anwendungen wiederzuverwenden.",
+      "en": "The Pension API was developed in close collaboration with the VVS, the bvg-digital Association, VVS members, and the Swiss fintech innovation communities “Open Pension” and “Common API.” By expanding the digital pension statement to include vested benefits and Pillar 3a assets, Switzerland is taking another step toward making pension information more accessible and usable in digital formats. The QR code standard makes it possible to present important information from pension statements in a structured, machine-readable format and to reuse it in digital applications.",
+      "fr": "La Pension API a été développée dans le cadre d’une large collaboration avec la VVS, l’association bvg-digital, les membres de la VVS ainsi que les communautés d’innovation Swiss Fintech «Open Pension» et «Common API». Avec l’extension du certificat de prévoyance numérique aux avoirs de libre passage et aux avoirs du pilier 3a, la Suisse franchit une nouvelle étape vers des informations de prévoyance plus accessibles et exploitables numériquement. La norme du code QR permet de présenter les informations importantes issues des certificats de prévoyance dans un format structuré et lisible par machine, et de les réutiliser dans des applications numériques.",
+      "it": "La Pension API è stata sviluppata grazie a un’ampia collaborazione con la VVS, l’associazione bvg-digital, i membri della VVS e le comunità di innovazione fintech svizzere «Open Pension» e «Common API». Con l’estensione dell’attestato previdenziale digitale agli averi di libero passaggio e agli averi del pilastro 3a, la Svizzera compie un ulteriore passo avanti verso informazioni previdenziali più accessibili e utilizzabili in formato digitale. Lo standard del codice QR consente di rappresentare le informazioni importanti contenute negli attestati previdenziali in un formato strutturato e leggibile da dispositivi automatici e di riutilizzarle nelle applicazioni digitali."
+    },
+    "documentation": [
+      {
+        "label": {
+          "de": "Common API Arbeitsgruppe",
+          "en": "Common API Working Group",
+          "fr": "Groupe de travail Common API",
+          "it": "Gruppo di lavoro Common API"
+        },
+        "uri": "https://github.com/swissfintechinnovations/.github/wiki"
+      }
+    ],
+    "endpointDescriptions": [
+      {
+        "label": {
+          "de": "Wiki",
+          "en": "Wiki",
+          "fr": "Wiki",
+          "it": "Wiki"
+        },
+        "uri": "https://github.com/swissfintechinnovations/ca-pension/wiki"
+      }
+    ],
+    "endpointUrls": [
+      {
+        "label": {
+          "de": "OpenAPI Spezifikation",
+          "en": "OpenAPI Specification",
+          "fr": "Spécification OpenAPI",
+          "it": "Specifiche OpenAPI"
+        },
+        "uri": "https://editor.swagger.io/?url=https://raw.githubusercontent.com/swissfintechinnovations/ca-pension/main/pensionAPI.yaml"
+      }
+    ],
+    "id": "019f3d36-5cb9-7f2f-8128-7a0175a512c8",
+    "identifiers": [
+      "pension-api-openpension"
+    ],
+    "issued": "2026-05-27T00:00:00+02:00",
+    "keywords": [
+      {
+        "label": {
+          "de": "Open Banking",
+          "en": "Open Banking",
+          "fr": "Open Banking",
+          "it": "Open Banking"
         }
-      ],
-      "contactPoints": [
-        {
-          "fn": {
-            "de": "Swiss Fintech Innovations (SFTI)",
-            "en": "Swiss Fintech Innovations (SFTI)",
-            "fr": "Swiss Fintech Innovations (SFTI)",
-            "it": "Swiss Fintech Innovations (SFTI)"
-          },
-          "hasAddress": {
-            "de": "Rämistrasse 5\nP.O. Box\n8024 Zurich",
-            "en": "Rämistrasse 5\nP.O. Box\n8024 Zurich",
-            "fr": "Rämistrasse 5\nP.O. Box\n8024 Zurich",
-            "it": "Rämistrasse 5\nP.O. Box\n8024 Zurich"
-          },
-          "hasEmail": "info@common-api.ch",
-          "kind": "Organization"
-        }
-      ],
-      "description": {
-        "de": "Die Pension API wurde in breiter Zusammenarbeit  mit dem VVS, dem Verband bvg-digital, VVS-Mitgliedern sowie den Swiss Fintech Innovations-Communities «Open Pension» und «Common API» entwickelt. Mit der Ausweitung des digitalen Vorsorgeausweises auf Freizügigkeitsguthaben und Säule-3a-Guthaben unternimmt die Schweiz einen weiteren Schritt hin zu besser zugänglichen und digital nutzbaren Vorsorgeinformationen. Der QR-Code-Standard ermöglicht es, wichtige Informationen aus Vorsorgeausweisen in einem strukturierten und maschinenlesbaren Format darzustellen und in digitalen Anwendungen wiederzuverwenden.",
-        "en": "The Pension API was developed in close collaboration with the VVS, the bvg-digital Association, VVS members, and the Swiss fintech innovation communities “Open Pension” and “Common API.” By expanding the digital pension statement to include vested benefits and Pillar 3a assets, Switzerland is taking another step toward making pension information more accessible and usable in digital formats. The QR code standard makes it possible to present important information from pension statements in a structured, machine-readable format and to reuse it in digital applications.",
-        "fr": "La Pension API a été développée dans le cadre d’une large collaboration avec la VVS, l’association bvg-digital, les membres de la VVS ainsi que les communautés d’innovation Swiss Fintech «Open Pension» et «Common API». Avec l’extension du certificat de prévoyance numérique aux avoirs de libre passage et aux avoirs du pilier 3a, la Suisse franchit une nouvelle étape vers des informations de prévoyance plus accessibles et exploitables numériquement. La norme du code QR permet de présenter les informations importantes issues des certificats de prévoyance dans un format structuré et lisible par machine, et de les réutiliser dans des applications numériques.",
-        "it": "La Pension API è stata sviluppata grazie a un’ampia collaborazione con la VVS, l’associazione bvg-digital, i membri della VVS e le comunità di innovazione fintech svizzere «Open Pension» e «Common API». Con l’estensione dell’attestato previdenziale digitale agli averi di libero passaggio e agli averi del pilastro 3a, la Svizzera compie un ulteriore passo avanti verso informazioni previdenziali più accessibili e utilizzabili in formato digitale. Lo standard del codice QR consente di rappresentare le informazioni importanti contenute negli attestati previdenziali in un formato strutturato e leggibile da dispositivi automatici e di riutilizzarle nelle applicazioni digitali."
       },
-      "documentation": [
-        {
-          "label": {
-            "de": "Common API Arbeitsgruppe",
-            "en": "Common API Working Group",
-            "fr": "Groupe de travail Common API",
-            "it": "Gruppo di lavoro Common API"
-          },
-          "uri": "https://github.com/swissfintechinnovations/.github/wiki"
+      {
+        "label": {
+          "de": "Open Finance",
+          "en": "Open Finance",
+          "fr": "Open Finance",
+          "it": "Open Finance"
         }
-      ],
-      "endpointDescriptions": [
-        {
-          "label": {
-            "de": "Wiki",
-            "en": "Wiki",
-            "fr": "Wiki",
-            "it": "Wiki"
-          },
-          "uri": "https://github.com/swissfintechinnovations/ca-pension/wiki"
-        }
-      ],
-      "endpointUrls": [
-        {
-          "label": {
-            "de": "OpenAPI Spezifikation",
-            "en": "OpenAPI Specification",
-            "fr": "Spécification OpenAPI",
-            "it": "Specifiche OpenAPI"
-          },
-          "uri": "https://editor.swagger.io/?url=https://raw.githubusercontent.com/swissfintechinnovations/ca-pension/main/pensionAPI.yaml"
-        }
-      ],
-      "id": "019f3d36-5cb9-7f2f-8128-7a0175a512c8",
-      "identifiers": [
-        "pension-api-openpension"
-      ],
-      "issued": "2026-05-27T00:00:00+02:00",
-      "keywords": [
-        {
-          "label": {
-            "de": "Open Banking",
-            "en": "Open Banking",
-            "fr": "Open Banking",
-            "it": "Open Banking"
-          }
-        },
-        {
-          "label": {
-            "de": "Open Finance",
-            "en": "Open Finance",
-            "fr": "Open Finance",
-            "it": "Open Finance"
-          }
-        },
-        {
-          "label": {
-            "de": "Vorsorge",
-            "en": "Pension",
-            "fr": "Retraite",
-            "it": "Pensione"
-          }
-        },
-        {
-          "label": {
-            "de": "Innovation",
-            "en": "Innovation",
-            "fr": "Innovation",
-            "it": "Innovation"
-          }
-        }
-      ],
-      "landingPages": [
-        {
-          "label": {
-            "de": "GitHub Verzeichnis Pension API",
-            "en": "GitHub repository Pension API",
-            "fr": "Répertoire GitHub Pension API",
-            "it": "Directory GitHub Pension API"
-          },
-          "uri": "https://github.com/swissfintechinnovations/ca-pension"
-        }
-      ],
-      "license": {
-        "code": "terms_by",
-        "name": {
-          "de": "Opendata BY: Freie Nutzung. Quellenangabe ist Pflicht.",
-          "en": "Opendata BY: Open use. Must provide the source.",
-          "fr": "Opendata BY: Utilisation libre. Obligation d'indiquer la source.",
-          "it": "Opendata BY: Libero utilizzo. Indicazione della fonte obbligatoria. Utilizzo a fini commerciali ammesso soltanto previo consenso del titolare dei dati"
-        },
-        "uri": "http://dcat-ap.ch/vocabulary/licenses/terms_by"
       },
-      "publicationLevel": "Public",
-      "publisher": {
-        "id": "8418ab4f-bb95-46c9-b875-e59696702a5b",
-        "identifier": "CH_SFTI",
-        "images": [],
-        "name": {
-          "de": "Swiss Fintech Innovations",
-          "en": "Swiss Fintech Innovations",
-          "fr": "Swiss Fintech Innovations",
-          "it": "Swiss Fintech Innovations"
-        },
-        "prefLabel": {
-          "de": "Swiss Fintech Innovations",
-          "en": "Swiss Fintech Innovations",
-          "fr": "Swiss Fintech Innovations",
-          "it": "Swiss Fintech Innovations"
-        },
-        "system": {
-          "createdAt": "2023-09-14T06:48:10.468993+00:00"
-        },
-        "spatial": [
-          "CH"
-        ],
-        "spatialCH": [],
-        "subAgents": []
+      {
+        "label": {
+          "de": "Vorsorge",
+          "en": "Pension",
+          "fr": "Retraite",
+          "it": "Pensione"
+        }
       },
-      "registrationStatus": "Recorded",
-      "registrationStatusProposal": "PreferredStandard",
-      "servesDatasets": [],
+      {
+        "label": {
+          "de": "Innovation",
+          "en": "Innovation",
+          "fr": "Innovation",
+          "it": "Innovation"
+        }
+      }
+    ],
+    "landingPages": [
+      {
+        "label": {
+          "de": "GitHub Verzeichnis Pension API",
+          "en": "GitHub repository Pension API",
+          "fr": "Répertoire GitHub Pension API",
+          "it": "Directory GitHub Pension API"
+        },
+        "uri": "https://github.com/swissfintechinnovations/ca-pension"
+      }
+    ],
+    "license": {
+      "code": "terms_by",
+      "name": {
+        "de": "Opendata BY: Freie Nutzung. Quellenangabe ist Pflicht.",
+        "en": "Opendata BY: Open use. Must provide the source.",
+        "fr": "Opendata BY: Utilisation libre. Obligation d'indiquer la source.",
+        "it": "Opendata BY: Libero utilizzo. Indicazione della fonte obbligatoria. Utilizzo a fini commerciali ammesso soltanto previo consenso del titolare dei dati"
+      },
+      "uri": "http://dcat-ap.ch/vocabulary/licenses/terms_by"
+    },
+    "publicationLevel": "Public",
+    "publisher": {
+      "id": "8418ab4f-bb95-46c9-b875-e59696702a5b",
+      "identifier": "CH_SFTI",
+      "images": [],
+      "name": {
+        "de": "Swiss Fintech Innovations",
+        "en": "Swiss Fintech Innovations",
+        "fr": "Swiss Fintech Innovations",
+        "it": "Swiss Fintech Innovations"
+      },
+      "prefLabel": {
+        "de": "Swiss Fintech Innovations",
+        "en": "Swiss Fintech Innovations",
+        "fr": "Swiss Fintech Innovations",
+        "it": "Swiss Fintech Innovations"
+      },
       "system": {
-        "createdAt": "2026-07-07T15:33:20.700952+00:00",
-        "creationType": "Manual",
-        "modifiedAt": "2026-07-07T16:03:06.597804+00:00"
+        "createdAt": "2023-09-14T06:48:10.468993+00:00"
       },
-      "themes": [
-        {
-          "code": "115",
-          "name": {
-            "de": "Wirtschaft",
-            "en": "Economy",
-            "fr": "Économie",
-            "it": "Economia"
-          }
-        }
+      "spatial": [
+        "CH"
       ],
-      "title": {
-        "de": "Pension API (OpenPension)",
-        "en": "Pension API (OpenPension)",
-        "fr": "Pension API (OpenPension)",
-        "it": "Pension API (OpenPension)"
-      },
-      "version": "v4"
-    }
+      "spatialCH": [],
+      "subAgents": []
+    },
+    "registrationStatus": "Recorded",
+    "registrationStatusProposal": "PreferredStandard",
+    "servesDatasets": [],
+    "system": {
+      "createdAt": "2026-07-07T15:33:20.700952+00:00",
+      "creationType": "Manual",
+      "modifiedAt": "2026-07-07T16:03:06.597804+00:00"
+    },
+    "themes": [
+      {
+        "code": "115",
+        "name": {
+          "de": "Wirtschaft",
+          "en": "Economy",
+          "fr": "Économie",
+          "it": "Economia"
+        }
+      }
+    ],
+    "title": {
+      "de": "Pension API (OpenPension)",
+      "en": "Pension API (OpenPension)",
+      "fr": "Pension API (OpenPension)",
+      "it": "Pension API (OpenPension)"
+    },
+    "version": "v4"
   }
 }

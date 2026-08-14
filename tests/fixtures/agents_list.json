@@ -1,257 +1,244 @@
 {
-  "_recording": {
-    "recorded_at": "2026-08-14T10:42:17+00:00",
-    "source": "https://api.i14y.admin.ch/api",
-    "endpoint": "/agents",
-    "params": {
-      "page": 1,
-      "pageSize": 3
+  "data": [
+    {
+      "classification": {
+        "code": "0220",
+        "name": {
+          "de": "Verwaltungseinheit des Bundes",
+          "en": "Administrative unit of the Confederation",
+          "fr": "Unité de l’administration fédérale",
+          "it": "Unità amministrativa della Confederazione"
+        }
+      },
+      "contactPoint": {
+        "hasAddress": {
+          "de": "Eigerplatz 3, 3007, Bern, BE",
+          "en": "Eigerplatz 3, 3007, Bern, BE",
+          "fr": "Eigerplatz 3, 3007, Bern, BE",
+          "it": "Eigerplatz 3, 3007, Bern, BE",
+          "rm": ""
+        },
+        "hasEmail": "info@bernmobil.ch",
+        "kind": "Organization"
+      },
+      "description": {
+        "de": "Öffentlicher Verkehr in Bern und Umgebung",
+        "en": "Public transport in and around the city of Bern, Switzerland",
+        "fr": "Transports publics dans et autour de la ville de Berne",
+        "it": "Trasporto pubblico nella città di Berna e dintorni",
+        "rm": ""
+      },
+      "homePage": "https://bernmobil.ch",
+      "id": "019ef8a3-0b03-7fe2-82b0-72b3541be2b7",
+      "identifier": "bernmobil",
+      "images": [
+        {
+          "label": {
+            "de": "BERNMOBIL AG",
+            "en": "BERNMOBIL",
+            "fr": "BERNMOBIL",
+            "it": "BERNMOBIL",
+            "rm": ""
+          },
+          "uri": "https://input-backend.i14y.c.bfs.admin.ch/api/Media/bernmobil_logo.jpg"
+        }
+      ],
+      "name": {
+        "de": "BERNMOBIL AG",
+        "en": "BERNMOBIL",
+        "fr": "BERNMOBIL",
+        "it": "BERNMOBIL",
+        "rm": ""
+      },
+      "prefLabel": {
+        "de": "BERNMOBIL",
+        "en": "BERNMOBIL",
+        "fr": "BERNMOBIL",
+        "it": "BERNMOBIL",
+        "rm": ""
+      },
+      "system": {
+        "createdAt": "2026-06-24T07:58:15.304155+00:00",
+        "creationType": "Manual",
+        "modifiedAt": "2026-08-14T09:45:28.572955+00:00"
+      },
+      "spatial": [
+        "Stadt Bern"
+      ],
+      "spatialCH": [
+        {
+          "code": "8100",
+          "name": {
+            "de": "Schweiz",
+            "en": "Switzerland",
+            "fr": "Suisse",
+            "it": "Svizzera",
+            "rm": "Svizra"
+          }
+        }
+      ],
+      "subAgents": [],
+      "uid": "CHE116244755"
     },
-    "status": 200,
-    "recorded_by": "scripts/record_fixtures.py"
-  },
-  "body": {
-    "data": [
-      {
-        "classification": {
-          "code": "0220",
-          "name": {
-            "de": "Verwaltungseinheit des Bundes",
-            "en": "Administrative unit of the Confederation",
-            "fr": "Unité de l’administration fédérale",
-            "it": "Unità amministrativa della Confederazione"
-          }
-        },
-        "contactPoint": {
-          "hasAddress": {
-            "de": "Eigerplatz 3, 3007, Bern, BE",
-            "en": "Eigerplatz 3, 3007, Bern, BE",
-            "fr": "Eigerplatz 3, 3007, Bern, BE",
-            "it": "Eigerplatz 3, 3007, Bern, BE",
-            "rm": ""
-          },
-          "hasEmail": "info@bernmobil.ch",
-          "kind": "Organization"
-        },
-        "description": {
-          "de": "Öffentlicher Verkehr in Bern und Umgebung",
-          "en": "Public transport in and around the city of Bern, Switzerland",
-          "fr": "Transports publics dans et autour de la ville de Berne",
-          "it": "Trasporto pubblico nella città di Berna e dintorni",
-          "rm": ""
-        },
-        "homePage": "https://bernmobil.ch",
-        "id": "019ef8a3-0b03-7fe2-82b0-72b3541be2b7",
-        "identifier": "bernmobil",
-        "images": [
-          {
-            "label": {
-              "de": "BERNMOBIL AG",
-              "en": "BERNMOBIL",
-              "fr": "BERNMOBIL",
-              "it": "BERNMOBIL",
-              "rm": ""
-            },
-            "uri": "https://input-backend.i14y.c.bfs.admin.ch/api/Media/bernmobil_logo.jpg"
-          }
-        ],
+    {
+      "classification": {
+        "code": "0220",
         "name": {
-          "de": "BERNMOBIL AG",
-          "en": "BERNMOBIL",
-          "fr": "BERNMOBIL",
-          "it": "BERNMOBIL",
-          "rm": ""
-        },
-        "prefLabel": {
-          "de": "BERNMOBIL",
-          "en": "BERNMOBIL",
-          "fr": "BERNMOBIL",
-          "it": "BERNMOBIL",
-          "rm": ""
-        },
-        "system": {
-          "createdAt": "2026-06-24T07:58:15.304155+00:00",
-          "creationType": "Manual",
-          "modifiedAt": "2026-08-14T09:45:28.572955+00:00"
-        },
-        "spatial": [
-          "Stadt Bern"
-        ],
-        "spatialCH": [
-          {
-            "code": "8100",
-            "name": {
-              "de": "Schweiz",
-              "en": "Switzerland",
-              "fr": "Suisse",
-              "it": "Svizzera",
-              "rm": "Svizra"
-            }
-          }
-        ],
-        "subAgents": [],
-        "uid": "CHE116244755"
+          "de": "Verwaltungseinheit des Bundes",
+          "en": "Administrative unit of the Confederation",
+          "fr": "Unité de l’administration fédérale",
+          "it": "Unità amministrativa della Confederazione"
+        }
       },
-      {
-        "classification": {
-          "code": "0220",
-          "name": {
-            "de": "Verwaltungseinheit des Bundes",
-            "en": "Administrative unit of the Confederation",
-            "fr": "Unité de l’administration fédérale",
-            "it": "Unità amministrativa della Confederazione"
-          }
-        },
-        "contactPoint": {
-          "hasAddress": {
-            "de": "Bahnhofstrasse 19, 6002, Luzern, LU",
-            "en": "Bahnhofstrasse 19, 6002, Luzern, LU",
-            "fr": "Bahnhofstrasse 19, 6002, Luzern, LU",
-            "it": "Bahnhofstrasse 19, 6002, Luzern, LU",
-            "rm": ""
-          },
-          "hasEmail": "info@lu.ch",
-          "hasTelephone": "+41 41 228 51 17",
-          "kind": "Organization"
-        },
-        "description": {
-          "de": "Die Dienststelle Finanzen ist das Kompetenzzentrum der kantonalen Verwaltung für Finanz- und Controlling-Fragen. Sie sorgt dafür, dass die öffentlichen Gelder zuverlässig verwaltet werden. Sie organisiert das Rechnungswesen inklusive Betrieb des Buchungszentrums und stellt sicher, dass der Kanton Luzern jederzeit zahlungsfähig bleibt.",
-          "en": "The Finance Department is the cantonal administration's center of expertise for financial and controlling matters. It ensures the reliable management of public funds. It organizes the accounting system, including the operation of the accounting center, and ensures that the Canton of Lucerne remains solvent at all times.",
-          "fr": "Le service des Finances est le centre d'expertise de l'administration cantonale en matière financière et de contrôle. Il garantit la gestion rigoureuse des fonds publics. Il organise le système comptable, notamment le fonctionnement du centre de comptabilité, et veille à la solvabilité du canton de Lucerne en toutes circonstances.",
-          "it": "Il Dipartimento delle Finanze è il centro di competenza dell'amministrazione cantonale per le questioni finanziarie e di controllo. Assicura la gestione affidabile dei fondi pubblici, organizza il sistema contabile, compreso il funzionamento del centro contabile, e garantisce che il Cantone di Lucerna rimanga solvibile in ogni momento.",
+      "contactPoint": {
+        "hasAddress": {
+          "de": "Bahnhofstrasse 19, 6002, Luzern, LU",
+          "en": "Bahnhofstrasse 19, 6002, Luzern, LU",
+          "fr": "Bahnhofstrasse 19, 6002, Luzern, LU",
+          "it": "Bahnhofstrasse 19, 6002, Luzern, LU",
           "rm": ""
         },
-        "homePage": "https://finanzen.lu.ch",
-        "id": "019ef96e-17aa-7824-b5d8-b404a20d513f",
-        "identifier": "CH_KT_LUZERN_FINANZEN",
-        "images": [
-          {
-            "label": {
-              "de": "Dienststelle Finanzen (LU)",
-              "en": "Finance Department (LU)",
-              "fr": "Service des Finances (LU)",
-              "it": "Dipartimento delle Finanze (LU)",
-              "rm": ""
-            },
-            "uri": "https://input-backend.i14y.c.bfs.admin.ch/api/Media/luzern_logo.png"
-          }
-        ],
-        "name": {
-          "de": "Dienststelle Finanzen (LU)",
-          "en": "Finance Department (LU)",
-          "fr": "Service des Finances (LU)",
-          "it": "Dipartimento delle Finanze (LU)",
-          "rm": ""
-        },
-        "prefLabel": {
-          "de": "Finanzen (LU)",
-          "en": "Finances (LU)",
-          "fr": "Finances (LU)",
-          "it": "Finanze (LU)",
-          "rm": ""
-        },
-        "system": {
-          "createdAt": "2026-06-24T11:40:02.346961+00:00",
-          "creationType": "Manual",
-          "modifiedAt": "2026-07-03T15:01:29.462637+00:00"
-        },
-        "spatial": [
-          "LU"
-        ],
-        "spatialCH": [
-          {
-            "code": "8100",
-            "name": {
-              "de": "Schweiz",
-              "en": "Switzerland",
-              "fr": "Suisse",
-              "it": "Svizzera",
-              "rm": "Svizra"
-            }
-          }
-        ],
-        "subAgents": []
+        "hasEmail": "info@lu.ch",
+        "hasTelephone": "+41 41 228 51 17",
+        "kind": "Organization"
       },
-      {
-        "classification": {
-          "code": "0220",
-          "name": {
-            "de": "Verwaltungseinheit des Bundes",
-            "en": "Administrative unit of the Confederation",
-            "fr": "Unité de l’administration fédérale",
-            "it": "Unità amministrativa della Confederazione"
-          }
-        },
-        "contactPoint": {
-          "hasAddress": {
-            "de": "Schwarzenburgstrasse 157, 3003, Bern, BE",
-            "en": "Schwarzenburgstrasse 157, 3003, Bern, BE",
-            "fr": "Schwarzenburgstrasse 157, 3003, Bern, BE",
-            "it": "Schwarzenburgstrasse 157, 3003, Bern, BE",
+      "description": {
+        "de": "Die Dienststelle Finanzen ist das Kompetenzzentrum der kantonalen Verwaltung für Finanz- und Controlling-Fragen. Sie sorgt dafür, dass die öffentlichen Gelder zuverlässig verwaltet werden. Sie organisiert das Rechnungswesen inklusive Betrieb des Buchungszentrums und stellt sicher, dass der Kanton Luzern jederzeit zahlungsfähig bleibt.",
+        "en": "The Finance Department is the cantonal administration's center of expertise for financial and controlling matters. It ensures the reliable management of public funds. It organizes the accounting system, including the operation of the accounting center, and ensures that the Canton of Lucerne remains solvent at all times.",
+        "fr": "Le service des Finances est le centre d'expertise de l'administration cantonale en matière financière et de contrôle. Il garantit la gestion rigoureuse des fonds publics. Il organise le système comptable, notamment le fonctionnement du centre de comptabilité, et veille à la solvabilité du canton de Lucerne en toutes circonstances.",
+        "it": "Il Dipartimento delle Finanze è il centro di competenza dell'amministrazione cantonale per le questioni finanziarie e di controllo. Assicura la gestione affidabile dei fondi pubblici, organizza il sistema contabile, compreso il funzionamento del centro contabile, e garantisce che il Cantone di Lucerna rimanga solvibile in ogni momento.",
+        "rm": ""
+      },
+      "homePage": "https://finanzen.lu.ch",
+      "id": "019ef96e-17aa-7824-b5d8-b404a20d513f",
+      "identifier": "CH_KT_LUZERN_FINANZEN",
+      "images": [
+        {
+          "label": {
+            "de": "Dienststelle Finanzen (LU)",
+            "en": "Finance Department (LU)",
+            "fr": "Service des Finances (LU)",
+            "it": "Dipartimento delle Finanze (LU)",
             "rm": ""
           },
-          "hasEmail": "info-mt@bag.admin.ch",
-          "hasTelephone": "+41 58 463 87 06",
-          "kind": "Organization"
-        },
-        "description": {
-          "de": "Übertragbare Krankheiten gefährden die öffentliche Gesundheit. Die Abteilung überwacht diese Krankheiten, publiziert regelmässig Berichte zur epidemiologischen Situation, legt Präventions- und Kontrollstrategien fest und setzt sie um.",
-          "en": "Communicable diseases pose a risk to public health. The division monitors these diseases, publishing regular reports on the epidemiological situation, laying down and implementing prevention and control strategies.",
-          "fr": "Les maladies transmissibles constituent une menace pour la santé publique. La division les surveille, publie régulièrement des rapports sur la situation épidémiologique, définit des stratégies de prévention et de contrôle, et les met en œuvre.",
-          "it": "Le malattie trasmissibili mettono in pericolo la salute pubblica. La divisione Malattie trasmissibili le monitora, pubblica regolarmente rapporti sulla situazione epidemiologica, stabilisce strategie di prevenzione e di controllo e le attua.",
-          "rm": ""
-        },
-        "homePage": "https://www.bag.admin.ch/de/abteilung-ubertragbare-krankheiten",
-        "id": "019eff3e-d773-7982-8214-90b3ec919ccd",
-        "identifier": "abteilung-uebertragbare-krankheiten",
-        "images": [
-          {
-            "label": {
-              "de": "Abteilung Übertragbare Krankheiten",
-              "en": "Communicable Diseases Division",
-              "fr": "Division Maladies transmissibles",
-              "it": "Divisione Malattie trasmissibili",
-              "rm": ""
-            },
-            "uri": "https://input-backend.i14y.c.bfs.admin.ch/api/Media/bag_geb%C3%A4ude.jpg"
+          "uri": "https://input-backend.i14y.c.bfs.admin.ch/api/Media/luzern_logo.png"
+        }
+      ],
+      "name": {
+        "de": "Dienststelle Finanzen (LU)",
+        "en": "Finance Department (LU)",
+        "fr": "Service des Finances (LU)",
+        "it": "Dipartimento delle Finanze (LU)",
+        "rm": ""
+      },
+      "prefLabel": {
+        "de": "Finanzen (LU)",
+        "en": "Finances (LU)",
+        "fr": "Finances (LU)",
+        "it": "Finanze (LU)",
+        "rm": ""
+      },
+      "system": {
+        "createdAt": "2026-06-24T11:40:02.346961+00:00",
+        "creationType": "Manual",
+        "modifiedAt": "2026-07-03T15:01:29.462637+00:00"
+      },
+      "spatial": [
+        "LU"
+      ],
+      "spatialCH": [
+        {
+          "code": "8100",
+          "name": {
+            "de": "Schweiz",
+            "en": "Switzerland",
+            "fr": "Suisse",
+            "it": "Svizzera",
+            "rm": "Svizra"
           }
-        ],
+        }
+      ],
+      "subAgents": []
+    },
+    {
+      "classification": {
+        "code": "0220",
         "name": {
-          "de": "Abteilung Übertragbare Krankheiten",
-          "en": "Communicable Diseases Division",
-          "fr": "Division Maladies transmissibles",
-          "it": "Divisione Malattie trasmissibili",
+          "de": "Verwaltungseinheit des Bundes",
+          "en": "Administrative unit of the Confederation",
+          "fr": "Unité de l’administration fédérale",
+          "it": "Unità amministrativa della Confederazione"
+        }
+      },
+      "contactPoint": {
+        "hasAddress": {
+          "de": "Schwarzenburgstrasse 157, 3003, Bern, BE",
+          "en": "Schwarzenburgstrasse 157, 3003, Bern, BE",
+          "fr": "Schwarzenburgstrasse 157, 3003, Bern, BE",
+          "it": "Schwarzenburgstrasse 157, 3003, Bern, BE",
           "rm": ""
         },
-        "prefLabel": {
-          "de": "Abteilung Übertragbare Krankheiten",
-          "en": "Communicable Diseases Division",
-          "fr": "Division Maladies transmissibles",
-          "it": "Divisione Malattie trasmissibili",
-          "rm": ""
-        },
-        "system": {
-          "createdAt": "2026-06-25T14:46:09.012238+00:00",
-          "creationType": "Manual",
-          "modifiedAt": "2026-06-25T14:49:49.17649+00:00"
-        },
-        "spatial": [
-          "CH"
-        ],
-        "spatialCH": [
-          {
-            "code": "8100",
-            "name": {
-              "de": "Schweiz",
-              "en": "Switzerland",
-              "fr": "Suisse",
-              "it": "Svizzera",
-              "rm": "Svizra"
-            }
+        "hasEmail": "info-mt@bag.admin.ch",
+        "hasTelephone": "+41 58 463 87 06",
+        "kind": "Organization"
+      },
+      "description": {
+        "de": "Übertragbare Krankheiten gefährden die öffentliche Gesundheit. Die Abteilung überwacht diese Krankheiten, publiziert regelmässig Berichte zur epidemiologischen Situation, legt Präventions- und Kontrollstrategien fest und setzt sie um.",
+        "en": "Communicable diseases pose a risk to public health. The division monitors these diseases, publishing regular reports on the epidemiological situation, laying down and implementing prevention and control strategies.",
+        "fr": "Les maladies transmissibles constituent une menace pour la santé publique. La division les surveille, publie régulièrement des rapports sur la situation épidémiologique, définit des stratégies de prévention et de contrôle, et les met en œuvre.",
+        "it": "Le malattie trasmissibili mettono in pericolo la salute pubblica. La divisione Malattie trasmissibili le monitora, pubblica regolarmente rapporti sulla situazione epidemiologica, stabilisce strategie di prevenzione e di controllo e le attua.",
+        "rm": ""
+      },
+      "homePage": "https://www.bag.admin.ch/de/abteilung-ubertragbare-krankheiten",
+      "id": "019eff3e-d773-7982-8214-90b3ec919ccd",
+      "identifier": "abteilung-uebertragbare-krankheiten",
+      "images": [
+        {
+          "label": {
+            "de": "Abteilung Übertragbare Krankheiten",
+            "en": "Communicable Diseases Division",
+            "fr": "Division Maladies transmissibles",
+            "it": "Divisione Malattie trasmissibili",
+            "rm": ""
+          },
+          "uri": "https://input-backend.i14y.c.bfs.admin.ch/api/Media/bag_geb%C3%A4ude.jpg"
+        }
+      ],
+      "name": {
+        "de": "Abteilung Übertragbare Krankheiten",
+        "en": "Communicable Diseases Division",
+        "fr": "Division Maladies transmissibles",
+        "it": "Divisione Malattie trasmissibili",
+        "rm": ""
+      },
+      "prefLabel": {
+        "de": "Abteilung Übertragbare Krankheiten",
+        "en": "Communicable Diseases Division",
+        "fr": "Division Maladies transmissibles",
+        "it": "Divisione Malattie trasmissibili",
+        "rm": ""
+      },
+      "system": {
+        "createdAt": "2026-06-25T14:46:09.012238+00:00",
+        "creationType": "Manual",
+        "modifiedAt": "2026-06-25T14:49:49.17649+00:00"
+      },
+      "spatial": [
+        "CH"
+      ],
+      "spatialCH": [
+        {
+          "code": "8100",
+          "name": {
+            "de": "Schweiz",
+            "en": "Switzerland",
+            "fr": "Suisse",
+            "it": "Svizzera",
+            "rm": "Svizra"
           }
-        ],
-        "subAgents": []
-      }
-    ]
-  }
+        }
+      ],
+      "subAgents": []
+    }
+  ]
 }

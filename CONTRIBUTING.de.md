@@ -30,6 +30,19 @@ ruff check src/ tests/                       # Lint-Gate
 ruff format --check src/ tests/              # Format-Gate
 ```
 
+Die Offline-Suite spielt echte Antworten aus `tests/fixtures/` ab, eine pro
+externem Endpunkt, jede mit ihrem Aufnahmedatum versehen. Neu aufzeichnen gegen
+die Live-API:
+
+```bash
+python scripts/record_fixtures.py
+```
+
+Erfolgs-Payloads nicht von Hand schreiben: ein Stub stimmt mit der eigenen
+Annahme überein — so blieb ein umbenanntes Quellfeld durch die ganze Suite
+grün. Fehlerpfade (404, Timeouts, maskierte 4xx) bleiben handgeschrieben, die
+lassen sich nicht auf Zuruf aufzeichnen.
+
 Das sind wörtlich die drei Gates der CI. Lint und Format sind getrennte
 Prüfungen: `ruff check` belegt kein Format, ein grüner Linter neben einem roten
 `ruff format --check` ist also ein gewöhnlicher Zustand, kein Widerspruch. Die

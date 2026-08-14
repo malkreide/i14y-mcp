@@ -1,0 +1,561 @@
+{
+  "_recording": {
+    "recorded_at": "2026-08-14T10:42:14+00:00",
+    "source": "https://api.i14y.admin.ch/api",
+    "endpoint": "/dataservices",
+    "params": {
+      "page": 1,
+      "pageSize": 3
+    },
+    "status": 200,
+    "recorded_by": "scripts/record_fixtures.py"
+  },
+  "body": {
+    "data": [
+      {
+        "accessRights": {
+          "code": "PUBLIC",
+          "name": {
+            "de": "Öffentlich",
+            "en": "Public",
+            "fr": "Public",
+            "it": "Pubblico"
+          },
+          "uri": "http://publications.europa.eu/resource/authority/access-right/PUBLIC"
+        },
+        "conformsTo": [
+          {
+            "label": {
+              "de": "ISO20022",
+              "en": "ISO20022",
+              "fr": "ISO20022",
+              "it": "ISO20022"
+            },
+            "uri": "https://www.iso20022.org"
+          }
+        ],
+        "contactPoints": [
+          {
+            "fn": {
+              "de": "Swiss Fintech Innovations (SFTI)",
+              "en": "Swiss Fintech Innovations (SFTI)",
+              "fr": "Swiss Fintech Innovations (SFTI)",
+              "it": "Swiss Fintech Innovations (SFTI)"
+            },
+            "hasAddress": {
+              "de": "Rämistrasse 5\nP.O. Box\n8024 Zurich",
+              "en": "Rämistrasse 5\nP.O. Box\n8024 Zurich",
+              "fr": "Rämistrasse 5\nP.O. Box\n8024 Zurich",
+              "it": "Rämistrasse 5\nP.O. Box\n8024 Zurich"
+            },
+            "hasEmail": "info@common-api.ch",
+            "kind": "Organization"
+          }
+        ],
+        "description": {
+          "de": "Die Pension API wurde in breiter Zusammenarbeit  mit dem VVS, dem Verband bvg-digital, VVS-Mitgliedern sowie den Swiss Fintech Innovations-Communities «Open Pension» und «Common API» entwickelt. Mit der Ausweitung des digitalen Vorsorgeausweises auf Freizügigkeitsguthaben und Säule-3a-Guthaben unternimmt die Schweiz einen weiteren Schritt hin zu besser zugänglichen und digital nutzbaren Vorsorgeinformationen. Der QR-Code-Standard ermöglicht es, wichtige Informationen aus Vorsorgeausweisen in einem strukturierten und maschinenlesbaren Format darzustellen und in digitalen Anwendungen wiederzuverwenden.",
+          "en": "The Pension API was developed in close collaboration with the VVS, the bvg-digital Association, VVS members, and the Swiss fintech innovation communities “Open Pension” and “Common API.” By expanding the digital pension statement to include vested benefits and Pillar 3a assets, Switzerland is taking another step toward making pension information more accessible and usable in digital formats. The QR code standard makes it possible to present important information from pension statements in a structured, machine-readable format and to reuse it in digital applications.",
+          "fr": "La Pension API a été développée dans le cadre d’une large collaboration avec la VVS, l’association bvg-digital, les membres de la VVS ainsi que les communautés d’innovation Swiss Fintech «Open Pension» et «Common API». Avec l’extension du certificat de prévoyance numérique aux avoirs de libre passage et aux avoirs du pilier 3a, la Suisse franchit une nouvelle étape vers des informations de prévoyance plus accessibles et exploitables numériquement. La norme du code QR permet de présenter les informations importantes issues des certificats de prévoyance dans un format structuré et lisible par machine, et de les réutiliser dans des applications numériques.",
+          "it": "La Pension API è stata sviluppata grazie a un’ampia collaborazione con la VVS, l’associazione bvg-digital, i membri della VVS e le comunità di innovazione fintech svizzere «Open Pension» e «Common API». Con l’estensione dell’attestato previdenziale digitale agli averi di libero passaggio e agli averi del pilastro 3a, la Svizzera compie un ulteriore passo avanti verso informazioni previdenziali più accessibili e utilizzabili in formato digitale. Lo standard del codice QR consente di rappresentare le informazioni importanti contenute negli attestati previdenziali in un formato strutturato e leggibile da dispositivi automatici e di riutilizzarle nelle applicazioni digitali."
+        },
+        "documentation": [
+          {
+            "label": {
+              "de": "Common API Arbeitsgruppe",
+              "en": "Common API Working Group",
+              "fr": "Groupe de travail Common API",
+              "it": "Gruppo di lavoro Common API"
+            },
+            "uri": "https://github.com/swissfintechinnovations/.github/wiki"
+          }
+        ],
+        "endpointDescriptions": [
+          {
+            "label": {
+              "de": "Wiki",
+              "en": "Wiki",
+              "fr": "Wiki",
+              "it": "Wiki"
+            },
+            "uri": "https://github.com/swissfintechinnovations/ca-pension/wiki"
+          }
+        ],
+        "endpointUrls": [
+          {
+            "label": {
+              "de": "OpenAPI Spezifikation",
+              "en": "OpenAPI Specification",
+              "fr": "Spécification OpenAPI",
+              "it": "Specifiche OpenAPI"
+            },
+            "uri": "https://editor.swagger.io/?url=https://raw.githubusercontent.com/swissfintechinnovations/ca-pension/main/pensionAPI.yaml"
+          }
+        ],
+        "id": "019f3d36-5cb9-7f2f-8128-7a0175a512c8",
+        "identifiers": [
+          "pension-api-openpension"
+        ],
+        "issued": "2026-05-27T00:00:00+02:00",
+        "keywords": [
+          {
+            "label": {
+              "de": "Open Banking",
+              "en": "Open Banking",
+              "fr": "Open Banking",
+              "it": "Open Banking"
+            }
+          },
+          {
+            "label": {
+              "de": "Open Finance",
+              "en": "Open Finance",
+              "fr": "Open Finance",
+              "it": "Open Finance"
+            }
+          },
+          {
+            "label": {
+              "de": "Vorsorge",
+              "en": "Pension",
+              "fr": "Retraite",
+              "it": "Pensione"
+            }
+          },
+          {
+            "label": {
+              "de": "Innovation",
+              "en": "Innovation",
+              "fr": "Innovation",
+              "it": "Innovation"
+            }
+          }
+        ],
+        "landingPages": [
+          {
+            "label": {
+              "de": "GitHub Verzeichnis Pension API",
+              "en": "GitHub repository Pension API",
+              "fr": "Répertoire GitHub Pension API",
+              "it": "Directory GitHub Pension API"
+            },
+            "uri": "https://github.com/swissfintechinnovations/ca-pension"
+          }
+        ],
+        "license": {
+          "code": "terms_by",
+          "name": {
+            "de": "Opendata BY: Freie Nutzung. Quellenangabe ist Pflicht.",
+            "en": "Opendata BY: Open use. Must provide the source.",
+            "fr": "Opendata BY: Utilisation libre. Obligation d'indiquer la source.",
+            "it": "Opendata BY: Libero utilizzo. Indicazione della fonte obbligatoria. Utilizzo a fini commerciali ammesso soltanto previo consenso del titolare dei dati"
+          },
+          "uri": "http://dcat-ap.ch/vocabulary/licenses/terms_by"
+        },
+        "publicationLevel": "Public",
+        "publisher": {
+          "id": "8418ab4f-bb95-46c9-b875-e59696702a5b",
+          "identifier": "CH_SFTI",
+          "images": [],
+          "name": {
+            "de": "Swiss Fintech Innovations",
+            "en": "Swiss Fintech Innovations",
+            "fr": "Swiss Fintech Innovations",
+            "it": "Swiss Fintech Innovations"
+          },
+          "prefLabel": {
+            "de": "Swiss Fintech Innovations",
+            "en": "Swiss Fintech Innovations",
+            "fr": "Swiss Fintech Innovations",
+            "it": "Swiss Fintech Innovations"
+          },
+          "system": {
+            "createdAt": "2023-09-14T06:48:10.468993+00:00"
+          },
+          "spatial": [
+            "CH"
+          ],
+          "spatialCH": [],
+          "subAgents": []
+        },
+        "registrationStatus": "Recorded",
+        "registrationStatusProposal": "PreferredStandard",
+        "servesDatasets": [],
+        "system": {
+          "createdAt": "2026-07-07T15:33:20.700952+00:00",
+          "creationType": "Manual",
+          "modifiedAt": "2026-07-07T16:03:06.597804+00:00"
+        },
+        "themes": [
+          {
+            "code": "115",
+            "name": {
+              "de": "Wirtschaft",
+              "en": "Economy",
+              "fr": "Économie",
+              "it": "Economia"
+            }
+          }
+        ],
+        "title": {
+          "de": "Pension API (OpenPension)",
+          "en": "Pension API (OpenPension)",
+          "fr": "Pension API (OpenPension)",
+          "it": "Pension API (OpenPension)"
+        },
+        "version": "v4"
+      },
+      {
+        "accessRights": {
+          "code": "PUBLIC",
+          "name": {
+            "de": "Öffentlich",
+            "en": "Public",
+            "fr": "Public",
+            "it": "Pubblico"
+          },
+          "uri": "http://publications.europa.eu/resource/authority/access-right/PUBLIC"
+        },
+        "conformsTo": [
+          {
+            "label": {
+              "de": "ISO20022",
+              "en": "ISO20022",
+              "fr": "ISO20022",
+              "it": "ISO20022"
+            },
+            "uri": "https://www.iso20022.org"
+          }
+        ],
+        "contactPoints": [
+          {
+            "fn": {
+              "de": "Swiss Fintech Innovations (SFTI)",
+              "en": "Swiss Fintech Innovations (SFTI)",
+              "fr": "Swiss Fintech Innovations (SFTI)",
+              "it": "Swiss Fintech Innovations (SFTI)"
+            },
+            "hasAddress": {
+              "de": "Rämistrasse 5\nP.O. Box\n8024 Zurich",
+              "en": "Rämistrasse 5\nP.O. Box\n8024 Zurich",
+              "fr": "Rämistrasse 5\nP.O. Box\n8024 Zurich",
+              "it": "Rämistrasse 5\nP.O. Box\n8024 Zurich"
+            },
+            "hasEmail": "info@common-api.ch",
+            "kind": "Organization"
+          }
+        ],
+        "description": {
+          "de": "Die Card API wurde in breiter Zusammenarbeit mit den Schweizer Kartenherausgeber und der Common API Arbeitsgruppe von Swiss Fintech Innovations entwickelt. Die Card API soll den Zugang zu Kredit- und Debitkarteninformationen und -transaktionen vereinheitlichen und standardisieren. Dadurch sollen neue Use Case ermöglicht und die Digitalisierung im Spesenmanagement unterstützt werden.",
+          "en": "The Card API was developed in close collaboration with Swiss card issuers and the Common API Working Group of Swiss Fintech Innovations. The Card API is intended to unify and standardize access to credit and debit card information and transactions. This is intended to enable new use cases and support digitalization in expense management.",
+          "fr": "La Card API a été développée dans le cadre d'une large collaboration avec les émetteurs de cartes suisses et le groupe de travail Common API de Swiss Fintech Innovations. La Card API vise à harmoniser et à normaliser l'accès aux informations et aux transactions relatives aux cartes de crédit et de débit. Elle devrait ainsi permettre de nouveaux cas d'utilisation et favoriser la numérisation dans la gestion des dépenses.",
+          "it": "La Card API è stata sviluppata grazie a un’ampia collaborazione con gli emittenti di carte svizzeri e il gruppo di lavoro Common API di Swiss Fintech Innovations. La Card API ha lo scopo di unificare e standardizzare l’accesso alle informazioni e alle transazioni relative alle carte di credito e di debito. Ciò dovrebbe consentire nuovi casi d’uso e favorire la digitalizzazione nella gestione delle spese."
+        },
+        "documentation": [
+          {
+            "label": {
+              "de": "Common API Arbeitsgruppe",
+              "en": "Common API Working Group",
+              "fr": "Groupe de travail Common API",
+              "it": "Gruppo di lavoro Common API"
+            },
+            "uri": "https://github.com/swissfintechinnovations/.github/wiki"
+          }
+        ],
+        "endpointDescriptions": [
+          {
+            "label": {
+              "de": "Wiki",
+              "en": "Wiki",
+              "fr": "Wiki",
+              "it": "Wiki"
+            },
+            "uri": "https://github.com/swissfintechinnovations/ca-card/wiki"
+          }
+        ],
+        "endpointUrls": [
+          {
+            "label": {
+              "de": "OpenAPI Spezifikation Card Level 1",
+              "en": "OpenAPI Specification Card Level 1",
+              "fr": "Spécification OpenAPI Card Level 1",
+              "it": "Specifiche OpenAPI Card Level 1"
+            },
+            "uri": "https://editor.swagger.io/?url=https://raw.githubusercontent.com/swissfintechinnovations/ca-card/main/cardInfoAPI-level1.yaml"
+          },
+          {
+            "label": {
+              "de": "OpenAPI Spezifikation Card Level 2",
+              "en": "OpenAPI Specification Card Level 2",
+              "fr": "Spécification OpenAPI Card Level 2",
+              "it": "Specifiche OpenAPI Card Level 2"
+            },
+            "uri": "https://editor.swagger.io/?url=https://raw.githubusercontent.com/swissfintechinnovations/ca-card/main/cardInfoAPI-level2.yaml"
+          }
+        ],
+        "id": "019f3d49-a17a-73c8-a8c4-b154c392a8fb",
+        "identifiers": [
+          "card-api"
+        ],
+        "issued": "2025-05-09T00:00:00+02:00",
+        "keywords": [
+          {
+            "label": {
+              "de": "Kredit- und Debitkarten",
+              "en": "Credit and debit cards",
+              "fr": "Cartes de crédit et de débit",
+              "it": "Carte di credito e di debito"
+            }
+          },
+          {
+            "label": {
+              "de": "Open Finance",
+              "en": "Open Finance",
+              "fr": "Open Finance",
+              "it": "Open Finance"
+            }
+          },
+          {
+            "label": {
+              "de": "Open Banking",
+              "en": "Open Banking",
+              "fr": "Open Banking",
+              "it": "Open Banking"
+            }
+          },
+          {
+            "label": {
+              "de": "Innovation",
+              "en": "Innovation",
+              "fr": "Innovation",
+              "it": "Innovation"
+            }
+          }
+        ],
+        "landingPages": [
+          {
+            "label": {
+              "de": "GitHub Verzeichnis Card API",
+              "en": "GitHub repository Card API",
+              "fr": "Répertoire GitHub Card API",
+              "it": "Directory GitHub Card API"
+            },
+            "uri": "https://github.com/swissfintechinnovations/ca-card"
+          }
+        ],
+        "license": {
+          "code": "terms_by",
+          "name": {
+            "de": "Opendata BY: Freie Nutzung. Quellenangabe ist Pflicht.",
+            "en": "Opendata BY: Open use. Must provide the source.",
+            "fr": "Opendata BY: Utilisation libre. Obligation d'indiquer la source.",
+            "it": "Opendata BY: Libero utilizzo. Indicazione della fonte obbligatoria. Utilizzo a fini commerciali ammesso soltanto previo consenso del titolare dei dati"
+          },
+          "uri": "http://dcat-ap.ch/vocabulary/licenses/terms_by"
+        },
+        "publicationLevel": "Public",
+        "publisher": {
+          "id": "8418ab4f-bb95-46c9-b875-e59696702a5b",
+          "identifier": "CH_SFTI",
+          "images": [],
+          "name": {
+            "de": "Swiss Fintech Innovations",
+            "en": "Swiss Fintech Innovations",
+            "fr": "Swiss Fintech Innovations",
+            "it": "Swiss Fintech Innovations"
+          },
+          "prefLabel": {
+            "de": "Swiss Fintech Innovations",
+            "en": "Swiss Fintech Innovations",
+            "fr": "Swiss Fintech Innovations",
+            "it": "Swiss Fintech Innovations"
+          },
+          "system": {
+            "createdAt": "2023-09-14T06:48:10.468993+00:00"
+          },
+          "spatial": [
+            "CH"
+          ],
+          "spatialCH": [],
+          "subAgents": []
+        },
+        "registrationStatus": "Recorded",
+        "registrationStatusProposal": "PreferredStandard",
+        "servesDatasets": [],
+        "system": {
+          "createdAt": "2026-07-07T15:54:23.483273+00:00",
+          "creationType": "Manual",
+          "modifiedAt": "2026-07-09T06:43:12.454815+00:00"
+        },
+        "themes": [
+          {
+            "code": "115",
+            "name": {
+              "de": "Wirtschaft",
+              "en": "Economy",
+              "fr": "Économie",
+              "it": "Economia"
+            }
+          }
+        ],
+        "title": {
+          "de": "Card API",
+          "en": "Card API",
+          "fr": "Card API",
+          "it": "Card API"
+        },
+        "version": "v1"
+      },
+      {
+        "accessRights": {
+          "code": "PUBLIC",
+          "name": {
+            "de": "Öffentlich",
+            "en": "Public",
+            "fr": "Public",
+            "it": "Pubblico"
+          },
+          "uri": "http://publications.europa.eu/resource/authority/access-right/PUBLIC"
+        },
+        "conformsTo": [
+          {
+            "label": {
+              "en": "SPARQL 1.1 Protocol"
+            },
+            "uri": "https://www.w3.org/TR/sparql11-protocol/"
+          },
+          {
+            "label": {
+              "en": "Published LINDAS graph"
+            },
+            "uri": "https://lindas.admin.ch/fobl/kbob/dd-fm"
+          }
+        ],
+        "contactPoints": [
+          {
+            "hasEmail": "kbob-data@bbl.admin.ch",
+            "kind": "Organization"
+          }
+        ],
+        "description": {
+          "de": "SPARQL-Endpunkt für KBOB FM Data Dictionary auf LINDAS INT",
+          "en": "SPARQL endpoint for KBOB FM Data Dictionary on LINDAS INT"
+        },
+        "documentation": [],
+        "endpointDescriptions": [
+          {
+            "label": {
+              "de": "Beschreibung des Endpunkts",
+              "en": "Endpoint description"
+            },
+            "uri": "https://github.com/I14Y-ch/LINDAS/blob/main/README.md"
+          }
+        ],
+        "endpointUrls": [
+          {
+            "label": {
+              "de": "SPARQL-Endpunkt",
+              "en": "SPARQL endpoint"
+            },
+            "uri": "https://int.lindas.admin.ch/query"
+          }
+        ],
+        "id": "019fec3c-519c-71c0-8626-071d53f11cfe",
+        "identifiers": [
+          "kbob-fm-data-dictionary-sparql"
+        ],
+        "issued": "2026-08-10T00:00:00+02:00",
+        "keywords": [],
+        "landingPages": [
+          {
+            "label": {
+              "de": "Datensatz-Landingpage",
+              "en": "Dataset landing page"
+            },
+            "uri": "https://input.i14y.admin.ch/catalog/datasets/019fec56-1bba-7457-8f5d-bc4a67625cf2/description"
+          }
+        ],
+        "license": {
+          "code": "terms_by",
+          "name": {
+            "de": "Opendata BY: Freie Nutzung. Quellenangabe ist Pflicht.",
+            "en": "Opendata BY: Open use. Must provide the source.",
+            "fr": "Opendata BY: Utilisation libre. Obligation d'indiquer la source.",
+            "it": "Opendata BY: Libero utilizzo. Indicazione della fonte obbligatoria. Utilizzo a fini commerciali ammesso soltanto previo consenso del titolare dei dati"
+          },
+          "uri": "http://dcat-ap.ch/vocabulary/licenses/terms_by"
+        },
+        "publicationLevel": "Public",
+        "publisher": {
+          "description": {
+            "de": "Ressourcen sparen und Qualität steigernDies ist die übergeordnete Zielsetzung der KBOB.Die KBOB wahrt die Interessen ihrer Mitglieder als Bauherren sowie Liegenschaftseigentümer und -besitzer, -bewirtschafter und -betreiber.Als Mitglieder gehören der KBOB die Bau- und Liegenschaftsorgane des Bundes, der Kantone sowie der Städte und Gemeinden an.Die KBOB nimmt insbesondere Koordinationsaufgaben in folgenden Bereichen wahr: Beschaffungs- und Vertragswesen, Planer- und Werkleistungen, Nachhaltigkeit, Digitalisierung und BIM, Bewirtschaftung von Immobilien, Preisänderungsfragen sowie Normen und Standards.",
+            "fr": "Économiser les ressources tout en améliorant la qualitéTel est l'objectif général de la KBOB.La KBOB défend les intérêts de ses membres en tant que maîtres d'ouvrage, propriétaires, gérants et exploitants d'immeubles.Les membres de la KBOB sont les services de la construction et des immeubles de la Confédération, des cantons ainsi que des villes et des communes.La KBOB assume notamment des tâches de coordination dans les domaines suivants : marchés publics et contrats, prestations de mandataire et travaux de construction, durabilité, numérisation et BIM, exploitation des biens immobiliers, variations de prix ainsi que normes et standards.",
+            "it": "Risparmiare le risorse e migliorare la qualitàQuesto è l'obiettivo principale del KBOB.La KBOB tutela gli interessi dei suoi membri in quanto proprietari di edifici e immobili, gestori e operatori.I membri della KBOB comprendono le autorità edilizie e immobiliari della Confederazione, dei Cantoni, delle città e dei Comuni.In particolare, il KBOB svolge compiti di coordinamento nelle seguenti aree: appalti pubblici e contratti, prestazioni del mandatario e prestazioni d’opera, sostenibilità, digitalizzazione e BIM, gestione degli immobili, questioni relative a variazioni di prezzo, nonché norme e standard."
+          },
+          "homePage": "https://www.kbob.admin.ch",
+          "id": "615246c9-31e2-42af-b14a-c20c8e23ec6a",
+          "identifier": "CH_KBOB",
+          "images": [],
+          "name": {
+            "de": "Koordinationskonferenz der Bau- und Liegenschaftsorgane der öffentlichen Bauherren (KBOB)",
+            "en": "KBOB",
+            "fr": "Conférence de coordination des services de la construction et des immeubles des maîtres d’ouvrage publics (KBOB)",
+            "it": "Conferenza di coordinamento degli organi della costruzione e degli immobili dei committenti pubblici (KBOB)"
+          },
+          "prefLabel": {
+            "de": "KBOB",
+            "en": "KBOB",
+            "fr": "KBOB",
+            "it": "KBOB"
+          },
+          "system": {
+            "createdAt": "2025-04-16T07:16:39.656834+00:00",
+            "modifiedAt": "2026-03-16T14:23:16.503187+00:00"
+          },
+          "spatial": [
+            "CH"
+          ],
+          "spatialCH": [
+            {
+              "code": "8100",
+              "name": {
+                "de": "Schweiz",
+                "en": "Switzerland",
+                "fr": "Suisse",
+                "it": "Svizzera",
+                "rm": "Svizra"
+              }
+            }
+          ],
+          "subAgents": []
+        },
+        "registrationStatus": "Candidate",
+        "servesDatasets": [
+          {
+            "id": "019fec56-1bba-7457-8f5d-bc4a67625cf2"
+          }
+        ],
+        "system": {
+          "createdAt": "2026-08-10T15:13:23.904985+00:00",
+          "creationType": "Manual",
+          "modifiedAt": "2026-08-12T08:15:18.716063+00:00"
+        },
+        "themes": [
+          {
+            "code": "120",
+            "name": {
+              "de": "Gebäude und Grundstücke",
+              "en": "Buildings and land",
+              "fr": "Bâtiments et biens-fonds",
+              "it": "Edifici e abitazioni"
+            }
+          }
+        ],
+        "title": {
+          "de": "KBOB FM Data Dictionary SPARQL-Endpunkt",
+          "en": "KBOB FM Data Dictionary SPARQL endpoint"
+        },
+        "version": "0.3.0"
+      }
+    ]
+  }
+}

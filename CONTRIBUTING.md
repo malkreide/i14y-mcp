@@ -29,6 +29,19 @@ ruff check src/ tests/                       # lint gate
 ruff format --check src/ tests/              # formatting gate
 ```
 
+The offline suite replays real responses from `tests/fixtures/`, one per
+external endpoint, each stamped with the date it was recorded. Re-record them
+against the live API with:
+
+```bash
+python scripts/record_fixtures.py
+```
+
+Do not hand-write a success payload: a stub agrees with whatever you assumed,
+which is how a renamed upstream field once stayed green through the whole
+suite. Error paths (404, timeouts, masked 4xx) stay handwritten — they cannot
+be recorded on demand.
+
 These are the three gates CI runs, verbatim. Lint and formatting are separate
 checks: `ruff check` says nothing about formatting, so a green linter next to a
 red `ruff format --check` is an ordinary state, not a contradiction. Use the

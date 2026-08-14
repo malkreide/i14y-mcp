@@ -8,6 +8,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- **`list_concepts`, `get_concept` and `list_public_services` returned a null
+  title for every record.** `/concepts` and `/publicservices` label their
+  records `name`; datasets and data services use `title`. Both mappers read
+  only `title`, so three tools produced titleless output in production while
+  the whole suite stayed green — the handwritten fixtures invented a `title`
+  key, so they agreed with the mapper instead of with the source. Found by
+  replaying recorded responses, not by reading the code.
+
+### Added
+
+- **Recorded response fixtures, one per external endpoint, each dated.**
+  `tests/fixtures/` now holds real I14Y responses for all eleven endpoints the
+  server calls, taken by `scripts/record_fixtures.py` and stamped with the
+  recording date in a `_recording` block. `tests/test_recorded_fixtures.py`
+  replays them through the actual tools. Counter-checked by neutralising each
+  new assurance one at a time: reverting either mapper fails exactly its own
+  tests, stripping a recording date fails exactly that fixture's date check,
+  deleting a recording fails the coverage guard, and renaming `title` to
+  `titel` in a recording fails exactly the dataset test — the field-rename
+  scenario that unit tests missed in production.
+
+### Fixed
+
 - **The retry had six defects, all inherited from the shared template.** This
   server copied its retry from `reference/retry_backoff.py` in
   [mcp-data-source-probe-skill](https://github.com/malkreide/mcp-data-source-probe-skill),

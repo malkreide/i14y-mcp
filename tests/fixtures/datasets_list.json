@@ -1,0 +1,1364 @@
+{
+  "_recording": {
+    "recorded_at": "2026-08-14T10:42:13+00:00",
+    "source": "https://api.i14y.admin.ch/api",
+    "endpoint": "/datasets",
+    "params": {
+      "page": 1,
+      "pageSize": 2
+    },
+    "status": 200,
+    "recorded_by": "scripts/record_fixtures.py"
+  },
+  "body": {
+    "data": [
+      {
+        "accessRights": {
+          "code": "PUBLIC",
+          "name": {
+            "de": "Öffentlich",
+            "en": "Public",
+            "fr": "Public",
+            "it": "Pubblico"
+          },
+          "uri": "http://publications.europa.eu/resource/authority/access-right/PUBLIC"
+        },
+        "confidentialityPerson": {
+          "code": "no_person",
+          "name": {
+            "de": "Enthält keine Personendaten",
+            "en": "Does not contain personal data",
+            "fr": "Ne contient pas de données personnelles",
+            "it": "Non contiene dati personali"
+          }
+        },
+        "conformsTo": [],
+        "contactPoints": [
+          {
+            "fn": {
+              "de": "Bundesamt für Zoll und Grenzsicherheit",
+              "en": "Federal Office for Customs and Border Security",
+              "fr": "Office fédéral de la douane et de la sécurité des frontières OFDF"
+            },
+            "hasAddress": {
+              "de": "Taubenstrasse 16\n3003 Bern (Schweiz)",
+              "en": "Taubenstrasse 16\n3003 Bern (Switzerland)",
+              "fr": "Taubenstrasse 16\n3003 Berne (Suisse)"
+            },
+            "hasEmail": "stat@bazg.admin.ch",
+            "hasTelephone": "+41 58 462 66 10",
+            "kind": "Organization"
+          }
+        ],
+        "description": {
+          "de": "Waren: Aussenhandel aggregiert nach Verwendungszweck und Ländern\nMonatliche Daten / Ab 1988 erhältlich",
+          "en": "Goods: Foreign trade aggregated by broad economic category and country\nMonthly data / Available from 1988",
+          "fr": "Marchandises: Commerce extérieur agrégé selon l'emploi des marchandises et pays\nDonnées mensuelles / Disponibles dès 1988"
+        },
+        "distributions": [
+          {
+            "accessServices": [],
+            "accessUrl": {
+              "uri": "https://share.dma.swiss/s/AScjoWiGq3p8qfK"
+            },
+            "conformsTo": [],
+            "coverage": [],
+            "description": {
+              "de": "Importe und Exporte nach Verwendungszweck / Land\nDefinitive Daten ab 1988",
+              "en": "Imports and exports by broad economic category / country\nDefinitive data since 1988",
+              "fr": "Importations et exportations selon l'emploi / pays\nDonnées définitives dès 1988"
+            },
+            "documentation": [],
+            "downloadUrl": {
+              "uri": "https://share.dma.swiss/s/AScjoWiGq3p8qfK"
+            },
+            "format": {
+              "code": "CSV",
+              "name": {
+                "de": "CSV",
+                "en": "CSV",
+                "fr": "CSV",
+                "it": "CSV"
+              },
+              "uri": "http://publications.europa.eu/resource/authority/file-type/CSV"
+            },
+            "id": "0fa2cc19-8c7f-458e-97d4-afe9262ff3f0",
+            "images": [],
+            "languages": [
+              {
+                "code": "de",
+                "name": {
+                  "de": "Deutsch",
+                  "en": "German",
+                  "fr": "allemand",
+                  "it": "Tedesco"
+                },
+                "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=de"
+              },
+              {
+                "code": "fr",
+                "name": {
+                  "de": "Französisch",
+                  "en": "French",
+                  "fr": "français",
+                  "it": "Francese"
+                },
+                "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=fr"
+              },
+              {
+                "code": "en",
+                "name": {
+                  "de": "Englisch",
+                  "en": "English",
+                  "fr": "anglais",
+                  "it": "Inglese"
+                },
+                "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=en"
+              }
+            ],
+            "license": {
+              "code": "terms_by_ask",
+              "name": {
+                "de": "Opendata BY ASK: Freie Nutzung. Quellenangabe ist Pflicht. Kommerzielle Nutzung nur mit Bewilligung des Datenlieferanten zulässig.",
+                "en": "Opendata BY ASK: Open use. Must provide the source. Use for commercial purposes requires permission of the data owner.",
+                "fr": "Opendata BY ASK: Utilisation libre. Obligation d'indiquer la source. Utilisation commerciale uniquement avec l'autorisation du fournisseur des donnés.",
+                "it": "Opendata BY ASK: Libero utilizzo. Indicazione della fonte obbligatoria. Utilizzo a fini commerciali ammesso soltanto previo consenso del titolare dei dati."
+              },
+              "uri": "http://dcat-ap.ch/vocabulary/licenses/terms_by_ask"
+            },
+            "packagingFormat": {
+              "code": "ZIP",
+              "name": {
+                "de": "ZIP",
+                "en": "ZIP",
+                "fr": "ZIP",
+                "it": "ZIP"
+              },
+              "uri": "http://publications.europa.eu/resource/authority/file-type/ZIP"
+            },
+            "title": {
+              "de": "VZ_IMPEXP_DEF",
+              "en": "VZ_IMPEXP_DEF",
+              "fr": "VZ_IMPEXP_DEF"
+            }
+          },
+          {
+            "accessServices": [],
+            "accessUrl": {
+              "uri": "https://share.dma.swiss/s/ZTdb97HRCFrmGdX"
+            },
+            "conformsTo": [],
+            "coverage": [],
+            "description": {
+              "de": "Importe und Exporte nach Verwendungszweck / Land\nProvisorische Daten",
+              "en": "Imports and exports by broad economic category / country\nProvisional data",
+              "fr": "Importations et exportations selon l'emploi des marchandises / pays\nDonnées provisoires"
+            },
+            "documentation": [],
+            "downloadUrl": {
+              "uri": "https://share.dma.swiss/s/ZTdb97HRCFrmGdX"
+            },
+            "format": {
+              "code": "CSV",
+              "name": {
+                "de": "CSV",
+                "en": "CSV",
+                "fr": "CSV",
+                "it": "CSV"
+              },
+              "uri": "http://publications.europa.eu/resource/authority/file-type/CSV"
+            },
+            "id": "6204ccda-8e8f-4599-afcb-f81b2aa9792b",
+            "images": [],
+            "languages": [
+              {
+                "code": "de",
+                "name": {
+                  "de": "Deutsch",
+                  "en": "German",
+                  "fr": "allemand",
+                  "it": "Tedesco"
+                },
+                "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=de"
+              },
+              {
+                "code": "fr",
+                "name": {
+                  "de": "Französisch",
+                  "en": "French",
+                  "fr": "français",
+                  "it": "Francese"
+                },
+                "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=fr"
+              },
+              {
+                "code": "en",
+                "name": {
+                  "de": "Englisch",
+                  "en": "English",
+                  "fr": "anglais",
+                  "it": "Inglese"
+                },
+                "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=en"
+              }
+            ],
+            "license": {
+              "code": "terms_by_ask",
+              "name": {
+                "de": "Opendata BY ASK: Freie Nutzung. Quellenangabe ist Pflicht. Kommerzielle Nutzung nur mit Bewilligung des Datenlieferanten zulässig.",
+                "en": "Opendata BY ASK: Open use. Must provide the source. Use for commercial purposes requires permission of the data owner.",
+                "fr": "Opendata BY ASK: Utilisation libre. Obligation d'indiquer la source. Utilisation commerciale uniquement avec l'autorisation du fournisseur des donnés.",
+                "it": "Opendata BY ASK: Libero utilizzo. Indicazione della fonte obbligatoria. Utilizzo a fini commerciali ammesso soltanto previo consenso del titolare dei dati."
+              },
+              "uri": "http://dcat-ap.ch/vocabulary/licenses/terms_by_ask"
+            },
+            "packagingFormat": {
+              "code": "ZIP",
+              "name": {
+                "de": "ZIP",
+                "en": "ZIP",
+                "fr": "ZIP",
+                "it": "ZIP"
+              },
+              "uri": "http://publications.europa.eu/resource/authority/file-type/ZIP"
+            },
+            "title": {
+              "de": "VZ_IMPEXP_PROV",
+              "en": "VZ_IMPEXP_PROV",
+              "fr": "VZ_IMPEXP_PROV"
+            }
+          }
+        ],
+        "documentation": [],
+        "frequency": {
+          "code": "MONTHLY",
+          "name": {
+            "de": "monatlich",
+            "en": "monthly",
+            "fr": "mensuel",
+            "it": "mensile"
+          },
+          "uri": "http://publications.europa.eu/resource/authority/frequency/MONTHLY"
+        },
+        "geoIvIds": [],
+        "id": "0091031d-c82c-4861-9ea9-42b9e23451f7",
+        "identifiers": [
+          "BAZG_VZ_LAND"
+        ],
+        "images": [],
+        "isReferencedBy": [],
+        "keywords": [
+          {
+            "label": {
+              "de": "Aussenhandel",
+              "en": "Foreign trade",
+              "fr": "Commerce extérieur"
+            }
+          },
+          {
+            "label": {
+              "de": "BAZG",
+              "en": "FOCBS",
+              "fr": "OFDF"
+            }
+          },
+          {
+            "label": {
+              "de": "Exporte",
+              "en": "Exports",
+              "fr": "Exportations"
+            }
+          },
+          {
+            "label": {
+              "de": "Importe",
+              "en": "Imports",
+              "fr": "Importations"
+            }
+          },
+          {
+            "label": {
+              "de": "Verwendungszweck",
+              "en": "Broad economic categories",
+              "fr": "Emploi des marchandises"
+            }
+          }
+        ],
+        "landingPages": [],
+        "languages": [
+          {
+            "code": "de",
+            "name": {
+              "de": "Deutsch",
+              "en": "German",
+              "fr": "allemand",
+              "it": "Tedesco"
+            },
+            "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=de"
+          },
+          {
+            "code": "fr",
+            "name": {
+              "de": "Französisch",
+              "en": "French",
+              "fr": "français",
+              "it": "Francese"
+            },
+            "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=fr"
+          },
+          {
+            "code": "en",
+            "name": {
+              "de": "Englisch",
+              "en": "English",
+              "fr": "anglais",
+              "it": "Inglese"
+            },
+            "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=en"
+          }
+        ],
+        "publicationLevel": "Public",
+        "publisher": {
+          "classification": {
+            "code": "0220",
+            "name": {
+              "de": "Verwaltungseinheit des Bundes",
+              "en": "Administrative unit of the Confederation",
+              "fr": "Unité de l’administration fédérale",
+              "it": "Unità amministrativa della Confederazione"
+            }
+          },
+          "description": {
+            "de": "Das Bundesamt für Zoll und Grenzsicherheit sorgt für umfassende Sicherheit an der Grenze – zum Wohl von Bevölkerung, Wirtschaft und Staat. Es ist national und international gut vernetzt. Zu seinen Kernaufgaben gehören das sachgerechte und rasche Abfertigen von Handelswaren, der zügige Ablauf des Reiseverkehrs, die Bereiche Sicherheitspolizei und Migration und es verfügt mit der Strafverfolgung über eine eigene Ermittlungsbehörde.",
+            "en": "The Federal Customs and Border Security Office (FOCBS) ensures comprehensive border security for the population, the economy and the state and is well connected nationally and internationally. Its main tasks include the correct and speedy taxation of tradable goods, the rapid handling of tourist traffic as well as the areas of migration and security police. The FOCBS has its own prosecuting authority.",
+            "fr": "L'Office fédéral de la douane et de la sécurité des frontières (OFDF) assure la sécurité globale à la frontière au profit de la population, de l'économie et de l'État. Il collabore étroitement avec d'autres autorités nationales et internationales. Parmi ses tâches principales figurent le dédouanement adéquat et rapide des marchandises de commerce, la gestion fluide du trafic touristique ainsi que les domaines de la police de sécurité et des migrations. Avec le domaine de direction Poursuites pénales, il dispose de sa propre autorité d'enquête.",
+            "it": "L'Ufficio federale della dogana e della sicurezza dei confini (UDSC) garantisce la sicurezza globale al confine a favore di popolazione, economia e Stato ed è ben interconnesso a livello nazionale e internazionale. Tra i suoi compiti principali rientrano la corretta e celere imposizione delle merci commerciabili, la rapida gestione del traffico turistico nonché gli ambiti della migrazione e della polizia di sicurezza. Con il Perseguimento penale l'UDSC dispone di una propria autorità inquirente.",
+            "rm": ""
+          },
+          "homePage": "https://www.bazg.admin.ch/",
+          "id": "4e590552-11c9-42f3-96ce-918bda9244cc",
+          "identifier": "CH_BAZG",
+          "images": [],
+          "name": {
+            "de": "Bundesamt für Zoll und Grenzsicherheit (BAZG)",
+            "en": "Federal Office for Customs and Border Security (FOCBS)",
+            "fr": "Office fédéral de la douane et de la sécurité des frontières (OFDF)",
+            "it": "Ufficio federale della dogana e della sicurezza dei confini (UDSC)",
+            "rm": ""
+          },
+          "prefLabel": {
+            "de": "BAZG",
+            "en": "FOCBS",
+            "fr": "OFDF",
+            "it": "UDSC",
+            "rm": ""
+          },
+          "system": {
+            "createdAt": "0001-01-01T00:00:00+00:00",
+            "modifiedAt": "2026-07-10T07:29:11.402126+00:00"
+          },
+          "spatial": [
+            "CH"
+          ],
+          "spatialCH": [
+            {
+              "code": "8100",
+              "name": {
+                "de": "Schweiz",
+                "en": "Switzerland",
+                "fr": "Suisse",
+                "it": "Svizzera",
+                "rm": "Svizra"
+              }
+            }
+          ],
+          "subAgents": [],
+          "uid": "CHE226598037"
+        },
+        "qualifiedAttributions": [],
+        "qualifiedRelations": [],
+        "registrationStatus": "Recorded",
+        "relations": [],
+        "system": {
+          "createdAt": "2025-11-17T16:59:03.675066+00:00",
+          "modifiedAt": "2025-11-17T17:01:16.409195+00:00"
+        },
+        "spatial": [
+          "Schweiz",
+          "Suisse",
+          "Switzerland"
+        ],
+        "temporalCoverage": [],
+        "themes": [
+          {
+            "code": "125",
+            "name": {
+              "de": "Öffentliche Statistik",
+              "en": "Official statistics",
+              "fr": "Statistique publique",
+              "it": "Statistica pubblica"
+            }
+          },
+          {
+            "code": "115",
+            "name": {
+              "de": "Wirtschaft",
+              "en": "Economy",
+              "fr": "Économie",
+              "it": "Economia"
+            }
+          }
+        ],
+        "title": {
+          "de": "Waren: Aussenhandel nach Verwendungszweck / Land",
+          "en": "Goods: Foreign trade by broad economic category / country",
+          "fr": "Marchandises: Commerce extérieur selon emploi / pays"
+        },
+        "version": "1"
+      },
+      {
+        "accessRights": {
+          "code": "PUBLIC",
+          "name": {
+            "de": "Öffentlich",
+            "en": "Public",
+            "fr": "Public",
+            "it": "Pubblico"
+          },
+          "uri": "http://publications.europa.eu/resource/authority/access-right/PUBLIC"
+        },
+        "confidentialityPerson": {
+          "code": "no_person",
+          "name": {
+            "de": "Enthält keine Personendaten",
+            "en": "Does not contain personal data",
+            "fr": "Ne contient pas de données personnelles",
+            "it": "Non contiene dati personali"
+          }
+        },
+        "conformsTo": [],
+        "contactPoints": [
+          {
+            "fn": {
+              "de": "Bundesamt für Zoll und Grenzsicherheit",
+              "en": "Federal Office for Customs and Border Security",
+              "fr": "Office fédéral de la douane et de la sécurité des frontières",
+              "it": "Ufficio federale della dogana e della sicurezza dei confini"
+            },
+            "hasAddress": {
+              "de": "Taubenstrasse 16\n3003 Bern (Schweiz)",
+              "en": "Taubenstrasse 16\n3003 Bern (Switzerland)",
+              "fr": "Taubenstrasse 16\n3003 Berne (Suisse)",
+              "it": "Taubenstrasse 16\n3003 Berna (Svizzera)"
+            },
+            "hasEmail": "stat@bazg.admin.ch",
+            "hasTelephone": "+41 58 462 66 10",
+            "kind": "Organization"
+          }
+        ],
+        "description": {
+          "de": "Waren: Aussenhandel nach Tarifnummer und Verkehrsträger\nProvisorische monatliche Daten / Definitive (historische) Daten auf Anfrage\n",
+          "en": "Goods: Foreign trade by tariff number and modes of transport\nProvisional monthly data / Definitive (historic) data on demand\n",
+          "fr": "Marchandises: Commerce extérieur par numéro de tarif et moyen de transport\nDonnées provisoires mensuelles / Données définitives (historiques) sur demande\n"
+        },
+        "distributions": [
+          {
+            "accessServices": [],
+            "accessUrl": {
+              "uri": "https://ocean.nivel.bazg.admin.ch/open-data-reports/TN8_VK_IMP_en/TN8_VK_IMP_en.zip"
+            },
+            "byteSize": 5000000000.0,
+            "conformsTo": [],
+            "coverage": [],
+            "description": {
+              "en": "Imports by tariff number and modes of transport"
+            },
+            "documentation": [],
+            "downloadUrl": {
+              "uri": "https://ocean.nivel.bazg.admin.ch/open-data-reports/TN8_VK_IMP_en/TN8_VK_IMP_en.zip"
+            },
+            "format": {
+              "code": "CSV",
+              "name": {
+                "de": "CSV",
+                "en": "CSV",
+                "fr": "CSV",
+                "it": "CSV"
+              },
+              "uri": "http://publications.europa.eu/resource/authority/file-type/CSV"
+            },
+            "id": "03878050-ecbe-4f59-9230-6b25b96b1466",
+            "identifier": "BAZG_TN8_VK",
+            "images": [],
+            "languages": [
+              {
+                "code": "en",
+                "name": {
+                  "de": "Englisch",
+                  "en": "English",
+                  "fr": "anglais",
+                  "it": "Inglese"
+                },
+                "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=en"
+              }
+            ],
+            "license": {
+              "code": "terms_by_ask",
+              "name": {
+                "de": "Opendata BY ASK: Freie Nutzung. Quellenangabe ist Pflicht. Kommerzielle Nutzung nur mit Bewilligung des Datenlieferanten zulässig.",
+                "en": "Opendata BY ASK: Open use. Must provide the source. Use for commercial purposes requires permission of the data owner.",
+                "fr": "Opendata BY ASK: Utilisation libre. Obligation d'indiquer la source. Utilisation commerciale uniquement avec l'autorisation du fournisseur des donnés.",
+                "it": "Opendata BY ASK: Libero utilizzo. Indicazione della fonte obbligatoria. Utilizzo a fini commerciali ammesso soltanto previo consenso del titolare dei dati."
+              },
+              "uri": "http://dcat-ap.ch/vocabulary/licenses/terms_by_ask"
+            },
+            "packagingFormat": {
+              "code": "ZIP",
+              "name": {
+                "de": "ZIP",
+                "en": "ZIP",
+                "fr": "ZIP",
+                "it": "ZIP"
+              },
+              "uri": "http://publications.europa.eu/resource/authority/file-type/ZIP"
+            },
+            "title": {
+              "en": "TN8_VK IMP",
+              "fr": "TN8_VK IMP"
+            }
+          },
+          {
+            "accessServices": [],
+            "accessUrl": {
+              "uri": "https://ocean.nivel.bazg.admin.ch/open-data-reports/schema/TN8_VK_IMP_en_schema/part-00000-f9a5fe9b-270c-40e6-b74e-db467d4fd3b9-c000.json"
+            },
+            "conformsTo": [],
+            "coverage": [],
+            "description": {
+              "en": "Scheme_TN8_VK IMP"
+            },
+            "documentation": [],
+            "downloadUrl": {
+              "uri": "https://ocean.nivel.bazg.admin.ch/open-data-reports/schema/TN8_VK_IMP_en_schema/part-00000-f9a5fe9b-270c-40e6-b74e-db467d4fd3b9-c000.json"
+            },
+            "format": {
+              "code": "JSON",
+              "name": {
+                "de": "JSON",
+                "en": "JSON",
+                "fr": "JSON",
+                "it": "JSON"
+              },
+              "uri": "http://publications.europa.eu/resource/authority/file-type/JSON"
+            },
+            "id": "1108ab23-bea1-40f5-9e2f-b162d3c56860",
+            "images": [],
+            "languages": [
+              {
+                "code": "en",
+                "name": {
+                  "de": "Englisch",
+                  "en": "English",
+                  "fr": "anglais",
+                  "it": "Inglese"
+                },
+                "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=en"
+              }
+            ],
+            "license": {
+              "code": "terms_by_ask",
+              "name": {
+                "de": "Opendata BY ASK: Freie Nutzung. Quellenangabe ist Pflicht. Kommerzielle Nutzung nur mit Bewilligung des Datenlieferanten zulässig.",
+                "en": "Opendata BY ASK: Open use. Must provide the source. Use for commercial purposes requires permission of the data owner.",
+                "fr": "Opendata BY ASK: Utilisation libre. Obligation d'indiquer la source. Utilisation commerciale uniquement avec l'autorisation du fournisseur des donnés.",
+                "it": "Opendata BY ASK: Libero utilizzo. Indicazione della fonte obbligatoria. Utilizzo a fini commerciali ammesso soltanto previo consenso del titolare dei dati."
+              },
+              "uri": "http://dcat-ap.ch/vocabulary/licenses/terms_by_ask"
+            },
+            "title": {
+              "en": "Scheme_TN8_VK IMP"
+            }
+          },
+          {
+            "accessServices": [],
+            "accessUrl": {
+              "uri": "https://ocean.nivel.bazg.admin.ch/open-data-reports/schema/TN8_VK_EXP_en_schema/part-00000-5f636c34-acdf-4387-b498-671799a4b3e3-c000.json"
+            },
+            "conformsTo": [],
+            "coverage": [],
+            "description": {
+              "en": "Scheme_TN8_VK EXP"
+            },
+            "documentation": [],
+            "downloadUrl": {
+              "uri": "https://ocean.nivel.bazg.admin.ch/open-data-reports/schema/TN8_VK_EXP_en_schema/part-00000-5f636c34-acdf-4387-b498-671799a4b3e3-c000.json"
+            },
+            "format": {
+              "code": "JSON",
+              "name": {
+                "de": "JSON",
+                "en": "JSON",
+                "fr": "JSON",
+                "it": "JSON"
+              },
+              "uri": "http://publications.europa.eu/resource/authority/file-type/JSON"
+            },
+            "id": "25956c63-c462-4839-9a68-11ae2f9c3dec",
+            "images": [],
+            "languages": [
+              {
+                "code": "en",
+                "name": {
+                  "de": "Englisch",
+                  "en": "English",
+                  "fr": "anglais",
+                  "it": "Inglese"
+                },
+                "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=en"
+              }
+            ],
+            "license": {
+              "code": "terms_by_ask",
+              "name": {
+                "de": "Opendata BY ASK: Freie Nutzung. Quellenangabe ist Pflicht. Kommerzielle Nutzung nur mit Bewilligung des Datenlieferanten zulässig.",
+                "en": "Opendata BY ASK: Open use. Must provide the source. Use for commercial purposes requires permission of the data owner.",
+                "fr": "Opendata BY ASK: Utilisation libre. Obligation d'indiquer la source. Utilisation commerciale uniquement avec l'autorisation du fournisseur des donnés.",
+                "it": "Opendata BY ASK: Libero utilizzo. Indicazione della fonte obbligatoria. Utilizzo a fini commerciali ammesso soltanto previo consenso del titolare dei dati."
+              },
+              "uri": "http://dcat-ap.ch/vocabulary/licenses/terms_by_ask"
+            },
+            "title": {
+              "en": "Scheme_TN8_VK EXP"
+            }
+          },
+          {
+            "accessServices": [],
+            "accessUrl": {
+              "uri": "https://ocean.nivel.bazg.admin.ch/open-data-reports/TN8_VK_IMP_de/TN8_VK_IMP_de.zip"
+            },
+            "byteSize": 5000000000.0,
+            "conformsTo": [],
+            "coverage": [],
+            "description": {
+              "de": "Importe nach Tarifnummer und Verkehrsträger"
+            },
+            "documentation": [],
+            "downloadUrl": {
+              "uri": "https://ocean.nivel.bazg.admin.ch/open-data-reports/TN8_VK_IMP_de/TN8_VK_IMP_de.zip"
+            },
+            "format": {
+              "code": "CSV",
+              "name": {
+                "de": "CSV",
+                "en": "CSV",
+                "fr": "CSV",
+                "it": "CSV"
+              },
+              "uri": "http://publications.europa.eu/resource/authority/file-type/CSV"
+            },
+            "id": "2eae1662-304d-43f1-84e9-b7532d4784aa",
+            "identifier": "BAZG_TN8_VK",
+            "images": [],
+            "languages": [
+              {
+                "code": "de",
+                "name": {
+                  "de": "Deutsch",
+                  "en": "German",
+                  "fr": "allemand",
+                  "it": "Tedesco"
+                },
+                "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=de"
+              }
+            ],
+            "license": {
+              "code": "terms_by_ask",
+              "name": {
+                "de": "Opendata BY ASK: Freie Nutzung. Quellenangabe ist Pflicht. Kommerzielle Nutzung nur mit Bewilligung des Datenlieferanten zulässig.",
+                "en": "Opendata BY ASK: Open use. Must provide the source. Use for commercial purposes requires permission of the data owner.",
+                "fr": "Opendata BY ASK: Utilisation libre. Obligation d'indiquer la source. Utilisation commerciale uniquement avec l'autorisation du fournisseur des donnés.",
+                "it": "Opendata BY ASK: Libero utilizzo. Indicazione della fonte obbligatoria. Utilizzo a fini commerciali ammesso soltanto previo consenso del titolare dei dati."
+              },
+              "uri": "http://dcat-ap.ch/vocabulary/licenses/terms_by_ask"
+            },
+            "packagingFormat": {
+              "code": "ZIP",
+              "name": {
+                "de": "ZIP",
+                "en": "ZIP",
+                "fr": "ZIP",
+                "it": "ZIP"
+              },
+              "uri": "http://publications.europa.eu/resource/authority/file-type/ZIP"
+            },
+            "title": {
+              "de": "TN8_VK IMP"
+            }
+          },
+          {
+            "accessServices": [],
+            "accessUrl": {
+              "uri": "https://ocean.nivel.bazg.admin.ch/open-data-reports/TN8_VK_IMP_fr/TN8_VK_IMP_fr.zip"
+            },
+            "byteSize": 5000000000.0,
+            "conformsTo": [],
+            "coverage": [],
+            "description": {
+              "fr": "Importations par numéro de tarif et moyen de transport"
+            },
+            "documentation": [],
+            "downloadUrl": {
+              "uri": "https://ocean.nivel.bazg.admin.ch/open-data-reports/TN8_VK_IMP_fr/TN8_VK_IMP_fr.zip"
+            },
+            "format": {
+              "code": "CSV",
+              "name": {
+                "de": "CSV",
+                "en": "CSV",
+                "fr": "CSV",
+                "it": "CSV"
+              },
+              "uri": "http://publications.europa.eu/resource/authority/file-type/CSV"
+            },
+            "id": "43092b2e-d0ac-471b-a384-7f59fbb3bd26",
+            "identifier": "BAZG_TN8_VK",
+            "images": [],
+            "languages": [
+              {
+                "code": "fr",
+                "name": {
+                  "de": "Französisch",
+                  "en": "French",
+                  "fr": "français",
+                  "it": "Francese"
+                },
+                "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=fr"
+              }
+            ],
+            "license": {
+              "code": "terms_by",
+              "name": {
+                "de": "Opendata BY: Freie Nutzung. Quellenangabe ist Pflicht.",
+                "en": "Opendata BY: Open use. Must provide the source.",
+                "fr": "Opendata BY: Utilisation libre. Obligation d'indiquer la source.",
+                "it": "Opendata BY: Libero utilizzo. Indicazione della fonte obbligatoria. Utilizzo a fini commerciali ammesso soltanto previo consenso del titolare dei dati"
+              },
+              "uri": "http://dcat-ap.ch/vocabulary/licenses/terms_by"
+            },
+            "title": {
+              "fr": "TN8_VK IMP"
+            }
+          },
+          {
+            "accessServices": [],
+            "accessUrl": {
+              "uri": "https://ocean.nivel.bazg.admin.ch/open-data-reports/schema/TN8_VK_EXP_de_schema/part-00000-e60724fe-6dfc-4301-ad3f-87b46428fc39-c000.json"
+            },
+            "conformsTo": [],
+            "coverage": [],
+            "description": {
+              "de": "Schema_TN8_VK EXP"
+            },
+            "documentation": [],
+            "downloadUrl": {
+              "uri": "https://ocean.nivel.bazg.admin.ch/open-data-reports/schema/TN8_VK_EXP_de_schema/part-00000-e60724fe-6dfc-4301-ad3f-87b46428fc39-c000.json"
+            },
+            "format": {
+              "code": "JSON",
+              "name": {
+                "de": "JSON",
+                "en": "JSON",
+                "fr": "JSON",
+                "it": "JSON"
+              },
+              "uri": "http://publications.europa.eu/resource/authority/file-type/JSON"
+            },
+            "id": "7debf481-a2f5-4189-a3ce-0d841dfe2ffc",
+            "images": [],
+            "languages": [
+              {
+                "code": "de",
+                "name": {
+                  "de": "Deutsch",
+                  "en": "German",
+                  "fr": "allemand",
+                  "it": "Tedesco"
+                },
+                "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=de"
+              }
+            ],
+            "license": {
+              "code": "terms_by_ask",
+              "name": {
+                "de": "Opendata BY ASK: Freie Nutzung. Quellenangabe ist Pflicht. Kommerzielle Nutzung nur mit Bewilligung des Datenlieferanten zulässig.",
+                "en": "Opendata BY ASK: Open use. Must provide the source. Use for commercial purposes requires permission of the data owner.",
+                "fr": "Opendata BY ASK: Utilisation libre. Obligation d'indiquer la source. Utilisation commerciale uniquement avec l'autorisation du fournisseur des donnés.",
+                "it": "Opendata BY ASK: Libero utilizzo. Indicazione della fonte obbligatoria. Utilizzo a fini commerciali ammesso soltanto previo consenso del titolare dei dati."
+              },
+              "uri": "http://dcat-ap.ch/vocabulary/licenses/terms_by_ask"
+            },
+            "title": {
+              "de": "Schema_TN8_VK EXP"
+            }
+          },
+          {
+            "accessServices": [],
+            "accessUrl": {
+              "uri": "https://ocean.nivel.bazg.admin.ch/open-data-reports/schema/TN8_VK_EXP_fr_schema/part-00000-58c12611-b20d-44ad-8d9b-63e9bd79d117-c000.json"
+            },
+            "conformsTo": [],
+            "coverage": [],
+            "description": {
+              "fr": "Schéma_TN8_VK EXP"
+            },
+            "documentation": [],
+            "downloadUrl": {
+              "uri": "https://ocean.nivel.bazg.admin.ch/open-data-reports/schema/TN8_VK_EXP_fr_schema/part-00000-58c12611-b20d-44ad-8d9b-63e9bd79d117-c000.json"
+            },
+            "format": {
+              "code": "JSON",
+              "name": {
+                "de": "JSON",
+                "en": "JSON",
+                "fr": "JSON",
+                "it": "JSON"
+              },
+              "uri": "http://publications.europa.eu/resource/authority/file-type/JSON"
+            },
+            "id": "9216f10c-b210-460b-a7c5-4faa2b73a32d",
+            "images": [],
+            "languages": [
+              {
+                "code": "fr",
+                "name": {
+                  "de": "Französisch",
+                  "en": "French",
+                  "fr": "français",
+                  "it": "Francese"
+                },
+                "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=fr"
+              }
+            ],
+            "license": {
+              "code": "terms_by_ask",
+              "name": {
+                "de": "Opendata BY ASK: Freie Nutzung. Quellenangabe ist Pflicht. Kommerzielle Nutzung nur mit Bewilligung des Datenlieferanten zulässig.",
+                "en": "Opendata BY ASK: Open use. Must provide the source. Use for commercial purposes requires permission of the data owner.",
+                "fr": "Opendata BY ASK: Utilisation libre. Obligation d'indiquer la source. Utilisation commerciale uniquement avec l'autorisation du fournisseur des donnés.",
+                "it": "Opendata BY ASK: Libero utilizzo. Indicazione della fonte obbligatoria. Utilizzo a fini commerciali ammesso soltanto previo consenso del titolare dei dati."
+              },
+              "uri": "http://dcat-ap.ch/vocabulary/licenses/terms_by_ask"
+            },
+            "title": {
+              "fr": "Schéma_TN8_VK EXP"
+            }
+          },
+          {
+            "accessServices": [],
+            "accessUrl": {
+              "uri": "https://ocean.nivel.bazg.admin.ch/open-data-reports/schema/TN8_VK_IMP_de_schema/part-00000-f6925e75-a854-4e73-8e48-64a3e81b7d54-c000.json"
+            },
+            "conformsTo": [],
+            "coverage": [],
+            "description": {
+              "de": "Schema_TN8_VK IMP"
+            },
+            "documentation": [],
+            "downloadUrl": {
+              "uri": "https://ocean.nivel.bazg.admin.ch/open-data-reports/schema/TN8_VK_IMP_de_schema/part-00000-f6925e75-a854-4e73-8e48-64a3e81b7d54-c000.json"
+            },
+            "format": {
+              "code": "JSON",
+              "name": {
+                "de": "JSON",
+                "en": "JSON",
+                "fr": "JSON",
+                "it": "JSON"
+              },
+              "uri": "http://publications.europa.eu/resource/authority/file-type/JSON"
+            },
+            "id": "a6442ee2-d5c7-4aae-b07a-67aba3589b91",
+            "images": [],
+            "languages": [
+              {
+                "code": "de",
+                "name": {
+                  "de": "Deutsch",
+                  "en": "German",
+                  "fr": "allemand",
+                  "it": "Tedesco"
+                },
+                "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=de"
+              }
+            ],
+            "license": {
+              "code": "terms_by_ask",
+              "name": {
+                "de": "Opendata BY ASK: Freie Nutzung. Quellenangabe ist Pflicht. Kommerzielle Nutzung nur mit Bewilligung des Datenlieferanten zulässig.",
+                "en": "Opendata BY ASK: Open use. Must provide the source. Use for commercial purposes requires permission of the data owner.",
+                "fr": "Opendata BY ASK: Utilisation libre. Obligation d'indiquer la source. Utilisation commerciale uniquement avec l'autorisation du fournisseur des donnés.",
+                "it": "Opendata BY ASK: Libero utilizzo. Indicazione della fonte obbligatoria. Utilizzo a fini commerciali ammesso soltanto previo consenso del titolare dei dati."
+              },
+              "uri": "http://dcat-ap.ch/vocabulary/licenses/terms_by_ask"
+            },
+            "title": {
+              "de": "Schema_TN8_VK IMP"
+            }
+          },
+          {
+            "accessServices": [],
+            "accessUrl": {
+              "uri": "https://ocean.nivel.bazg.admin.ch/open-data-reports/TN8_VK_EXP_de/TN8_VK_EXP_de.zip"
+            },
+            "byteSize": 5261334937.0,
+            "conformsTo": [
+              {
+                "uri": "https://www.bazg.admin.ch/bazg/de/home/themen/schweizerische-aussenhandelsstatistik/methoden-metadaten/methoden/definitionen.html"
+              }
+            ],
+            "coverage": [],
+            "description": {
+              "de": "Exporte nach Tarifnummer und Verkehrsträger"
+            },
+            "documentation": [],
+            "downloadUrl": {
+              "uri": "https://ocean.nivel.bazg.admin.ch/open-data-reports/TN8_VK_EXP_de/TN8_VK_EXP_de.zip"
+            },
+            "format": {
+              "code": "CSV",
+              "name": {
+                "de": "CSV",
+                "en": "CSV",
+                "fr": "CSV",
+                "it": "CSV"
+              },
+              "uri": "http://publications.europa.eu/resource/authority/file-type/CSV"
+            },
+            "id": "b7c5c1e6-bcd8-4f32-ad83-bb6cbcb7e5f2",
+            "identifier": "BAZG_TN8_VK",
+            "images": [],
+            "languages": [
+              {
+                "code": "de",
+                "name": {
+                  "de": "Deutsch",
+                  "en": "German",
+                  "fr": "allemand",
+                  "it": "Tedesco"
+                },
+                "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=de"
+              }
+            ],
+            "license": {
+              "code": "terms_by_ask",
+              "name": {
+                "de": "Opendata BY ASK: Freie Nutzung. Quellenangabe ist Pflicht. Kommerzielle Nutzung nur mit Bewilligung des Datenlieferanten zulässig.",
+                "en": "Opendata BY ASK: Open use. Must provide the source. Use for commercial purposes requires permission of the data owner.",
+                "fr": "Opendata BY ASK: Utilisation libre. Obligation d'indiquer la source. Utilisation commerciale uniquement avec l'autorisation du fournisseur des donnés.",
+                "it": "Opendata BY ASK: Libero utilizzo. Indicazione della fonte obbligatoria. Utilizzo a fini commerciali ammesso soltanto previo consenso del titolare dei dati."
+              },
+              "uri": "http://dcat-ap.ch/vocabulary/licenses/terms_by_ask"
+            },
+            "packagingFormat": {
+              "code": "ZIP",
+              "name": {
+                "de": "ZIP",
+                "en": "ZIP",
+                "fr": "ZIP",
+                "it": "ZIP"
+              },
+              "uri": "http://publications.europa.eu/resource/authority/file-type/ZIP"
+            },
+            "title": {
+              "de": "TN8_VK EXP"
+            }
+          },
+          {
+            "accessServices": [],
+            "accessUrl": {
+              "uri": "https://ocean.nivel.bazg.admin.ch/open-data-reports/schema/TN8_VK_IMP_fr_schema/part-00000-87cd2885-99bd-4e33-80e8-8f6d0cf66c22-c000.json"
+            },
+            "conformsTo": [],
+            "coverage": [],
+            "description": {
+              "fr": "Schéma_TN8_VK IMP"
+            },
+            "documentation": [],
+            "downloadUrl": {
+              "uri": "https://ocean.nivel.bazg.admin.ch/open-data-reports/schema/TN8_VK_IMP_fr_schema/part-00000-87cd2885-99bd-4e33-80e8-8f6d0cf66c22-c000.json"
+            },
+            "format": {
+              "code": "JSON",
+              "name": {
+                "de": "JSON",
+                "en": "JSON",
+                "fr": "JSON",
+                "it": "JSON"
+              },
+              "uri": "http://publications.europa.eu/resource/authority/file-type/JSON"
+            },
+            "id": "d4ccbda2-67ed-4cbf-8d81-345770a3a2a4",
+            "images": [],
+            "languages": [
+              {
+                "code": "fr",
+                "name": {
+                  "de": "Französisch",
+                  "en": "French",
+                  "fr": "français",
+                  "it": "Francese"
+                },
+                "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=fr"
+              }
+            ],
+            "license": {
+              "code": "terms_by_ask",
+              "name": {
+                "de": "Opendata BY ASK: Freie Nutzung. Quellenangabe ist Pflicht. Kommerzielle Nutzung nur mit Bewilligung des Datenlieferanten zulässig.",
+                "en": "Opendata BY ASK: Open use. Must provide the source. Use for commercial purposes requires permission of the data owner.",
+                "fr": "Opendata BY ASK: Utilisation libre. Obligation d'indiquer la source. Utilisation commerciale uniquement avec l'autorisation du fournisseur des donnés.",
+                "it": "Opendata BY ASK: Libero utilizzo. Indicazione della fonte obbligatoria. Utilizzo a fini commerciali ammesso soltanto previo consenso del titolare dei dati."
+              },
+              "uri": "http://dcat-ap.ch/vocabulary/licenses/terms_by_ask"
+            },
+            "title": {
+              "fr": "Schéma_TN8_VK IMP"
+            }
+          },
+          {
+            "accessServices": [],
+            "accessUrl": {
+              "uri": "https://ocean.nivel.bazg.admin.ch/open-data-reports/TN8_VK_EXP_en/TN8_VK_EXP_en.zip"
+            },
+            "byteSize": 5046586572.0,
+            "conformsTo": [
+              {
+                "uri": "https://www.bazg.admin.ch/bazg/en/home/topics/swiss-foreign-trade-statistics/methoden-metadaten/methoden/definitionen.html"
+              }
+            ],
+            "coverage": [],
+            "description": {
+              "en": "Exports by tariff number and modes of transport\n"
+            },
+            "documentation": [],
+            "downloadUrl": {
+              "uri": "https://ocean.nivel.bazg.admin.ch/open-data-reports/TN8_VK_EXP_en/TN8_VK_EXP_en.zip"
+            },
+            "format": {
+              "code": "CSV",
+              "name": {
+                "de": "CSV",
+                "en": "CSV",
+                "fr": "CSV",
+                "it": "CSV"
+              },
+              "uri": "http://publications.europa.eu/resource/authority/file-type/CSV"
+            },
+            "id": "d97467ea-ecd5-4342-810e-57b4cf302bdb",
+            "images": [],
+            "languages": [
+              {
+                "code": "en",
+                "name": {
+                  "de": "Englisch",
+                  "en": "English",
+                  "fr": "anglais",
+                  "it": "Inglese"
+                },
+                "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=en"
+              }
+            ],
+            "license": {
+              "code": "terms_by_ask",
+              "name": {
+                "de": "Opendata BY ASK: Freie Nutzung. Quellenangabe ist Pflicht. Kommerzielle Nutzung nur mit Bewilligung des Datenlieferanten zulässig.",
+                "en": "Opendata BY ASK: Open use. Must provide the source. Use for commercial purposes requires permission of the data owner.",
+                "fr": "Opendata BY ASK: Utilisation libre. Obligation d'indiquer la source. Utilisation commerciale uniquement avec l'autorisation du fournisseur des donnés.",
+                "it": "Opendata BY ASK: Libero utilizzo. Indicazione della fonte obbligatoria. Utilizzo a fini commerciali ammesso soltanto previo consenso del titolare dei dati."
+              },
+              "uri": "http://dcat-ap.ch/vocabulary/licenses/terms_by_ask"
+            },
+            "packagingFormat": {
+              "code": "ZIP",
+              "name": {
+                "de": "ZIP",
+                "en": "ZIP",
+                "fr": "ZIP",
+                "it": "ZIP"
+              },
+              "uri": "http://publications.europa.eu/resource/authority/file-type/ZIP"
+            },
+            "title": {
+              "en": "TN8_VK EXP"
+            }
+          },
+          {
+            "accessServices": [],
+            "accessUrl": {
+              "uri": "https://ocean.nivel.bazg.admin.ch/open-data-reports/TN8_VK_EXP_fr/TN8_VK_EXP_fr.zip"
+            },
+            "byteSize": 5368709120.0,
+            "conformsTo": [
+              {
+                "uri": "https://www.bazg.admin.ch/bazg/fr/home/themes/statistique-du-commerce-exterieur-suisse/methoden-metadaten/methoden/definitionen.html"
+              }
+            ],
+            "coverage": [],
+            "description": {
+              "fr": "Exportations par numéro de tarif et moyen de transport\n"
+            },
+            "documentation": [],
+            "downloadUrl": {
+              "uri": "https://ocean.nivel.bazg.admin.ch/open-data-reports/TN8_VK_EXP_fr/TN8_VK_EXP_fr.zip"
+            },
+            "format": {
+              "code": "CSV",
+              "name": {
+                "de": "CSV",
+                "en": "CSV",
+                "fr": "CSV",
+                "it": "CSV"
+              },
+              "uri": "http://publications.europa.eu/resource/authority/file-type/CSV"
+            },
+            "id": "ea995a06-4b25-4809-b054-ff0a1a654d03",
+            "identifier": "BAZG_TN8_VK",
+            "images": [],
+            "languages": [
+              {
+                "code": "fr",
+                "name": {
+                  "de": "Französisch",
+                  "en": "French",
+                  "fr": "français",
+                  "it": "Francese"
+                },
+                "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=fr"
+              }
+            ],
+            "license": {
+              "code": "terms_by_ask",
+              "name": {
+                "de": "Opendata BY ASK: Freie Nutzung. Quellenangabe ist Pflicht. Kommerzielle Nutzung nur mit Bewilligung des Datenlieferanten zulässig.",
+                "en": "Opendata BY ASK: Open use. Must provide the source. Use for commercial purposes requires permission of the data owner.",
+                "fr": "Opendata BY ASK: Utilisation libre. Obligation d'indiquer la source. Utilisation commerciale uniquement avec l'autorisation du fournisseur des donnés.",
+                "it": "Opendata BY ASK: Libero utilizzo. Indicazione della fonte obbligatoria. Utilizzo a fini commerciali ammesso soltanto previo consenso del titolare dei dati."
+              },
+              "uri": "http://dcat-ap.ch/vocabulary/licenses/terms_by_ask"
+            },
+            "packagingFormat": {
+              "code": "ZIP",
+              "name": {
+                "de": "ZIP",
+                "en": "ZIP",
+                "fr": "ZIP",
+                "it": "ZIP"
+              },
+              "uri": "http://publications.europa.eu/resource/authority/file-type/ZIP"
+            },
+            "title": {
+              "fr": "TN8_VK EXP"
+            }
+          }
+        ],
+        "documentation": [
+          {
+            "uri": "https://www.bazg.admin.ch/bazg/de/home/themen/schweizerische-aussenhandelsstatistik/methoden-metadaten/methoden/definitionen.html"
+          }
+        ],
+        "frequency": {
+          "code": "MONTHLY",
+          "name": {
+            "de": "monatlich",
+            "en": "monthly",
+            "fr": "mensuel",
+            "it": "mensile"
+          },
+          "uri": "http://publications.europa.eu/resource/authority/frequency/MONTHLY"
+        },
+        "geoIvIds": [],
+        "id": "00b36995-5293-4d74-b226-90a0098ee085",
+        "identifiers": [
+          "BAZG_TN8_VK"
+        ],
+        "images": [],
+        "isReferencedBy": [],
+        "keywords": [
+          {
+            "label": {
+              "de": "Tarifnummer",
+              "en": "Tariff number",
+              "fr": "Numéro de tarif"
+            }
+          },
+          {
+            "label": {
+              "de": "Aussenhandel",
+              "en": "Foreign trade",
+              "fr": "Commerce extérieur"
+            }
+          },
+          {
+            "label": {
+              "de": "Verkehrsträger",
+              "en": "Means of transport",
+              "fr": "Moyens de transport"
+            }
+          },
+          {
+            "label": {
+              "de": "BAZG",
+              "en": "FOCBS",
+              "fr": "OFDF"
+            }
+          },
+          {
+            "label": {
+              "de": "Exporte",
+              "en": "Exports",
+              "fr": "Exportations"
+            }
+          },
+          {
+            "label": {
+              "de": "Importe",
+              "en": "Imports",
+              "fr": "Importations"
+            }
+          }
+        ],
+        "landingPages": [],
+        "languages": [
+          {
+            "code": "de",
+            "name": {
+              "de": "Deutsch",
+              "en": "German",
+              "fr": "allemand",
+              "it": "Tedesco"
+            },
+            "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=de"
+          },
+          {
+            "code": "fr",
+            "name": {
+              "de": "Französisch",
+              "en": "French",
+              "fr": "français",
+              "it": "Francese"
+            },
+            "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=fr"
+          },
+          {
+            "code": "en",
+            "name": {
+              "de": "Englisch",
+              "en": "English",
+              "fr": "anglais",
+              "it": "Inglese"
+            },
+            "uri": "https://www.loc.gov/standards/iso639-2/php/langcodes_name.php?iso_639_1=en"
+          }
+        ],
+        "publicationLevel": "Public",
+        "publisher": {
+          "classification": {
+            "code": "0220",
+            "name": {
+              "de": "Verwaltungseinheit des Bundes",
+              "en": "Administrative unit of the Confederation",
+              "fr": "Unité de l’administration fédérale",
+              "it": "Unità amministrativa della Confederazione"
+            }
+          },
+          "description": {
+            "de": "Das Bundesamt für Zoll und Grenzsicherheit sorgt für umfassende Sicherheit an der Grenze – zum Wohl von Bevölkerung, Wirtschaft und Staat. Es ist national und international gut vernetzt. Zu seinen Kernaufgaben gehören das sachgerechte und rasche Abfertigen von Handelswaren, der zügige Ablauf des Reiseverkehrs, die Bereiche Sicherheitspolizei und Migration und es verfügt mit der Strafverfolgung über eine eigene Ermittlungsbehörde.",
+            "en": "The Federal Customs and Border Security Office (FOCBS) ensures comprehensive border security for the population, the economy and the state and is well connected nationally and internationally. Its main tasks include the correct and speedy taxation of tradable goods, the rapid handling of tourist traffic as well as the areas of migration and security police. The FOCBS has its own prosecuting authority.",
+            "fr": "L'Office fédéral de la douane et de la sécurité des frontières (OFDF) assure la sécurité globale à la frontière au profit de la population, de l'économie et de l'État. Il collabore étroitement avec d'autres autorités nationales et internationales. Parmi ses tâches principales figurent le dédouanement adéquat et rapide des marchandises de commerce, la gestion fluide du trafic touristique ainsi que les domaines de la police de sécurité et des migrations. Avec le domaine de direction Poursuites pénales, il dispose de sa propre autorité d'enquête.",
+            "it": "L'Ufficio federale della dogana e della sicurezza dei confini (UDSC) garantisce la sicurezza globale al confine a favore di popolazione, economia e Stato ed è ben interconnesso a livello nazionale e internazionale. Tra i suoi compiti principali rientrano la corretta e celere imposizione delle merci commerciabili, la rapida gestione del traffico turistico nonché gli ambiti della migrazione e della polizia di sicurezza. Con il Perseguimento penale l'UDSC dispone di una propria autorità inquirente.",
+            "rm": ""
+          },
+          "homePage": "https://www.bazg.admin.ch/",
+          "id": "4e590552-11c9-42f3-96ce-918bda9244cc",
+          "identifier": "CH_BAZG",
+          "images": [],
+          "name": {
+            "de": "Bundesamt für Zoll und Grenzsicherheit (BAZG)",
+            "en": "Federal Office for Customs and Border Security (FOCBS)",
+            "fr": "Office fédéral de la douane et de la sécurité des frontières (OFDF)",
+            "it": "Ufficio federale della dogana e della sicurezza dei confini (UDSC)",
+            "rm": ""
+          },
+          "prefLabel": {
+            "de": "BAZG",
+            "en": "FOCBS",
+            "fr": "OFDF",
+            "it": "UDSC",
+            "rm": ""
+          },
+          "system": {
+            "createdAt": "0001-01-01T00:00:00+00:00",
+            "modifiedAt": "2026-07-10T07:29:11.402126+00:00"
+          },
+          "spatial": [
+            "CH"
+          ],
+          "spatialCH": [
+            {
+              "code": "8100",
+              "name": {
+                "de": "Schweiz",
+                "en": "Switzerland",
+                "fr": "Suisse",
+                "it": "Svizzera",
+                "rm": "Svizra"
+              }
+            }
+          ],
+          "subAgents": [],
+          "uid": "CHE226598037"
+        },
+        "qualifiedAttributions": [],
+        "qualifiedRelations": [],
+        "registrationStatus": "Recorded",
+        "relations": [],
+        "system": {
+          "createdAt": "2025-06-26T14:21:56.249929+00:00",
+          "modifiedAt": "2025-09-19T17:02:29.5328+00:00"
+        },
+        "spatial": [
+          "Schweiz",
+          "Suisse",
+          "Switzerland"
+        ],
+        "temporalCoverage": [],
+        "themes": [
+          {
+            "code": "125",
+            "name": {
+              "de": "Öffentliche Statistik",
+              "en": "Official statistics",
+              "fr": "Statistique publique",
+              "it": "Statistica pubblica"
+            }
+          },
+          {
+            "code": "115",
+            "name": {
+              "de": "Wirtschaft",
+              "en": "Economy",
+              "fr": "Économie",
+              "it": "Economia"
+            }
+          }
+        ],
+        "title": {
+          "de": "Waren: Aussenhandel nach Tarifnummer / Verkehrsträger",
+          "en": "Goods: Foreign trade by tariff number / modes of transport",
+          "fr": "Marchandises: Commerce extérieur par numéro de tarif / moyens de transport"
+        },
+        "version": "1"
+      }
+    ]
+  }
+}

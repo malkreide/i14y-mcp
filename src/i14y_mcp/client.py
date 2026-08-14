@@ -46,6 +46,16 @@ USER_AGENT = f"i14y-mcp/{__version__} (+https://github.com/malkreide/i14y-mcp)"
 # Retry policy: 3 retries, 2s / 4s / 8s.
 MAX_ATTEMPTS = 4
 
+# The seam the offline tests patch to skip the backoff waits, and a module-level
+# alias on purpose. `monkeypatch.setattr(client.asyncio, "sleep", ...)` looks
+# local but is not: it reaches through this module's reference to the `asyncio`
+# module *object* and replaces `sleep` there, for every importer in the process
+# — httpx, respx, pytest-asyncio and the code under test alike. What is meant as
+# "make this test fast" quietly disarms the mechanism everywhere, and a test that
+# should have caught a broken wait stays green. Patching `_sleep` rebinds a name
+# in this module and stops there.
+_sleep = asyncio.sleep
+
 
 # --- Retry policy ------------------------------------------------------------
 # Adopted from the mcp-data-source-probe reference template (repaired
@@ -249,7 +259,7 @@ async def fetch_json(
             if delay >= deadline - time.monotonic():
                 break
             logger.debug("i14y.retry", path=path, attempt=attempt, delay_s=round(delay, 2))
-            await asyncio.sleep(delay)
+            await _sleep(delay)
 
         remaining = deadline - time.monotonic()
         if remaining <= 0:

@@ -6,6 +6,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- **The offline tests no longer disarm `asyncio.sleep` process-wide.** All three
+  test modules collapsed the retry backoff with
+  `monkeypatch.setattr(client.asyncio, "sleep", ...)`, which reads as a local
+  override but replaces `sleep` on the shared module object — for httpx, respx,
+  pytest-asyncio and every other importer. `client.py` now exposes the seam as
+  a module-level alias `_sleep`, and the tests patch that. Two new tests hold
+  the line: one asserts the patch does not reach the `asyncio` module and that
+  real sleeping still works (real clock, not a fake one), the other records the
+  delays the retry requests and checks them against the 2/4/8 ladder with its
+  jitter bounds.
+- **CI lints `scripts/` too.** Both ruff gates ran on `src/ tests/` only, so
+  `scripts/record_fixtures.py` was unchecked. Verified by planting a violation
+  in `scripts/`: the old paths stayed green, the new ones caught it.
+  `CONTRIBUTING.md`, `CONTRIBUTING.de.md` and `CLAUDE.md` quote the gates
+  verbatim and were updated in step.
+
 ### Fixed
 
 - **`list_concepts`, `get_concept` and `list_public_services` returned a null

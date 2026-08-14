@@ -54,8 +54,8 @@ Die drei CI-Gates, wörtlich aus `.github/workflows/ci.yml` (Matrix 3.10–3.13)
 
 ```bash
 PYTHONPATH=src pytest tests/ -m "not live"
-ruff check src/ tests/
-ruff format --check src/ tests/
+ruff check src/ tests/ scripts/
+ruff format --check src/ tests/ scripts/
 ```
 
 `ruff format --check` ist ein eigenständiges Gate: `ruff check` belegt kein
@@ -65,6 +65,12 @@ Format, ein grüner Linter neben einem roten Format-Gate ist kein Widerspruch.
 per Cron (`17 5 * * 1`, Mo 05:17 UTC) plus `workflow_dispatch` gegen die echte
 I14Y-API. DRIFT-005 ist damit erfüllt, nicht bloss per `-m "not live"` umgangen.
 
-**Offener Befund:** alle Fixtures in `tests/` sind handgeschriebene Inline-respx-
-Stubs ohne aufgezeichnete Antwort und ohne Aufnahmedatum — Teil 1 verlangt
-mindestens eine Aufzeichnung pro externem Endpunkt.
+**Fixtures: aufgezeichnet.** `tests/fixtures/` hält eine echte Antwort je
+externem Endpunkt, mit Aufnahmedatum im `_recording`-Block; neu aufzeichnen mit
+`python scripts/record_fixtures.py`. Erfolgs-Payloads nicht mehr von Hand
+schreiben — die erste Aufzeichnung deckte auf, dass `/concepts` und
+`/publicservices` ihr Label `name` nennen, nicht `title`: drei Tools lieferten
+leere Titel, die Suite blieb grün. Fehlerpfade bleiben handgeschrieben.
+
+Der Backoff-Schlaf wird über den Modul-Alias `client._sleep` gepatcht, nie über
+`c.asyncio.sleep` — siehe Teil 1.

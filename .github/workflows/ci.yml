@@ -30,7 +30,7 @@ jobs:
           PYTHONPATH=src pytest tests/ -m "not live"
 
       - name: Lint
-        run: ruff check src/ tests/
+        run: ruff check src/ tests/ scripts/
 
       # Zweites, eigenstaendiges Gate. `ruff check` belegt kein Format: ein
       # gruener Linter neben einem roten `ruff format --check` ist ein
@@ -45,4 +45,4 @@ jobs:
       # Kein `--line-length`: die Breite entscheidet die `[tool.ruff]`-Sektion
       # in pyproject.toml, nicht dieser Workflow.
       - name: Format
-        run: ruff format --check src/ tests/
+        run: ruff format --check src/ tests/ scripts/

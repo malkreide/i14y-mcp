@@ -25,8 +25,8 @@ pip install -e ".[dev]"
 
 PYTHONPATH=src pytest tests/ -m "not live"   # offline, respx-mocked
 PYTHONPATH=src pytest tests/ -m live         # hits the real API
-ruff check src/ tests/                       # lint gate
-ruff format --check src/ tests/              # formatting gate
+ruff check src/ tests/ scripts/               # lint gate
+ruff format --check src/ tests/ scripts/      # formatting gate
 ```
 
 The offline suite replays real responses from `tests/fixtures/`, one per

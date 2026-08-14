@@ -55,6 +55,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
   is why it could not catch the empty-string case: informative in the test,
   blank in production.
 
+### Changed
+
+- **`CONTRIBUTING.md` documented only one of the two lint gates.** The
+  development section listed `ruff check src tests` and never mentioned
+  `ruff format --check src/ tests/`, so following the instructions ran half the
+  lint check and left the other half to fail in CI. Both files now list all
+  three CI gates verbatim, note that lint and formatting are independent
+  checks, and point at the ruff pin in `pyproject.toml`. `CONTRIBUTING.de.md`
+  updated in step.
+
 ## [0.3.2] - 2026-08-02
 
 ### Fixed

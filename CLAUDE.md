@@ -58,9 +58,8 @@ ruff check src/ tests/
 ruff format --check src/ tests/
 ```
 
-`ruff format --check` ist ein eigenständiges Gate und steht **nicht** in
-`CONTRIBUTING.md` (dort nur `ruff check src tests`) — wer der Anleitung folgt,
-fährt die halbe Lint-Prüfung nicht.
+`ruff format --check` ist ein eigenständiges Gate: `ruff check` belegt kein
+Format, ein grüner Linter neben einem roten Format-Gate ist kein Widerspruch.
 
 **Live-Tests: geplanter Workflow vorhanden.** `.github/workflows/live.yml` läuft
 per Cron (`17 5 * * 1`, Mo 05:17 UTC) plus `workflow_dispatch` gegen die echte

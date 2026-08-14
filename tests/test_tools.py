@@ -19,7 +19,7 @@ def _no_sleep(monkeypatch):
     async def _instant(_seconds):
         return None
 
-    monkeypatch.setattr(c.asyncio, "sleep", _instant)
+    monkeypatch.setattr(c, "_sleep", _instant)
 
 
 # --------------------------------------------------------------------------

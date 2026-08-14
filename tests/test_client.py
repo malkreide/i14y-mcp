@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import asyncio
+import time
 from datetime import datetime, timedelta, timezone
 from email.utils import format_datetime
 
@@ -21,7 +23,56 @@ def _no_sleep(monkeypatch):
     async def _instant(_seconds):
         return None
 
-    monkeypatch.setattr(c.asyncio, "sleep", _instant)
+    monkeypatch.setattr(c, "_sleep", _instant)
+
+
+async def test_the_backoff_patch_stops_at_this_module():
+    """The autouse patch above must not reach the `asyncio` module itself.
+
+    `monkeypatch.setattr(c.asyncio, "sleep", ...)` reads as a local override but
+    replaces `sleep` on the shared module object, for httpx, respx, pytest-asyncio
+    and every other importer in the process. A wait that should have been asserted
+    then never happens, and the test that was supposed to catch it passes.
+
+    Real clock on purpose: a fake one that only advances when something sleeps
+    cannot tell a genuine wait from a disarmed one.
+    """
+    assert c._sleep.__name__ == "_instant", "the autouse fixture should have patched the alias"
+    assert asyncio.sleep is not c._sleep, "the patch leaked into the asyncio module"
+
+    started = time.perf_counter()
+    await asyncio.sleep(0.05)
+    assert time.perf_counter() - started >= 0.04, "asyncio.sleep no longer waits"
+
+
+@respx.mock
+async def test_retry_asks_for_the_backoff_ladder(monkeypatch):
+    """Record the delays the retry requests instead of waiting them out.
+
+    This pins the seam itself. Collapsing the backoff makes the suite fast but
+    asserts nothing about it: if `fetch_json` stopped going through the module
+    alias, every test here would still pass and only the wall clock would show
+    it — 47s instead of 2s, which nobody reads. Here, nothing gets recorded and
+    this fails.
+    """
+    seen: list[float] = []
+
+    async def _record(seconds):
+        seen.append(seconds)
+
+    monkeypatch.setattr(c, "_sleep", _record)
+    respx.get(f"{BASE}/datasets").mock(return_value=httpx.Response(503))
+
+    async with c.build_client() as http:
+        with pytest.raises(c.UpstreamError):
+            await c.fetch_json(http, "/datasets")
+
+    assert len(seen) == c.MAX_ATTEMPTS - 1, "one wait between each pair of attempts"
+    for i, delay in enumerate(seen):
+        base = c.RETRY_BASE_DELAY * 2**i  # 2, 4, 8 before jitter
+        low = base * (1.0 - c.RETRY_JITTER_SPREAD)
+        high = min(base * (1.0 + c.RETRY_JITTER_SPREAD), c.RETRY_MAX_DELAY)
+        assert low <= delay <= high, f"wait {i} was {delay}s, outside [{low}, {high}]"
 
 
 @respx.mock

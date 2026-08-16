@@ -72,6 +72,19 @@ ruff format --check src/ tests/ scripts/
 `ruff format --check` ist ein eigenständiges Gate: `ruff check` belegt kein
 Format, ein grüner Linter neben einem roten Format-Gate ist kein Widerspruch.
 
+**Drei ist die ganze Liste** — und das ist hier die wichtigere Hälfte der
+Aussage. Es gibt keinen Import-Test, keinen Manifest-Hash und vor allem
+**kein Versions-Sync-Gate**: `scripts/` enthält nur `classify_live_run.py`
+und `record_fixtures.py`. `pyproject.toml` und die zwei Stellen in
+`server.json` stehen heute alle auf `0.3.2`, gehalten wird das von nichts.
+Die Schwester-Server fahren dafür `scripts/check_version_sync.py`. Beim
+Anheben also alle drei Stellen von Hand — ein Auseinanderlaufen macht kein
+Gate rot.
+
+Die Matrix setzt **kein** `fail-fast: false`, es gilt also der Standard: Eine
+rote 3.10 bricht 3.11–3.13 ab, bevor sie etwas sagen. Ein einzelnes rotes
+Feld heisst dann nicht «nur dort kaputt», sondern «der Rest kam nicht dazu».
+
 **Beide ruff-Gates decken dieselben drei Verzeichnisse ab, und das gehört so.**
 Fällt `scripts/` aus einem der beiden, bleibt `classify_live_run.py` ungeprüft —
 ausgerechnet das Skript, das entscheidet, ob ein roter Live-Lauf ein Issue

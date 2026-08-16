@@ -75,6 +75,9 @@ Test schon. Er kennt dabei alle gängigen Installationsformen (`--upgrade`,
 Anführungszeichen, `pip3`, `uv tool install`, `uv run --with`) und beide
 Workflow-Endungen; eine engere Fassung war grün, weil sie nicht hinsah.
 
+Vor dem Lauf `ruff --version` prüfen: ein älteres ruff früher im `PATH`
+schlägt den Pin, ohne dass der Install etwas meldet.
+
 Die drei CI-Gates, wörtlich aus `.github/workflows/ci.yml` (Matrix 3.10–3.13):
 
 ```bash

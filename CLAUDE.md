@@ -54,6 +54,13 @@ in `pyproject.toml`; die CI erbt ihn über `pip install -e ".[dev]"`. Eine
 `.pre-commit-config.yaml` existiert nicht — es gibt also keine zweite,
 abweichende Version, aber auch kein lokales Gate vor dem Push.
 
+Keine zweite Version in die Workflows schreiben: ein solcher Schritt liefe nach
+dem dev-Install und überstimmte den Pin still. `tests/test_werkzeug_versionen.py`
+hält das fest, statt es zu behaupten — dieser Absatz kann nicht umfallen, ein
+Test schon. Er kennt dabei alle gängigen Installationsformen (`--upgrade`,
+Anführungszeichen, `pip3`, `uv tool install`, `uv run --with`) und beide
+Workflow-Endungen; eine engere Fassung war grün, weil sie nicht hinsah.
+
 Die drei CI-Gates, wörtlich aus `.github/workflows/ci.yml` (Matrix 3.10–3.13):
 
 ```bash
@@ -64,6 +71,13 @@ ruff format --check src/ tests/ scripts/
 
 `ruff format --check` ist ein eigenständiges Gate: `ruff check` belegt kein
 Format, ein grüner Linter neben einem roten Format-Gate ist kein Widerspruch.
+
+**Beide ruff-Gates decken dieselben drei Verzeichnisse ab, und das gehört so.**
+Fällt `scripts/` aus einem der beiden, bleibt `classify_live_run.py` ungeprüft —
+ausgerechnet das Skript, das entscheidet, ob ein roter Live-Lauf ein Issue
+aufmacht. Zwei Gates mit zwei Reichweiten sehen aus wie ein Gate; auch das hält
+`test_werkzeug_versionen.py` fest. Kein `include` unter `[tool.ruff]` setzen —
+das hebt die Pfadangabe der Gates still wieder auf.
 
 **Live-Tests: geplanter Workflow vorhanden.** `.github/workflows/live.yml` läuft
 per Cron (`17 5 * * 1`, Mo 05:17 UTC) plus `workflow_dispatch` gegen die echte

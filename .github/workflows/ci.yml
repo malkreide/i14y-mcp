@@ -46,3 +46,6 @@ jobs:
       # in pyproject.toml, nicht dieser Workflow.
       - name: Format
         run: ruff format --check src/ tests/ scripts/
+
+      - name: Versions-Sync (pyproject ↔ server.json / README / src)
+        run: python scripts/check_version_sync.py

@@ -23,6 +23,12 @@ Ein veralteter Klon erzeugt eine rote CI, deren Ursache nicht im Diff steht.
 Am 3.8.2026 zweimal passiert — beide Male fehlten genau die Commits, die
 das Gate einführten, an dem der Branch scheiterte.
 
+In diesem Repo läuft die Prüfung beim Sessionstart von selbst:
+`.claude/hooks/session-start.sh` meldet den Rückstand und schweigt bei 0. Er
+blockiert nie — kein Netz, kein Remote, detached HEAD gehen still durch, und
+genau deshalb ersetzt er den Handgriff oben nicht, wenn eine Session lange
+läuft. Begründung und Fallunterscheidung in `.claude/hooks/README.md`.
+
 Gates lokal fahren, mit der GEPINNTEN ruff-Version aus der CI. Eine andere
 Version meldet Abweichungen, die niemand verursacht hat.
 

@@ -26,14 +26,13 @@ readonly NETZ_TIMEOUT=5
 export GIT_TERMINAL_PROMPT=0
 export GIT_ASKPASS=true
 export SSH_ASKPASS=true
-export GIT_SSH_COMMAND="${GIT_SSH_COMMAND:-ssh} -o BatchMode=yes -o ConnectTimeout=${NETZ_TIMEOUT} -o StrictHostKeyChecking=accept-new"
+export GIT_SSH_COMMAND="${GIT_SSH_COMMAND:-ssh} -o BatchMode=yes -o ConnectTimeout=${NETZ_TIMEOUT}"
 
 cd "${CLAUDE_PROJECT_DIR:-.}" 2>/dev/null || exit 0
 
-#
-# Diese drei Vorpruefungen sparen nicht nur Arbeit, sie sparen den Netzversuch:
-# ohne sie wartet der Sessionstart in jedem dieser Faelle einen Timeout lang auf
-# ein Ergebnis, das es nicht geben kann. Genau das haelt
+# Die Vorpruefungen sparen nicht nur Arbeit, sie sparen den Netzversuch: ohne
+# sie wartet der Sessionstart in jedem dieser Faelle einen Timeout lang auf ein
+# Ergebnis, das es nicht geben kann. Genau das haelt
 # tests/test_session_start_hook.py fest (die *_kein_netzversuch-Tests) — am
 # Schweigen allein waere der Unterschied nicht zu sehen.
 command -v git >/dev/null 2>&1 || exit 0
@@ -88,9 +87,9 @@ fi
 # gegen etwas anderes als den Standard-Branch.
 [ -n "$standard_branch" ] || exit 0
 
-# --no-tags/--no-write-fetch-head: der Hook laeuft im Arbeitsverzeichnis des
-# Nutzers und soll dort nichts hinterlassen. Das Ergebnis kommt aus dem
-# stdout-freien Fetch ueber die Remote-Ref, nicht aus FETCH_HEAD.
+# Expliziter Refspec statt `fetch origin`: gezaehlt wird gegen
+# refs/remotes/origin/<Branch>, eine benannte Ref, nicht gegen FETCH_HEAD.
+# `--no-tags`, weil Tags fuer den Vergleich nichts beitragen.
 netz git "${GIT_NETZ_OPTS[@]}" fetch --quiet --no-tags \
   origin "refs/heads/${standard_branch}:refs/remotes/origin/${standard_branch}" \
   >/dev/null 2>&1 || exit 0

@@ -174,3 +174,92 @@ def test_der_erkenner_kennt_die_gaengigen_installationsformen() -> None:
     assert not uebersehen, f"Erkenner uebersieht: {uebersehen}"
     fehlalarm = [z for z in darf_nicht_treffen if _installiert_ruff(z)]
     assert not fehlalarm, f"Erkenner schlaegt faelschlich an: {fehlalarm}"
+
+
+# --- Der Gate-Block in CLAUDE.md ------------------------------------------
+#
+# Die CLAUDE.md zitiert die CI-Gates woertlich. Genau das war einmal falsch:
+# der Block nannte vier Befehle, der Fliesstext sprach von «drei», und
+# `check_version_sync.py` lief in der CI, ohne irgendwo aufzutauchen — der
+# Absatz behauptete sogar ausdruecklich, es gebe kein Versions-Sync-Gate.
+# Wer danach arbeitet, prueft lokal weniger als die CI und sucht den
+# Unterschied spaeter im Diff.
+#
+# Ein Zitat, das niemand nachschlaegt, ist eine Behauptung. Dieser Test
+# schlaegt nach.
+
+_CLAUDE_MD = _ROOT / "CLAUDE.md"
+
+# `pip install -e ".[dev]"` ist die Vorbereitung, kein Gate: der Schritt
+# stellt die Umgebung her, in der die anderen laufen.
+_KEIN_GATE = re.compile(r"^pip install -e")
+
+
+def _ci_gate_befehle() -> list[str]:
+    """Die `run:`-Befehle aus ci.yml, in Reihenfolge, ohne den Install-Schritt.
+
+    Von Hand geparst statt mit PyYAML: das Paket ist keine Abhaengigkeit
+    dieses Projekts, und ein Test, der eine neue Abhaengigkeit mitbringt,
+    laeuft irgendwo nicht.
+    """
+    befehle: list[str] = []
+    block_einzug: int | None = None
+
+    for zeile in (_WORKFLOWS / "ci.yml").read_text(encoding="utf-8").splitlines():
+        if block_einzug is not None:
+            if not zeile.strip():
+                continue
+            einzug = len(zeile) - len(zeile.lstrip())
+            if einzug >= block_einzug:
+                inhalt = zeile.strip()
+                if not inhalt.startswith("#") and not _KEIN_GATE.match(inhalt):
+                    befehle.append(inhalt)
+                continue
+            block_einzug = None
+
+        treffer = re.match(r"^(\s*)run:\s*(.*)$", zeile)
+        if treffer:
+            rest = treffer.group(2).strip()
+            if rest in {"|", ">", "|-", ">-"}:
+                block_einzug = len(treffer.group(1)) + 1
+            elif rest and not _KEIN_GATE.match(rest):
+                befehle.append(rest)
+
+    return befehle
+
+
+def _claude_md_gate_block() -> list[str]:
+    """Die Zeilen des ```bash-Blocks, der auf die Gate-Ueberschrift folgt."""
+    zeilen = _CLAUDE_MD.read_text(encoding="utf-8").splitlines()
+    for i, zeile in enumerate(zeilen):
+        if "CI-Gates" in zeile and "ci.yml" in zeile:
+            start = next(j for j in range(i, len(zeilen)) if zeilen[j].startswith("```"))
+            ende = next(j for j in range(start + 1, len(zeilen)) if zeilen[j].startswith("```"))
+            return [z.strip() for z in zeilen[start + 1 : ende] if z.strip()]
+    raise AssertionError("Kein Absatz in CLAUDE.md, der die CI-Gates aus ci.yml zitiert")
+
+
+def test_claude_md_zitiert_die_ci_gates_vollstaendig() -> None:
+    doku = _claude_md_gate_block()
+    echt = _ci_gate_befehle()
+
+    fehlt = [b for b in echt if b not in doku]
+    zuviel = [b for b in doku if b not in echt]
+    assert not fehlt, f"CLAUDE.md nennt diese Gates nicht: {fehlt}"
+    assert not zuviel, f"CLAUDE.md nennt Gates, die ci.yml nicht faehrt: {zuviel}"
+    assert doku == echt, f"Reihenfolge weicht ab:\n  CLAUDE.md: {doku}\n  ci.yml:    {echt}"
+
+
+def test_der_ci_parser_findet_ueberhaupt_etwas() -> None:
+    """Gegenprobe zum Parser: faende er nichts, waere der Vergleich oben leer
+    und damit immer gruen — genau die Sorte Test, die nichts prueft."""
+    befehle = _ci_gate_befehle()
+    assert len(befehle) >= 4, befehle
+    assert any("pytest" in b for b in befehle), befehle
+
+
+def test_jedes_genannte_skript_existiert() -> None:
+    """`python scripts/x.py` in einem Gate muss auch da liegen."""
+    for befehl in _ci_gate_befehle():
+        for pfad in re.findall(r"\bscripts/\S+\.py\b", befehl):
+            assert (_ROOT / pfad).is_file(), f"{befehl!r} ruft {pfad} auf, das es nicht gibt"

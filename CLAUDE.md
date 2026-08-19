@@ -84,26 +84,43 @@ Workflow-Endungen; eine engere Fassung war grün, weil sie nicht hinsah.
 Vor dem Lauf `ruff --version` prüfen: ein älteres ruff früher im `PATH`
 schlägt den Pin, ohne dass der Install etwas meldet.
 
-Die drei CI-Gates, wörtlich aus `.github/workflows/ci.yml` (Matrix 3.10–3.13):
+Die CI-Gates, wörtlich aus `.github/workflows/ci.yml` (Matrix 3.10–3.13):
 
 ```bash
 PYTHONPATH=src pytest tests/ -m "not live"
 python scripts/check_ruff_pin.py
 ruff check src/ tests/ scripts/
 ruff format --check src/ tests/ scripts/
+python scripts/check_version_sync.py
 ```
+
+Keine Zahl davor: dieser Block stand einmal auf «drei», während die CI längst
+mehr fuhr. `tests/test_werkzeug_versionen.py` vergleicht ihn jetzt Zeile für
+Zeile mit den `run:`-Schritten des Workflows — eine Zahl im Fliesstext hätte
+niemand geprüft.
 
 `ruff format --check` ist ein eigenständiges Gate: `ruff check` belegt kein
 Format, ein grüner Linter neben einem roten Format-Gate ist kein Widerspruch.
 
-**Drei ist die ganze Liste** — und das ist hier die wichtigere Hälfte der
-Aussage. Es gibt keinen Import-Test, keinen Manifest-Hash und vor allem
-**kein Versions-Sync-Gate**: `scripts/` enthält nur `classify_live_run.py`
-und `record_fixtures.py`. `pyproject.toml` und die zwei Stellen in
-`server.json` stehen heute alle auf `0.3.2`, gehalten wird das von nichts.
-Die Schwester-Server fahren dafür `scripts/check_version_sync.py`. Beim
-Anheben also alle drei Stellen von Hand — ein Auseinanderlaufen macht kein
-Gate rot.
+**Das ist die ganze Liste** — und das ist hier die wichtigere Hälfte der
+Aussage. Es gibt keinen Import-Test und keinen Manifest-Hash; was die Schritte
+oben nicht abdecken, fällt niemandem auf.
+
+**Der Versions-Sync ist gedeckt.** `scripts/check_version_sync.py` nimmt
+`pyproject.toml` als einzige Quelle und vergleicht `server.json` damit —
+`version` und jedes `packages[*].version`, heute beide auf `0.3.2`. Zweitens
+verbietet es eine Versionsnummer in `src/`: der Laufzeit-Wert kommt aus
+`importlib.metadata.version()`. Beim Anheben also `pyproject.toml` ändern und
+das Gate laufen lassen, statt Stellen von Hand zu zählen.
+
+Es sucht ausserdem Shields.io-Versions-Badges in allen `README*.md` — die
+READMEs hier führen keine, der Teil greift also ins Leere. Wer einen Badge
+ergänzt, bekommt ihn ab dann mitgeprüft, ohne etwas konfigurieren zu müssen.
+
+Der Grund, warum es das Gate braucht: `publish.yml` synchronisiert
+`server.json` beim Veröffentlichen aus dem Tag-Namen. Die committete Version
+wirkt also nie auf das publizierte Artefakt und fällt deshalb nicht auf, wenn
+sie veraltet.
 
 Die Matrix setzt **kein** `fail-fast: false`, es gilt also der Standard: Eine
 rote 3.10 bricht 3.11–3.13 ab, bevor sie etwas sagen. Ein einzelnes rotes

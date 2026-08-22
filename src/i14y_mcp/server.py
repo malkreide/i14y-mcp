@@ -18,6 +18,7 @@ from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from typing import Annotated, Any, Literal
 
+from mcp.server.caching import CacheableMethod, CacheHint
 from mcp.server.mcpserver import Context, MCPServer
 from pydantic import Field
 
@@ -69,7 +70,32 @@ async def _lifespan(_server: MCPServer) -> AsyncIterator[None]:
             logger.info("server.stop")
 
 
-mcp = MCPServer("i14y-mcp", lifespan=_lifespan)
+# SEP-2549, Spec 2026-07-28: die auflistenden Methoden tragen `ttlMs` und
+# `cacheScope`. Das SDK setzt beides auf «sofort veraltet, nie geteilt» — ein
+# Server ohne `cache_hints` verhaelt sich also nicht neutral, sondern laesst
+# jeden Client bei jeder Verbindung neu auflisten, fuer Verzeichnisse, die beim
+# Import feststehen und sich zur Laufzeit des Prozesses nicht aendern koennen.
+#
+# `public` folgt aus der Sache, nicht aus Bequemlichkeit: die 13 Tools werden
+# per Dekorator beim Import registriert, es gibt keine Filterung nach Aufrufer.
+# Sobald eine Liste vom Aufrufer abhaengt, muss der Scope im selben Commit auf
+# `private` wechseln.
+#
+# `prompts/list` und `resources/list` bleiben ungesetzt: dieser Server
+# registriert weder Prompts noch Ressourcen, und ein Hinweis darauf beschriebe
+# eine Flaeche, die es nicht gibt.
+LIST_CACHE_TTL_MS = 300_000
+
+# Annotiert, nicht inferiert: `MCPServer` nimmt
+# `Mapping[CacheableMethod, CacheHint]`, und ein Dict-Literal ohne Annotation
+# inferiert mypy als `str`. Zur Laufzeit stimmt beides — ein `mypy src/`-Gate
+# meldet den Unterschied, die Tests nicht.
+CACHE_HINTS: dict[CacheableMethod, CacheHint] = {
+    "tools/list": CacheHint(ttl_ms=LIST_CACHE_TTL_MS, scope="public"),
+    "server/discover": CacheHint(ttl_ms=LIST_CACHE_TTL_MS, scope="public"),
+}
+
+mcp = MCPServer("i14y-mcp", lifespan=_lifespan, cache_hints=CACHE_HINTS)
 
 Language = Literal["de", "fr", "it", "rm", "en"]
 ResourceType = Literal["Dataset", "DataService", "PublicService", "Concept", "MappingTable"]

@@ -701,6 +701,21 @@ async def tool_manifest() -> dict[str, Any]:
 # --------------------------------------------------------------------------
 
 
+def configured_origins() -> list[str]:
+    """Parse `I14Y_MCP_CORS_ORIGINS`. Empty by default — no cross-origin access.
+
+    `allow_origins` was the literal `["*"]`, with no way to narrow it: every
+    website on the internet could call this server from a visitor's browser,
+    and no environment variable existed to say otherwise. The wildcard is still
+    reachable — it just has to be asked for now, and it says so in the log.
+
+    Fail-closed is the portfolio default: nobody inherits a permissive setting
+    they did not choose. stdio and non-browser clients are unaffected either
+    way; CORS governs browsers only.
+    """
+    return [o.strip() for o in os.getenv("I14Y_MCP_CORS_ORIGINS", "").split(",") if o.strip()]
+
+
 def build_transport_security(host: str, port: int):
     """Host/Origin allow-list for the HTTP/SSE transports (SEC-005, inbound).
 
@@ -730,7 +745,10 @@ def build_transport_security(host: str, port: int):
     # rejects exactly the browser clients CORS permits. "*" cannot be expressed
     # here (origins are matched literally, only a trailing ":*" port wildcard
     # exists), so it is not copied across.
-    origins = {o for o in [] if o != "*"}
+    # Bis hierher stand `{o for o in [] if o != "*"}` — eine leere Komprehension
+    # unter einem Kommentar, der das Gegenteil beschreibt. Es gab schlicht keine
+    # Quelle, aus der konfigurierte Origins haetten kommen koennen.
+    origins = {o for o in configured_origins() if o != "*"}
     origins |= {f"http://{h}" for h in hosts}
     return TransportSecuritySettings(
         enable_dns_rebinding_protection=True,
@@ -788,9 +806,23 @@ def build_http_app(
         if transport == "sse"
         else mcp.streamable_http_app(transport_security=security, host=host)
     )
+    origins = configured_origins()
+    if "*" in origins:
+        logger.warning(
+            "cors_wildcard_origin",
+            hint="I14Y_MCP_CORS_ORIGINS contains '*'; any site can call this "
+            "server from a visitor's browser. Name explicit origins in production.",
+        )
+    elif not origins:
+        logger.info(
+            "cors_no_origins",
+            hint="I14Y_MCP_CORS_ORIGINS is unset, so browser-based MCP clients "
+            "are not permitted. Set it to a comma-separated origin list to "
+            "enable them. stdio and non-browser clients are unaffected.",
+        )
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["*"],
+        allow_origins=origins,
         allow_methods=["GET", "POST", "DELETE", "OPTIONS"],
         allow_headers=CORS_ALLOW_HEADERS,
         # The critical line: browsers only read a response header if it is

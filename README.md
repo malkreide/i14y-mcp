@@ -213,6 +213,10 @@ I14Y_MCP_TRANSPORT=sse HOST=0.0.0.0 PORT=8000 i14y-mcp
 HTTP transports bind to `HOST`, which defaults to `127.0.0.1` (loopback); set
 `HOST=0.0.0.0` to expose the port on a PaaS (the Docker image already does).
 CORS exposes the `Mcp-Session-Id` header so browser MCP clients keep their session.
+Which browser origins may call the server comes from `I14Y_MCP_CORS_ORIGINS`, a
+comma-separated list — **unset means no browser client is permitted at all**,
+which is the default. `*` is still accepted and logs a warning. stdio and other
+non-browser clients are unaffected either way.
 
 ### Docker
 

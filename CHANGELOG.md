@@ -6,6 +6,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- **Two docstrings described the SDK's transport-security default wrongly.**
+  `build_transport_security` and `tests/test_transport_security.py` both claimed
+  the SDK "leaves DNS-rebinding protection OFF while `transport_security` is
+  unset", quoting the SDK's own "backwards compatibility" note as if it settled
+  the matter. It does not — that note describes
+  `TransportSecurityMiddleware(None)`, constructed directly. `sse_app` and
+  `streamable_http_app` never hand the middleware a bare `None`: with
+  `transport_security` unset and a loopback `host` — and `host` **defaults** to
+  `127.0.0.1` — they synthesise a loopback-only list themselves
+  (`mcp/server/mcpserver/server.py`).
+
+  Measured through the assembled stack: a bare `mcp.streamable_http_app()`
+  answers `421 Invalid Host header` under `Host: testserver` and `200` under
+  `Host: 127.0.0.1:8000`. An unwired server is therefore not unprotected, it is
+  protected for loopback only — which is worse to diagnose, because it looks
+  fine in local testing and rejects every real hostname and every configured
+  origin in production. The test file's second claim, "this server never set it,
+  so there was no Host check at all", was wrong for the same reason.
+
+  No behaviour changes: this server passes `transport_security` and `host`, and
+  the code was already correct. What was wrong was the account of *why*.
+  `test_the_sdk_default_is_loopback_only` now measures both layers instead of
+  restating them, so the correction cannot rot the way the claim it replaces
+  did.
+
 ### Changed
 
 - **BRECHEND: Browser-Origins sind jetzt fail-closed.** `allow_origins` war

@@ -1,8 +1,20 @@
 """Inbound Host/Origin validation on the HTTP/SSE transports (SEC-005).
 
-The SDK leaves DNS-rebinding protection off while ``transport_security`` is
-unset. This server never set it, so there was no Host check at all. These tests
-pin the new behaviour and fail if the protection is dropped again.
+Passing ``transport_security`` is not the difference between protection and
+none — it is the difference between the right allow-list and a loopback-only
+one, and this file said otherwise.
+
+"This server never set it, so there was no Host check at all" was wrong twice
+over. ``sse_app`` / ``streamable_http_app`` synthesise a loopback-only list
+when ``transport_security`` is unset and ``host`` is loopback — and ``host``
+defaults to ``"127.0.0.1"``. The unwired server therefore had a Host check; it
+was simply the wrong one, rejecting every real hostname with 421 and every
+configured origin with 403. Only ``TransportSecurityMiddleware(None)``,
+constructed directly, disables the check outright — that is the layer the SDK's
+"backwards compatibility" note is about.
+
+``test_the_sdk_default_is_loopback_only`` measures both layers rather than
+restating them, so the correction cannot rot the way the claim it replaces did.
 """
 
 from __future__ import annotations
@@ -95,3 +107,34 @@ def test_right_host_wrong_port_is_rejected():
 def test_all_loopback_forms_are_local(host, monkeypatch):
     monkeypatch.delenv("I14Y_MCP_ALLOWED_HOSTS", raising=False)
     assert build_transport_security(host, 8000) is not None
+
+
+def test_the_sdk_default_is_loopback_only() -> None:
+    """Both layers, measured — the claim this file used to make in prose.
+
+    An unwired app is *not* unprotected. `streamable_http_app` with no
+    `transport_security` and no `host` gets the SDK's synthesised loopback-only
+    list, so a real hostname is refused with 421 while `127.0.0.1` passes. That
+    is what makes an unwired server look fine in local testing and reject every
+    browser client in production.
+
+    The second assertion pins the layer the SDK's "backwards compatibility"
+    note actually describes: the middleware constructed with `None` really does
+    turn the check off. Both are asserted here because conflating them is what
+    produced the wrong docstring in the first place.
+
+    A fresh app per request: a `StreamableHTTPSessionManager` starts once per
+    app object, and a second lifespan on the same one dies of its own
+    RuntimeError rather than on the Host header.
+    """
+    from mcp.server.transport_security import TransportSecurityMiddleware
+
+    def status(base_url: str) -> int:
+        with TestClient(mcp.streamable_http_app(), base_url=base_url) as c:
+            return c.post("/mcp", json=_INIT, headers=_HEADERS).status_code
+
+    assert status("http://testserver") == 421, "unwired app accepted a foreign Host"
+    assert status("http://127.0.0.1:8000") == 200, "unwired app refused loopback"
+
+    # The other layer, and the one the SDK quote is about.
+    assert TransportSecurityMiddleware(None).settings.enable_dns_rebinding_protection is False

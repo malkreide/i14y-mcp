@@ -719,10 +719,28 @@ def configured_origins() -> list[str]:
 def build_transport_security(host: str, port: int):
     """Host/Origin allow-list for the HTTP/SSE transports (SEC-005, inbound).
 
-    The SDK leaves DNS-rebinding protection OFF while ``transport_security`` is
-    unset — its own source says "If not specified, disable DNS rebinding
-    protection by default for backwards compatibility". Unset therefore means
-    no Host and no Origin validation at all.
+    Passing this object is not the difference between protection and none — it
+    is the difference between the right allow-list and a loopback-only one.
+
+    Two SDK layers are easy to conflate. ``TransportSecurityMiddleware(None)``
+    really does disable the check ("If not specified, disable DNS rebinding
+    protection by default for backwards compatibility"), and an earlier version
+    of this docstring quoted exactly that as if it settled the question. It does
+    not: ``sse_app`` / ``streamable_http_app`` never hand the middleware a bare
+    ``None``. With ``transport_security`` unset and a loopback ``host`` — and
+    ``host`` **defaults** to ``"127.0.0.1"``, so the condition always holds
+    unless a caller says otherwise — they synthesise a list themselves
+    (``mcp/server/mcpserver/server.py``):
+
+        allowed_hosts=["127.0.0.1:*", "localhost:*", "[::1]:*"]
+        allowed_origins=["http://127.0.0.1:*", ...]
+
+    Measured through the assembled stack: a bare ``mcp.streamable_http_app()``
+    answers **421 Invalid Host header** under ``Host: testserver`` and 200 under
+    ``Host: 127.0.0.1:8000``. So an unwired server is not unprotected — it is
+    protected for loopback only, which silently rejects every configured origin
+    and every real hostname. ``test_the_sdk_default_is_loopback_only`` pins both
+    layers; the day either changes, it fails here instead of in production.
 
     Returns ``None`` when no allow-list can be derived: a non-loopback bind
     with no ``I14Y_MCP_ALLOWED_HOSTS``. The server is then reached under a

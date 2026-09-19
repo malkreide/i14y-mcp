@@ -6,6 +6,63 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.4.0] — 2026-09-19
+
+Zwei Gründe, warum dieses Release nötig ist, und beide betreffen Leute, die das
+veröffentlichte Paket einsetzen.
+
+**Der HTTP- und SSE-Transport war seit der 2.x-Migration tot — auch noch,
+nachdem er als repariert galt.** Die 1.x-API führte `host`, `port` und
+`transport_security` auf `mcp.settings`; in 2.x gibt es keines der drei, und
+pydantic wirft auf eine Zuweisung an ein nicht deklariertes Feld sofort. Drei
+solche Zeilen standen im Code. Eine (`transport_security`, in `_run_http`) wurde
+behoben und mit einem Test versehen — die anderen zwei (`host`, `port`, in
+`main`) blieben stehen, und damit starb jeder HTTP-Start weiterhin, nur zwei
+Zeilen später:
+
+```
+ValueError: "Settings" object has no field "host"
+```
+
+Aufgefallen ist es erst beim **gebauten Rad in einer frischen venv**, nicht am
+Quellbaum: `i14y-mcp` mit `I14Y_MCP_TRANSPORT=streamable-http` beendete sich
+sofort, ohne je einen Port zu öffnen. Am Commit, der `0.3.2` setzte
+(`107e920`), standen alle drei Zeilen — das veröffentlichte `0.3.2` hat also
+keinen HTTP-Transport, nur stdio. Der Grund, warum 180 Tests das nicht sahen:
+sie setzen alle *unterhalb* von `main()` an, und dort standen die Zeilen.
+`tests/test_entrypoint.py` ruft den Einstiegspunkt jetzt selbst auf.
+
+Die Lehre ist nicht «zwei Zeilen übersehen», sondern: eine Reparatur, die eine
+von drei gleichartigen Zeilen entfernt, sieht im Diff vollständig aus. Und ein
+Test, der die reparierte Ebene prüft statt die, die der Betrieb startet, belegt
+die Reparatur nicht.
+
+**Die Spec-Revision `2026-07-28` wird jetzt nicht nur bedient, sondern auch
+beantwortet.** Die moderne Ära lief in `0.3.2` bereits vollständig — und
+transportierte dabei eine leere Serverversion und `instructions: null`.
+
+### Changed (breaking)
+
+- **BRECHEND: Browser-Origins sind jetzt fail-closed.** `allow_origins` war
+  der Literalwert `["*"]`, ohne jede Möglichkeit, ihn einzuengen —
+  jede Website im Internet konnte diesen Server aus dem Browser eines
+  Besuchers aufrufen. Gemessen vorher:
+  `Origin: https://boesartig.example` bekam `200` mit
+  `Access-Control-Allow-Origin: *`.
+
+  Die Origins kommen jetzt aus `I14Y_MCP_CORS_ORIGINS` (kommagetrennt) und
+  sind **standardmässig leer** — kein Browser-Client wird zugelassen. Wer
+  Browser-Clients will, nennt die Origins; niemand erbt eine Freizügigkeit, die
+  er nicht gewählt hat.
+
+  `*` ist weiterhin erreichbar, aber nicht mehr stillschweigend: es muss
+  ausdrücklich gesetzt werden und schreibt eine Warnung ins Log. Eine
+  Verengung des Standards ist nicht dasselbe wie das Entfernen der Option.
+
+  **Wer den bisherigen Zustand behalten will, setzt `I14Y_MCP_CORS_ORIGINS=*`.**
+  stdio- und andere Nicht-Browser-Clients sind unberührt — CORS betrifft nur
+  Browser.
+
 ### Added
 
 - **Der Server sagt auf Spec `2026-07-28` jetzt, wer er ist.** Die moderne Ära
@@ -55,108 +112,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
   erfüllt — also genau im Ausgangsbefund grün. Beide sind geschlossen, die
   zweite durch einen Vergleich auf Gleichheit statt auf Teilstring.
 
-### Changed
-
-- **Frischehinweise für alle fünf cachebaren Methoden**, nicht mehr nur für
-  `tools/list` und `server/discover`. Im Code stand, `prompts/list` und
-  `resources/list` blieben bewusst ungesetzt, weil dieser Server weder Prompts
-  noch Ressourcen registriert und ein Hinweis «eine Fläche beschriebe, die es
-  nicht gibt». Nachgemessen trägt die Begründung nicht: `MCPServer` verdrahtet
-  `on_list_prompts`, `on_list_resources` und `on_list_resource_templates`
-  bedingungslos. Alle drei antworten auf der modernen Ära mit HTTP 200 und
-  einer leeren Liste — und taten das mit `ttlMs: 0, cacheScope: private`, also
-  dreimal dasselbe Nichts bei jeder Verbindung.
-
-  Der neue Test leitet die Liste aus `CACHEABLE_METHODS` des SDK ab statt aus
-  unserem eigenen Dict: `CACHE_HINTS` gegen sich selbst zu prüfen kann nie
-  zeigen, dass ein Eintrag fehlt. Eine künftig neu bediente cachebare Methode
-  fällt damit auf, statt still mit `ttlMs: 0` zu antworten.
-
-### Fixed
-
-- **README.md nannte zwei Protokoll-Stände gleichzeitig.** Ein Abschnitt
-  «MCP protocol version» behauptete `mcp >= 1.28.1` und eine Aushandlung «at
-  initialize time», während der Abschnitt zwei Zeilen darunter die beiden
-  tatsächlichen Ären führte und `pyproject.toml` seit dem 2.x-Umstieg
-  `mcp>=2.0.0,<3` pinnt. Der veraltete Abschnitt ist entfernt, nicht korrigiert:
-  er war eine zweite Fassung derselben Auskunft und wäre wieder auseinandergelaufen.
-  `README.de.md` hatte ihn nie.
-
-### Fixed
-
-- **Two docstrings described the SDK's transport-security default wrongly.**
-  `build_transport_security` and `tests/test_transport_security.py` both claimed
-  the SDK "leaves DNS-rebinding protection OFF while `transport_security` is
-  unset", quoting the SDK's own "backwards compatibility" note as if it settled
-  the matter. It does not — that note describes
-  `TransportSecurityMiddleware(None)`, constructed directly. `sse_app` and
-  `streamable_http_app` never hand the middleware a bare `None`: with
-  `transport_security` unset and a loopback `host` — and `host` **defaults** to
-  `127.0.0.1` — they synthesise a loopback-only list themselves
-  (`mcp/server/mcpserver/server.py`).
-
-  Measured through the assembled stack: a bare `mcp.streamable_http_app()`
-  answers `421 Invalid Host header` under `Host: testserver` and `200` under
-  `Host: 127.0.0.1:8000`. An unwired server is therefore not unprotected, it is
-  protected for loopback only — which is worse to diagnose, because it looks
-  fine in local testing and rejects every real hostname and every configured
-  origin in production. The test file's second claim, "this server never set it,
-  so there was no Host check at all", was wrong for the same reason.
-
-  No behaviour changes: this server passes `transport_security` and `host`, and
-  the code was already correct. What was wrong was the account of *why*.
-  `test_the_sdk_default_is_loopback_only` now measures both layers instead of
-  restating them, so the correction cannot rot the way the claim it replaces
-  did.
-
-### Changed
-
-- **BRECHEND: Browser-Origins sind jetzt fail-closed.** `allow_origins` war
-  der Literalwert `["*"]`, ohne jede Möglichkeit, ihn einzuengen —
-  jede Website im Internet konnte diesen Server aus dem Browser eines
-  Besuchers aufrufen. Gemessen vorher:
-  `Origin: https://boesartig.example` bekam `200` mit
-  `Access-Control-Allow-Origin: *`.
-
-  Die Origins kommen jetzt aus `I14Y_MCP_CORS_ORIGINS` (kommagetrennt) und
-  sind **standardmässig leer** — kein Browser-Client wird zugelassen. Wer
-  Browser-Clients will, nennt die Origins; niemand erbt eine Freizügigkeit, die
-  er nicht gewählt hat.
-
-  `*` ist weiterhin erreichbar, aber nicht mehr stillschweigend: es muss
-  ausdrücklich gesetzt werden und schreibt eine Warnung ins Log. Eine
-  Verengung des Standards ist nicht dasselbe wie das Entfernen der Option.
-
-  **Wer den bisherigen Zustand behalten will, setzt `I14Y_MCP_CORS_ORIGINS=*`.**
-  stdio- und andere Nicht-Browser-Clients sind unberührt — CORS betrifft nur
-  Browser.
-
-### Fixed
-
-- **Jeder HTTP-Transport starb beim Start.** `_run_http` setzte
-  `mcp.settings.transport_security = security` — die Form vor 2.x. In `mcp` 2.x
-  gibt es das Feld nicht, pydantic wirft `ValueError: "Settings" object has no
-  field "transport_security"`, und zwar bevor uvicorn überhaupt erreicht wurde.
-  Die Transport-Sicherheit ist jetzt ein Schlüsselwort-Argument von
-  `build_http_app`, wie im SDK vorgesehen. Ohne sie kam ein fremder `Host`
-  durch die Prüfung (400 statt 421) — der Test hält genau diesen Unterschied
-  fest, statt bloss zu belegen, dass die Funktion das Argument entgegennimmt.
-
-- **`allow_headers` stand auf `["*", "Mcp-Session-Id"]`,** und die Wildcard
-  gewann: Starlette schaltet damit auf `allow_all_headers` und spiegelt im
-  Preflight zurück, was der Browser ankündigt. Die Liste nennt jetzt
-  `Content-Type`, die drei Routing-Header der Spec `2026-07-28`,
-  `Mcp-Session-Id` und `Last-Event-ID`. Letzterer setzt einen abgerissenen
-  SSE-Strom fort und war unter der Wildcard nie geprüft — eine Wildcard kann
-  nicht falsch werden und sagt deshalb nichts darüber, ob die Header, die das
-  Protokoll braucht, freigegeben sind.
-
-  `allow_origins` bleibt unverändert bei `["*"]`. Das ist eine eigene
-  Entscheidung mit eigenen Folgen für bestehende Clients und gehört nicht in
-  diesen Commit.
-
-### Added
-
 - **Frischehinweise auf `tools/list` und `server/discover`** (SEP-2549, Spec
   `2026-07-28`): `ttlMs` 300000, `cacheScope` `public`. Das SDK setzt beides von
   sich aus auf «sofort veraltet, nie geteilt» — wer nichts übergibt, verhält
@@ -182,7 +137,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
   dagegen — im Portfolio sind EN und DE desselben Repos schon dreimal
   auseinandergelaufen, weil nur eine Fassung nachgezogen wurde.
 
+- **Recorded response fixtures, one per external endpoint, each dated.**
+  `tests/fixtures/` now holds real I14Y responses for all eleven endpoints the
+  server calls, taken by `scripts/record_fixtures.py`, with source, date,
+  selection rule and SHA-256 per file in `tests/fixtures/PROVENANCE.md`.
+  `tests/test_recorded_fixtures.py` replays them through the actual tools.
+  Counter-checked by neutralising each new assurance one at a time: reverting
+  either mapper fails exactly its own tests, stripping the recording date fails
+  the provenance check, adding a fixture without a provenance entry fails the
+  completeness check, deleting a recording fails the coverage guard, and
+  renaming `title` to `titel` in a recording fails exactly the dataset test —
+  the field-rename scenario that unit tests missed in production.
+
 ### Changed
+
+- **Frischehinweise für alle fünf cachebaren Methoden**, nicht mehr nur für
+  `tools/list` und `server/discover`. Im Code stand, `prompts/list` und
+  `resources/list` blieben bewusst ungesetzt, weil dieser Server weder Prompts
+  noch Ressourcen registriert und ein Hinweis «eine Fläche beschriebe, die es
+  nicht gibt». Nachgemessen trägt die Begründung nicht: `MCPServer` verdrahtet
+  `on_list_prompts`, `on_list_resources` und `on_list_resource_templates`
+  bedingungslos. Alle drei antworten auf der modernen Ära mit HTTP 200 und
+  einer leeren Liste — und taten das mit `ttlMs: 0, cacheScope: private`, also
+  dreimal dasselbe Nichts bei jeder Verbindung.
+
+  Der neue Test leitet die Liste aus `CACHEABLE_METHODS` des SDK ab statt aus
+  unserem eigenen Dict: `CACHE_HINTS` gegen sich selbst zu prüfen kann nie
+  zeigen, dass ein Eintrag fehlt. Eine künftig neu bediente cachebare Methode
+  fällt damit auf, statt still mit `ttlMs: 0` zu antworten.
 
 - **Die Pruefsummen im Fixture-Nachweis waren Zierde.** `PROVENANCE.md` fuehrt
   je Datei einen SHA-256 — um genau einen Fall zu fangen: eine Aufzeichnung,
@@ -228,7 +210,84 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
   `CONTRIBUTING.md`, `CONTRIBUTING.de.md` and `CLAUDE.md` quote the gates
   verbatim and were updated in step.
 
+- **`CONTRIBUTING.md` documented only one of the two lint gates.** The
+  development section listed `ruff check src tests` and never mentioned
+  `ruff format --check src/ tests/`, so following the instructions ran half the
+  lint check and left the other half to fail in CI. Both files now list all
+  three CI gates verbatim, note that lint and formatting are independent
+  checks, and point at the ruff pin in `pyproject.toml`. `CONTRIBUTING.de.md`
+  updated in step.
+
 ### Fixed
+
+- **README.md nannte zwei Protokoll-Stände gleichzeitig.** Ein Abschnitt
+  «MCP protocol version» behauptete `mcp >= 1.28.1` und eine Aushandlung «at
+  initialize time», während der Abschnitt zwei Zeilen darunter die beiden
+  tatsächlichen Ären führte und `pyproject.toml` seit dem 2.x-Umstieg
+  `mcp>=2.0.0,<3` pinnt. Der veraltete Abschnitt ist entfernt, nicht korrigiert:
+  er war eine zweite Fassung derselben Auskunft und wäre wieder auseinandergelaufen.
+  `README.de.md` hatte ihn nie.
+
+- **Two docstrings described the SDK's transport-security default wrongly.**
+  `build_transport_security` and `tests/test_transport_security.py` both claimed
+  the SDK "leaves DNS-rebinding protection OFF while `transport_security` is
+  unset", quoting the SDK's own "backwards compatibility" note as if it settled
+  the matter. It does not — that note describes
+  `TransportSecurityMiddleware(None)`, constructed directly. `sse_app` and
+  `streamable_http_app` never hand the middleware a bare `None`: with
+  `transport_security` unset and a loopback `host` — and `host` **defaults** to
+  `127.0.0.1` — they synthesise a loopback-only list themselves
+  (`mcp/server/mcpserver/server.py`).
+
+  Measured through the assembled stack: a bare `mcp.streamable_http_app()`
+  answers `421 Invalid Host header` under `Host: testserver` and `200` under
+  `Host: 127.0.0.1:8000`. An unwired server is therefore not unprotected, it is
+  protected for loopback only — which is worse to diagnose, because it looks
+  fine in local testing and rejects every real hostname and every configured
+  origin in production. The test file's second claim, "this server never set it,
+  so there was no Host check at all", was wrong for the same reason.
+
+  No behaviour changes: this server passes `transport_security` and `host`, and
+  the code was already correct. What was wrong was the account of *why*.
+  `test_the_sdk_default_is_loopback_only` now measures both layers instead of
+  restating them, so the correction cannot rot the way the claim it replaces
+  did.
+
+- **Der HTTP-Transport startete auch nach der `transport_security`-Reparatur
+  nicht.** `main()` setzte weiterhin `mcp.settings.host` und
+  `mcp.settings.port` — dieselbe Fehlerklasse, dieselbe Ausnahme, zwei Zeilen
+  hinter der behobenen Stelle. Beide Werte reicht `_run_http` ohnehin an
+  `build_http_app` und `uvicorn.run` weiter; die Zuweisungen waren also nicht
+  nur tödlich, sondern auch wirkungslos. Sie sind entfernt.
+
+  `tests/test_entrypoint.py` ruft `main()` jetzt selbst auf, mit gestubbtem
+  `uvicorn.run`, für alle drei Schreibweisen der Transport-Variablen und für
+  stdio. Die Gegenprobe: mit den zwei Zeilen zurück fallen genau vier Tests,
+  vorher fiel keiner. Dazu eine Zusicherung, dass `Settings` die drei Felder
+  nicht führt — damit eine künftige Zuweisung nicht wieder damit begründet
+  wird, das Feld gebe es ja.
+
+- **Jeder HTTP-Transport starb beim Start.** `_run_http` setzte
+  `mcp.settings.transport_security = security` — die Form vor 2.x. In `mcp` 2.x
+  gibt es das Feld nicht, pydantic wirft `ValueError: "Settings" object has no
+  field "transport_security"`, und zwar bevor uvicorn überhaupt erreicht wurde.
+  Die Transport-Sicherheit ist jetzt ein Schlüsselwort-Argument von
+  `build_http_app`, wie im SDK vorgesehen. Ohne sie kam ein fremder `Host`
+  durch die Prüfung (400 statt 421) — der Test hält genau diesen Unterschied
+  fest, statt bloss zu belegen, dass die Funktion das Argument entgegennimmt.
+
+- **`allow_headers` stand auf `["*", "Mcp-Session-Id"]`,** und die Wildcard
+  gewann: Starlette schaltet damit auf `allow_all_headers` und spiegelt im
+  Preflight zurück, was der Browser ankündigt. Die Liste nennt jetzt
+  `Content-Type`, die drei Routing-Header der Spec `2026-07-28`,
+  `Mcp-Session-Id` und `Last-Event-ID`. Letzterer setzt einen abgerissenen
+  SSE-Strom fort und war unter der Wildcard nie geprüft — eine Wildcard kann
+  nicht falsch werden und sagt deshalb nichts darüber, ob die Header, die das
+  Protokoll braucht, freigegeben sind.
+
+  `allow_origins` bleibt unverändert bei `["*"]`. Das ist eine eigene
+  Entscheidung mit eigenen Folgen für bestehende Clients und gehört nicht in
+  diesen Commit.
 
 - **`list_concepts`, `get_concept` and `list_public_services` returned a null
   title for every record.** `/concepts` and `/publicservices` label their
@@ -242,22 +301,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
   deklariert.** Der Abschnitt sprach von `mcp >= 1.28.1`, deklariert ist
   `mcp>=2.0.0,<3` — eine Major-Version daneben, und genau die, die die zweite
   Protokoll-Aera mitbringt.
-
-### Added
-
-- **Recorded response fixtures, one per external endpoint, each dated.**
-  `tests/fixtures/` now holds real I14Y responses for all eleven endpoints the
-  server calls, taken by `scripts/record_fixtures.py`, with source, date,
-  selection rule and SHA-256 per file in `tests/fixtures/PROVENANCE.md`.
-  `tests/test_recorded_fixtures.py` replays them through the actual tools.
-  Counter-checked by neutralising each new assurance one at a time: reverting
-  either mapper fails exactly its own tests, stripping the recording date fails
-  the provenance check, adding a fixture without a provenance entry fails the
-  completeness check, deleting a recording fails the coverage guard, and
-  renaming `title` to `titel` in a recording fails exactly the dataset test —
-  the field-rename scenario that unit tests missed in production.
-
-### Fixed
 
 - **The retry had six defects, all inherited from the shared template.** This
   server copied its retry from `reference/retry_backoff.py` in
@@ -305,16 +348,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
   `"unreachable after"` — it passed `"timed out"` as the mock's message, which
   is why it could not catch the empty-string case: informative in the test,
   blank in production.
-
-### Changed
-
-- **`CONTRIBUTING.md` documented only one of the two lint gates.** The
-  development section listed `ruff check src tests` and never mentioned
-  `ruff format --check src/ tests/`, so following the instructions ran half the
-  lint check and left the other half to fail in CI. Both files now list all
-  three CI gates verbatim, note that lint and formatting are independent
-  checks, and point at the ruff pin in `pyproject.toml`. `CONTRIBUTING.de.md`
-  updated in step.
 
 ## [0.3.2] - 2026-08-02
 
@@ -531,7 +564,11 @@ server in the portfolio does not have to rediscover them.
 - **Read endpoints need no authentication**, despite the OpenAPI document
   declaring a Bearer scheme. Write endpoints do.
 
-[Unreleased]: https://github.com/malkreide/i14y-mcp/compare/v0.2.1...HEAD
+[Unreleased]: https://github.com/malkreide/i14y-mcp/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/malkreide/i14y-mcp/compare/v0.3.2...v0.4.0
+[0.3.2]: https://github.com/malkreide/i14y-mcp/compare/v0.3.1...v0.3.2
+[0.3.1]: https://github.com/malkreide/i14y-mcp/compare/v0.3.0...v0.3.1
+[0.3.0]: https://github.com/malkreide/i14y-mcp/compare/v0.2.1...v0.3.0
 [0.2.1]: https://github.com/malkreide/i14y-mcp/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/malkreide/i14y-mcp/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/malkreide/i14y-mcp/releases/tag/v0.1.0

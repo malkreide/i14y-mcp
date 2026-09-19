@@ -59,9 +59,23 @@ Edit `pyproject.toml` and bump `version` following [SemVer](https://semver.org/)
 version = "0.1.0"   # -> 0.1.1 (patch) / 0.2.0 (minor) / 1.0.0 (major)
 ```
 
-Also update the version badge in `README.md` / `README.de.md` if it is pinned.
-The `server.json` version is synced to the release tag automatically by the
-publish workflow, so it does not need a manual bump.
+Bump `server.json` in the **same commit** — both `version` and
+`packages[0].version`. `scripts/check_version_sync.py` is a CI gate and fails
+the build otherwise; measured on the 0.4.0 bump, pyproject alone reports:
+
+```
+DRIFT: pyproject.toml steht auf '0.4.0', diese Stellen weichen ab:
+  server.json → version = '0.3.2'
+  server.json → packages[0].version = '0.3.2'
+```
+
+`publish.yml` *does* overwrite `server.json` from the tag at release time — and
+that is precisely why the committed value rots unnoticed and why the gate
+exists. The published artefact never contradicts a stale number; a human
+reading the repo does.
+
+The READMEs carry no pinned version badge today. If you add one, the same gate
+starts checking it, with nothing to configure.
 
 ### 2. Update the changelog
 
@@ -73,15 +87,24 @@ In `CHANGELOG.md`, move the `[Unreleased]` notes into a new dated version sectio
 
 ### 3. Verify locally before tagging
 
+Run the five CI gates, not a subset — a green linter next to a red format
+gate is not a contradiction, it is two gates:
+
 ```bash
-# tests + lint
 PYTHONPATH=src pytest tests/ -m "not live"
-ruff check src/ tests/
+python scripts/check_ruff_pin.py
+ruff check src/ tests/ scripts/
+ruff format --check src/ tests/ scripts/
+python scripts/check_version_sync.py
 
 # build and validate the artifacts
 python -m build
 twine check dist/*
 ```
+
+Check `ruff --version` first: the pin is `ruff==0.16.3` in
+`[project.optional-dependencies].dev`, and an older `ruff` earlier in `PATH`
+beats it without the install saying anything.
 
 `twine check` must report `PASSED` for both the `.whl` and the `.tar.gz`.
 
@@ -149,9 +172,11 @@ uv publish            # uses UV_PUBLISH_TOKEN or prompts
 ## Checklist
 
 - [ ] `version` bumped in `pyproject.toml` (SemVer)
-- [ ] `CHANGELOG.md` has a dated section for the release
-- [ ] Version badge updated in both READMEs (if pinned)
-- [ ] `pytest -m "not live"` and `ruff check` pass
+- [ ] `server.json` bumped in the same commit (`version` + `packages[0].version`)
+- [ ] `CHANGELOG.md` has a dated section for the release, and the link
+      references at the bottom of the file name the new tag
+- [ ] Version badge updated in both READMEs (if pinned — none today)
+- [ ] All five CI gates pass locally, with the pinned `ruff 0.16.3`
 - [ ] `python -m build` + `twine check dist/*` pass
 - [ ] Tag `vX.Y.Z` pushed and GitHub Release published
 - [ ] New version visible on PyPI and `uvx i14y-mcp` works

@@ -138,14 +138,6 @@ cleanly onto MCP Resources, and the server ships no opinionated prompt templates
 Every tool is read-only and idempotent; if a future stable entry point emerges
 (e.g. a fixed theme list) it is a candidate for a Resource.
 
-### MCP protocol version
-
-Built against the MCP Python SDK (`mcp >= 1.28.1`), which negotiates the protocol
-version with the client at initialize time. The tested SDK floor is pinned in
-`pyproject.toml`; [Dependabot](.github/dependabot.yml) opens monthly SDK-update
-PRs, and any change that bumps the negotiated spec version is called out in
-[`CHANGELOG.md`](CHANGELOG.md).
-
 ---
 
 ## MCP Protocol Version
@@ -168,6 +160,41 @@ the assembled ASGI stack, not read off a constant name.
 Note that the SDK's `LATEST_PROTOCOL_VERSION` is an alias for the **modern**
 era, not for the handshake era — pinning against it alone would leave the era
 that current clients actually negotiate free to drift.
+
+### What the server carries on the modern revision
+
+`2026-07-28` moves discovery off the `initialize` handshake onto
+`server/discover` plus a per-request `_meta` envelope, and gives every cacheable
+result a freshness hint. What this server puts on those surfaces is measured in
+[`tests/test_spec_2026_07_28.py`](tests/test_spec_2026_07_28.py) through the
+assembled stack — and, for stdio, through a real subprocess — rather than read
+back off the configuration:
+
+| Surface | What this server answers |
+|---|---|
+| `serverInfo`, stamped under **every** modern response | name, display title, description, website, and the installed distribution version — the same version the outbound `User-Agent` carries |
+| `server/discover` → `instructions` | how to sequence the tools, plus the two properties of I14Y that no single tool description shows |
+| `ttlMs` / `cacheScope` | 300 s, `public`, on all five cacheable methods this server answers |
+| `tools[].title` | a display name per tool, so a client shows «Search a concept's code list» rather than `search_codelist_entries` |
+
+The freshness hint is not cosmetic. With none set, the SDK answers `ttlMs: 0,
+cacheScope: private` — «already stale, never share» — for directories that are
+fixed at import and cannot change while the process runs.
+
+Both transports serve the modern revision: HTTP through the streamable-HTTP
+session manager, and stdio — the default, and what `uvx i14y-mcp` starts —
+through the same dual-era loop. Neither is evidence for the other, so both are
+measured.
+
+**One thing this server advertises but does not use.** On `2026-07-28` the
+`listChanged` flags and `resources.subscribe` derive solely from whether
+`subscriptions/listen` is served, and the SDK wires that handler
+unconditionally. `server/discover` therefore reports `listChanged: true` for a
+tool list that is fixed at import, and a subscribe capability over an empty
+resource list; no change notification is ever sent. It is not switchable
+through the public API — only a wholesale replacement of the `server/discover`
+handler could do it, which would be a second truth about our own capabilities —
+so it is pinned by a test instead of papered over.
 
 **Update policy.** When the gate fails, do not edit the constant blindly: read
 the spec changelog between the two revisions, verify the server still behaves,

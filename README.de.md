@@ -161,6 +161,43 @@ Zu beachten: `LATEST_PROTOCOL_VERSION` im SDK ist ein Alias auf die **moderne**
 Aera, nicht auf die Handshake-Aera — wer nur dagegen pinnt, laesst genau die
 Aera frei wandern, die heutige Clients tatsaechlich aushandeln.
 
+### Was der Server auf der modernen Revision traegt
+
+`2026-07-28` loest die Erkennung vom `initialize`-Handshake und legt sie auf
+`server/discover` plus einen Envelope pro Anfrage; jedes cachebare Resultat
+traegt zusaetzlich einen Frischehinweis. Was dieser Server auf diese Flaechen
+schreibt, ist in
+[`tests/test_spec_2026_07_28.py`](tests/test_spec_2026_07_28.py) gemessen — durch
+den zusammengebauten Stack und, fuer stdio, durch einen echten Unterprozess —
+statt aus der Konfiguration zurueckgelesen:
+
+| Flaeche | Was dieser Server antwortet |
+|---|---|
+| `serverInfo`, gestempelt unter **jede** moderne Antwort | Name, Anzeigename, Beschreibung, Website und die installierte Paketversion — dieselbe Version, die auch der ausgehende `User-Agent` traegt |
+| `server/discover` → `instructions` | in welcher Reihenfolge die Werkzeuge greifen, plus die zwei Eigenheiten von I14Y, die aus keiner einzelnen Tool-Beschreibung hervorgehen |
+| `ttlMs` / `cacheScope` | 300 s, `public`, auf allen fuenf cachebaren Methoden, die dieser Server beantwortet |
+| `tools[].title` | ein Anzeigename je Werkzeug, damit ein Client «Search a concept's code list» zeigt und nicht `search_codelist_entries` |
+
+Der Frischehinweis ist nicht kosmetisch: ohne ihn antwortet das SDK mit
+`ttlMs: 0, cacheScope: private` — «schon veraltet, nie teilen» — fuer
+Verzeichnisse, die beim Import feststehen und sich bis zum Prozessende nicht
+aendern koennen.
+
+Beide Transporte bedienen die moderne Revision: HTTP ueber den
+Streamable-HTTP-Session-Manager, stdio — die Vorgabe, und was `uvx i14y-mcp`
+startet — ueber dieselbe Dual-Aera-Schleife. Der eine belegt fuer den anderen
+nichts, deshalb sind beide gemessen.
+
+**Eine Ankuendigung, die dieser Server nicht einloest.** Auf `2026-07-28`
+leiten sich die `listChanged`-Flags und `resources.subscribe` ausschliesslich
+daraus ab, ob `subscriptions/listen` bedient wird — und das SDK verdrahtet den
+Handler bedingungslos. `server/discover` meldet deshalb `listChanged: true` fuer
+eine Werkzeugliste, die beim Import feststeht, und ein Abo ueber eine leere
+Ressourcenliste; eine Aenderungsmeldung geht nie hinaus. Ueber die oeffentliche
+Oberflaeche ist das nicht abstellbar — nur ein vollstaendig ersetzter
+`server/discover`-Handler koennte es, und der waere eine zweite Wahrheit ueber
+die eigenen Faehigkeiten. Deshalb per Test festgehalten statt uebertuencht.
+
 **Update-Politik.** Faellt das Gate, die Konstante nicht blind nachziehen: erst
 das Spec-Changelog zwischen den beiden Revisionen lesen, pruefen, ob sich der
 Server weiterhin richtig verhaelt, dann Konstante, diesen Abschnitt, `README.md`

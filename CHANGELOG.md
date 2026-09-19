@@ -6,6 +6,82 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- **Der Server sagt auf Spec `2026-07-28` jetzt, wer er ist.** Die moderne Ära
+  lief hier schon vollständig — `server/discover`, Envelope pro Anfrage,
+  Frischehinweise auf `tools/list`. Was sie transportierte, war gemessen dies:
+
+  ```json
+  {"name": "i14y-mcp", "version": ""}
+  ```
+
+  und `"instructions": null`. Das SDK stempelt `serverInfo` unter *jede*
+  moderne Antwort, nicht nur unter die Erkennung; die leere Version stand also
+  auf jedem einzelnen Response. `_version.__version__` war die ganze Zeit
+  richtig und wurde `MCPServer` nur nie übergeben. 162 Tests blieben dabei
+  grün, weil keiner hinsah.
+
+  Gesetzt sind jetzt `version` (aus den Paket-Metadaten, dieselbe Quelle wie
+  der `User-Agent`), `title`, `description`, `website_url` und `instructions`.
+  `description` und `website_url` stehen wortgleich in `server.json`, dem
+  Registry-Manifest — den zwei Stellen, an denen ein Client diesen Server
+  beschrieben sieht; ein Test legt sie nebeneinander, statt darauf zu bauen,
+  dass beide gepflegt werden.
+
+- **`instructions` auf `server/discover`.** Auf `2026-07-28` ist das die
+  einzige Stelle, an der ein Server als Ganzes erklärt wird — Tool-Beschreibungen
+  erklären je ein Werkzeug. Der Text nennt die Aufrufreihenfolge und die zwei
+  Eigenheiten der Quelle, an denen Aufrufer auflaufen: dass der Suchindex oben
+  nur Datasets führt (Konzepte und Data Services gehen über `list_concepts`
+  bzw. `list_data_services`) und dass jeder Datensatz mehrsprachig ist. Beides
+  stand bisher nur in einer Tool-Beschreibung, die man schon gefunden haben
+  musste.
+
+- **Anzeigenamen für alle 13 Werkzeuge** (`tools[].title`). Ohne sie zeigt ein
+  Client `search_codelist_entries`. Die Signatur-Sperre
+  `tool-definitions.lock.json` ist unberührt: sie deckt Argumentnamen und
+  Pflichtfelder ab, nicht die Anzeige.
+
+- **`tests/test_spec_2026_07_28.py`** — zwölf Zusicherungen an der Antwort, nie
+  an der Konfiguration. Der stdio-Fall fährt einen echten Unterprozess:
+  `Client(mcp)` verbindet in-process und umgeht die JSON-RPC-Rahmung ganz
+  (`_connect_inproc` im SDK), kann über den Transport, den `uvx i14y-mcp`
+  startet, also nichts aussagen — und stdio ist die Vorgabe.
+
+  Zwei Lücken hat erst die Gegenprobe gezeigt, beide in der ersten Fassung
+  dieser Datei: `title=SERVER_TITLE` liess sich entfernen, ohne dass ein Test
+  fiel, und `assert f"i14y-mcp/{version}" in USER_AGENT` war mit `version == ""`
+  erfüllt — also genau im Ausgangsbefund grün. Beide sind geschlossen, die
+  zweite durch einen Vergleich auf Gleichheit statt auf Teilstring.
+
+### Changed
+
+- **Frischehinweise für alle fünf cachebaren Methoden**, nicht mehr nur für
+  `tools/list` und `server/discover`. Im Code stand, `prompts/list` und
+  `resources/list` blieben bewusst ungesetzt, weil dieser Server weder Prompts
+  noch Ressourcen registriert und ein Hinweis «eine Fläche beschriebe, die es
+  nicht gibt». Nachgemessen trägt die Begründung nicht: `MCPServer` verdrahtet
+  `on_list_prompts`, `on_list_resources` und `on_list_resource_templates`
+  bedingungslos. Alle drei antworten auf der modernen Ära mit HTTP 200 und
+  einer leeren Liste — und taten das mit `ttlMs: 0, cacheScope: private`, also
+  dreimal dasselbe Nichts bei jeder Verbindung.
+
+  Der neue Test leitet die Liste aus `CACHEABLE_METHODS` des SDK ab statt aus
+  unserem eigenen Dict: `CACHE_HINTS` gegen sich selbst zu prüfen kann nie
+  zeigen, dass ein Eintrag fehlt. Eine künftig neu bediente cachebare Methode
+  fällt damit auf, statt still mit `ttlMs: 0` zu antworten.
+
+### Fixed
+
+- **README.md nannte zwei Protokoll-Stände gleichzeitig.** Ein Abschnitt
+  «MCP protocol version» behauptete `mcp >= 1.28.1` und eine Aushandlung «at
+  initialize time», während der Abschnitt zwei Zeilen darunter die beiden
+  tatsächlichen Ären führte und `pyproject.toml` seit dem 2.x-Umstieg
+  `mcp>=2.0.0,<3` pinnt. Der veraltete Abschnitt ist entfernt, nicht korrigiert:
+  er war eine zweite Fassung derselben Auskunft und wäre wieder auseinandergelaufen.
+  `README.de.md` hatte ihn nie.
+
 ### Fixed
 
 - **Two docstrings described the SDK's transport-security default wrongly.**

@@ -966,8 +966,13 @@ def main() -> None:
                 "interfaces; run it only behind a reverse proxy / firewall.",
                 file=sys.stderr,
             )
-        mcp.settings.host = host
-        mcp.settings.port = port
+        # `mcp.settings.host = host` / `.port = port` standen hier und toeteten
+        # jeden HTTP-Start: `Settings` in mcp 2.x fuehrt weder `host` noch
+        # `port` (auch kein `transport_security`), und pydantic wirft auf eine
+        # Zuweisung an ein nicht deklariertes Feld. Beide Werte reicht
+        # `_run_http` ohnehin weiter — an `build_http_app` und an `uvicorn.run`.
+        # Die Zuweisungen waren also nicht bloss toedlich, sondern auch
+        # wirkungslos. Siehe `tests/test_entrypoint.py`.
         _run_http("sse" if transport == "sse" else "streamable-http", host, port)
     else:
         mcp.run(transport="stdio")

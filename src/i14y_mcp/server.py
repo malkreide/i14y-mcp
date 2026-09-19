@@ -23,6 +23,7 @@ from mcp.server.mcpserver import Context, MCPServer
 from pydantic import Field
 
 from . import mappers
+from ._version import __version__
 from .client import (
     BASE_URL,
     SEARCH_HARD_CAP,
@@ -70,6 +71,64 @@ async def _lifespan(_server: MCPServer) -> AsyncIterator[None]:
             logger.info("server.stop")
 
 
+# --------------------------------------------------------------------------
+# Server-Identitaet (Spec 2026-07-28)
+# --------------------------------------------------------------------------
+#
+# Auf der modernen Aera ist `server/discover`, was frueher `initialize` war:
+# die Stelle, an der sich der Server beschreibt. Das SDK stempelt dieselbe
+# Identitaet zusaetzlich als `_meta["io.modelcontextprotocol/serverInfo"]`
+# unter *jede* moderne Antwort — sie ist also kein Beiwerk der Erkennung,
+# sondern steht auf jedem einzelnen Response.
+#
+# Ohne die Argumente unten laesst `MCPServer` sie leer, und zwar still.
+# Gemessen, nicht aus der Signatur geschlossen: vor dieser Aenderung antwortete
+# dieser Server auf `server/discover` mit
+# `{"name": "i14y-mcp", "version": ""}` und `instructions: null`. Ein
+# Katalogeintrag ohne Version und ohne ein Wort darueber, wofuer er gut ist —
+# und nichts wurde deswegen rot.
+#
+# `version` kommt aus `_version.__version__`, also aus den Paket-Metadaten.
+# Dieselbe Quelle wie der User-Agent in `client.py`; ein Literal an dieser
+# Stelle waere die zweite Kopie, gegen die `scripts/check_version_sync.py`
+# ueberhaupt existiert.
+#
+# `SERVER_DESCRIPTION` und `SERVER_WEBSITE_URL` stehen wortgleich in
+# `server.json`, dem Registry-Manifest. Das sind die zwei Stellen, an denen ein
+# Client diesen Server beschrieben sieht — im Verzeichnis und auf dem Draht;
+# `test_registry_manifest_und_protokoll_beschreiben_denselben_server` legt sie
+# nebeneinander, statt sich darauf zu verlassen, dass beide gepflegt werden.
+SERVER_TITLE = "I14Y — Swiss national metadata catalogue"
+SERVER_DESCRIPTION = (
+    "MCP server for I14Y — Switzerland's national open-data metadata catalogue (DCAT-AP-CH)"
+)
+SERVER_WEBSITE_URL = "https://github.com/malkreide/i14y-mcp"
+
+# Die Spec sagt zu `instructions` ausdruecklich: «Should not duplicate
+# information already in tool descriptions.» Hier steht deshalb nur, was aus
+# keiner einzelnen Tool-Beschreibung hervorgeht — die Reihenfolge der Aufrufe
+# und die zwei Eigenheiten der Quelle, an denen Aufrufer sonst auflaufen.
+SERVER_INSTRUCTIONS = """\
+I14Y is Switzerland's national metadata catalogue: it records which body \
+publishes what data, through which interface, under which licence. It holds \
+metadata, never the data itself — use it to find a source, then query that \
+source.
+
+Usual order: `search_catalog` for a topic, `get_dataset` for one record, \
+`get_dataset_distributions` for its download URLs and licences. The `list_*` \
+tools page through the catalogue when no search term applies.
+
+Two properties of the source that no single tool description shows. The \
+upstream search index covers Datasets only, so concepts and data services are \
+reachable through `list_concepts` and `list_data_services` but not through \
+`search_catalog`. And every record is multilingual: pass `language` (de, fr, \
+it, rm, en) rather than translating a title yourself.
+
+Read-only throughout — I14Y's write API needs a Bearer token and is \
+deliberately not exposed here. `api_status` separates «nothing matched» from \
+«the source is down»."""
+
+
 # SEP-2549, Spec 2026-07-28: die auflistenden Methoden tragen `ttlMs` und
 # `cacheScope`. Das SDK setzt beides auf «sofort veraltet, nie geteilt» — ein
 # Server ohne `cache_hints` verhaelt sich also nicht neutral, sondern laesst
@@ -81,21 +140,44 @@ async def _lifespan(_server: MCPServer) -> AsyncIterator[None]:
 # Sobald eine Liste vom Aufrufer abhaengt, muss der Scope im selben Commit auf
 # `private` wechseln.
 #
-# `prompts/list` und `resources/list` bleiben ungesetzt: dieser Server
-# registriert weder Prompts noch Ressourcen, und ein Hinweis darauf beschriebe
-# eine Flaeche, die es nicht gibt.
+# Hier stand, `prompts/list` und `resources/list` blieben bewusst ungesetzt,
+# weil dieser Server weder Prompts noch Ressourcen registriert und ein Hinweis
+# «eine Flaeche beschriebe, die es nicht gibt». Nachgemessen traegt die
+# Begruendung nicht: `MCPServer` verdrahtet `on_list_prompts`,
+# `on_list_resources` und `on_list_resource_templates` bedingungslos. Alle drei
+# antworten auf der modernen Aera mit HTTP 200 und einer leeren Liste — und,
+# ohne Hinweis, mit `ttlMs: 0, cacheScope: private`. Die Flaeche existiert also
+# und sagt bei jeder Verbindung dreimal dasselbe Nichts. Eine leere Liste, die
+# gar nicht voll werden kann, ist der bestcachebare Fall ueberhaupt; sie
+# auszulassen war kein Verzicht auf eine Aussage, sondern die schlechtere.
+#
+# Dieselbe TTL fuer alle fuenf, weil alle fuenf dieselbe Lebensdauer haben: sie
+# stehen beim Import fest und aendern sich bis zum Prozessende nicht.
 LIST_CACHE_TTL_MS = 300_000
 
 # Annotiert, nicht inferiert: `MCPServer` nimmt
 # `Mapping[CacheableMethod, CacheHint]`, und ein Dict-Literal ohne Annotation
 # inferiert mypy als `str`. Zur Laufzeit stimmt beides — ein `mypy src/`-Gate
 # meldet den Unterschied, die Tests nicht.
+_LIST_HINT = CacheHint(ttl_ms=LIST_CACHE_TTL_MS, scope="public")
 CACHE_HINTS: dict[CacheableMethod, CacheHint] = {
-    "tools/list": CacheHint(ttl_ms=LIST_CACHE_TTL_MS, scope="public"),
-    "server/discover": CacheHint(ttl_ms=LIST_CACHE_TTL_MS, scope="public"),
+    "tools/list": _LIST_HINT,
+    "server/discover": _LIST_HINT,
+    "prompts/list": _LIST_HINT,
+    "resources/list": _LIST_HINT,
+    "resources/templates/list": _LIST_HINT,
 }
 
-mcp = MCPServer("i14y-mcp", lifespan=_lifespan, cache_hints=CACHE_HINTS)
+mcp = MCPServer(
+    "i14y-mcp",
+    title=SERVER_TITLE,
+    description=SERVER_DESCRIPTION,
+    instructions=SERVER_INSTRUCTIONS,
+    website_url=SERVER_WEBSITE_URL,
+    version=__version__,
+    lifespan=_lifespan,
+    cache_hints=CACHE_HINTS,
+)
 
 Language = Literal["de", "fr", "it", "rm", "en"]
 ResourceType = Literal["Dataset", "DataService", "PublicService", "Concept", "MappingTable"]
@@ -155,7 +237,7 @@ async def _get(
 # --------------------------------------------------------------------------
 
 
-@mcp.tool(annotations=READ_ONLY)
+@mcp.tool(title="Search the I14Y catalogue", annotations=READ_ONLY)
 async def search_catalog(
     query: QueryStr,
     language: Language = "de",
@@ -229,7 +311,7 @@ async def search_catalog(
     )
 
 
-@mcp.tool(annotations=READ_ONLY)
+@mcp.tool(title="List datasets", annotations=READ_ONLY)
 async def list_datasets(
     publisher_identifier: FilterStr | None = None,
     access_rights: FilterStr | None = None,
@@ -274,7 +356,7 @@ async def list_datasets(
     )
 
 
-@mcp.tool(annotations=READ_ONLY)
+@mcp.tool(title="Get one dataset", annotations=READ_ONLY)
 async def get_dataset(
     dataset_id: PathId, language: Language = "de", ctx: Context | None = None
 ) -> DatasetDetailResult:
@@ -297,7 +379,7 @@ async def get_dataset(
     )
 
 
-@mcp.tool(annotations=READ_ONLY)
+@mcp.tool(title="Get a dataset's distributions", annotations=READ_ONLY)
 async def get_dataset_distributions(
     dataset_id: PathId, language: Language = "de", ctx: Context | None = None
 ) -> DistributionsResult:
@@ -329,7 +411,7 @@ async def get_dataset_distributions(
 # --------------------------------------------------------------------------
 
 
-@mcp.tool(annotations=READ_ONLY)
+@mcp.tool(title="List data services (APIs)", annotations=READ_ONLY)
 async def list_data_services(
     publisher_identifier: FilterStr | None = None,
     language: Language = "de",
@@ -372,7 +454,7 @@ async def list_data_services(
     )
 
 
-@mcp.tool(annotations=READ_ONLY)
+@mcp.tool(title="Get one data service", annotations=READ_ONLY)
 async def get_data_service(
     data_service_id: PathId, language: Language = "de", ctx: Context | None = None
 ) -> DataServiceDetailResult:
@@ -389,7 +471,7 @@ async def get_data_service(
     )
 
 
-@mcp.tool(annotations=READ_ONLY)
+@mcp.tool(title="List public services", annotations=READ_ONLY)
 async def list_public_services(
     publisher_identifier: FilterStr | None = None,
     language: Language = "de",
@@ -432,7 +514,7 @@ async def list_public_services(
 # --------------------------------------------------------------------------
 
 
-@mcp.tool(annotations=READ_ONLY)
+@mcp.tool(title="List harmonised concepts", annotations=READ_ONLY)
 async def list_concepts(
     publisher_identifier: FilterStr | None = None,
     language: Language = "de",
@@ -474,7 +556,7 @@ async def list_concepts(
     )
 
 
-@mcp.tool(annotations=READ_ONLY)
+@mcp.tool(title="Get one concept", annotations=READ_ONLY)
 async def get_concept(
     concept_id: PathId, language: Language = "de", ctx: Context | None = None
 ) -> ConceptDetailResult:
@@ -491,7 +573,7 @@ async def get_concept(
     )
 
 
-@mcp.tool(annotations=READ_ONLY)
+@mcp.tool(title="Search a concept's code list", annotations=READ_ONLY)
 async def search_codelist_entries(
     concept_id: PathId,
     language: Language = "de",
@@ -536,7 +618,7 @@ async def search_codelist_entries(
 # --------------------------------------------------------------------------
 
 
-@mcp.tool(annotations=READ_ONLY)
+@mcp.tool(title="List publishers", annotations=READ_ONLY)
 async def list_publishers(
     identifier: FilterStr | None = None,
     uid: FilterStr | None = None,
@@ -580,7 +662,7 @@ async def list_publishers(
     )
 
 
-@mcp.tool(annotations=READ_ONLY)
+@mcp.tool(title="List catalogues", annotations=READ_ONLY)
 async def list_catalogs(
     language: Language = "de",
     page: Page = 1,
@@ -612,7 +694,7 @@ async def list_catalogs(
 # --------------------------------------------------------------------------
 
 
-@mcp.tool(annotations=READ_ONLY)
+@mcp.tool(title="Check the I14Y API status", annotations=READ_ONLY)
 async def api_status(ctx: Context | None = None) -> StatusResult:
     """Check whether the I14Y API is reachable and which endpoints respond.
 

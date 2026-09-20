@@ -313,6 +313,56 @@ bekannten Schubladen zu zwingen: Dieser Abschnitt musste schon einmal von drei
 auf vier Gründe wachsen, und die 👍-Reaktion stand hier zwei Fassungen lang als
 Tatsache.
 
+**Und genau das ist am 20.9.2026 eingetreten: eine fünfte Form.** Sie steht
+hier nicht als fünfter *Grund* — die vier oben bleiben vier, Codex schweigt aus
+keinem neuen Anlass. Es ist eine fünfte Art, in der er sich äussert, und sie
+trug in `i14y-mcp` PR #66 das befundlose Urteil, das nach der Liste oben als
+«Swish!»-Kommentar hätte kommen müssen. Der kam nicht. Stattdessen setzt Codex
+einen **Summary-Kommentar mit Statustabelle**, markiert durch
+`<!-- codex-pull-request-review-summary -->`:
+
+```
+## Codex Review Summary
+
+| Review | Status | Commit | Review trigger |
+| --- | --- | --- | --- |
+| 📝 **Code Review** | ✅ **Completed** <Zeitstempel> | `00799dc` | Draft marked ready |
+```
+
+Das Neue daran ist nicht die Tabelle, sondern dass sie **an Ort und Stelle
+fortgeschrieben wird**. Dieselbe `issuecomment`-ID 5750605143 las sich um
+15:03:52 UTC als `🔄 **Running** since …` und um 15:04:54 als
+`✅ **Completed**`. Ein Kommentar, zwei gegensätzliche Aussagen, eine ID.
+
+Drei Handgriffe folgen daraus:
+
+- **`created_at` gegen `updated_at` halten.** Weichen sie ab, ist der Text
+  fortgeschrieben worden, und was beim letzten Blick dort stand, gilt nicht
+  mehr. Der Absatz oben warnt, dass eine Zahl drei Bedeutungen decken kann;
+  hier deckt ein und derselbe Kommentar sie nacheinander ab.
+- **Ein `Running` ist kein Ergebnis.** Wer einmal abfragt und die Tabelle
+  liest, kann einen laufenden Review für einen abgeschlossenen halten. Hier
+  lagen 62 Sekunden dazwischen — im Zweifel noch einmal nachsehen, statt den
+  Zwischenstand als Urteil zu protokollieren.
+- **Die Belegregel oben um diesen Fall erweitern.** «Belegt ist eine Prüfung
+  erst durch ein Review-Objekt **oder** eine Befundlos-Meldung» hätte diesen
+  Lauf als ungeprüft gezählt: `get_reviews` gab `[]` zurück, eine
+  Befundlos-Meldung gab es nicht. Belegt ist eine Prüfung **auch** durch eine
+  Summary-Tabelle, die für den fraglichen Commit auf `✅ Completed` steht. Ohne
+  diesen Zusatz baut der Abschnitt genau den Fehlalarm ein, vor dem er drei
+  Absätze weiter oben warnt, nur in die andere Richtung.
+
+Was die Beobachtung **nicht** hergibt, und das ist die Hälfte, die beim
+Weiterschreiben verlorengeht: Sie stammt aus **einem** Lauf in **einem** Repo.
+Ob die «Swish!»-Form damit abgelöst oder nur hier nicht gewählt wurde, ist
+offen. Ob die Tabelle auch neben einem Befund erscheint, ist unbelegt — der
+Kopftext behauptet es («the latest Codex review activity»), und der Infokasten
+desselben Bots hat sich mit der 👍-Reaktion schon einmal geirrt. Ob Kontingent-
+und Environment-Ausfall künftig ebenfalls als Tabellenzeile statt als eigener
+Kommentar kommen, wurde gar nicht geprüft. Eine Reaktion kam auch diesmal
+nicht (`reactions.total_count: 0`) — das stützt den Satz oben, dass der Kasten
+keine Quelle ist.
+
 Und ein befundloser Lauf ist kein Freispruch. Am 23.8. lief derselbe Text durch
 42 Reviews: 36 meldeten denselben P2-Befund, 6 die Befundlos-Meldung — gleiche
 Eingabe, gegenteiliges Urteil, alles in denselben neun Minuten. Ein sauberer

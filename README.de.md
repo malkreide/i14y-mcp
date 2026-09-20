@@ -235,13 +235,49 @@ pip install -e ".[dev]"
 ### Remote-Betrieb (Render, Railway)
 
 ```bash
-I14Y_MCP_TRANSPORT=sse HOST=0.0.0.0 PORT=8000 i14y-mcp
+I14Y_MCP_TRANSPORT=streamable-http HOST=0.0.0.0 PORT=8000 i14y-mcp
 ```
 
-`I14Y_MCP_TRANSPORT` akzeptiert `stdio` (Standard), `sse` oder `streamable-http`.
-Die HTTP-Transporte binden an `HOST`, standardmässig `127.0.0.1` (Loopback);
-für ein PaaS `HOST=0.0.0.0` setzen (das Docker-Image tut das bereits). CORS
-exponiert den `Mcp-Session-Id`-Header, damit Browser-MCP-Clients ihre Session behalten.
+`I14Y_MCP_TRANSPORT` akzeptiert `stdio` (der Standard des Einstiegspunkts
+selbst), `streamable-http` (`http` ist ein Synonym) oder `sse`. Die
+HTTP-Transporte binden an `HOST`, standardmässig `127.0.0.1` (Loopback); für ein
+PaaS `HOST=0.0.0.0` setzen (das Container-Image tut beides bereits).
+
+#### Connector-URL: `https://<host>/mcp`
+
+Ein Claude.ai-Custom-Connector spricht Streamable HTTP, und dieser Transport
+serviert genau einen Pfad: `/mcp`. `sse` ist der ältere Transport und serviert
+stattdessen `/sse` und `/messages` — am zusammengebauten Stack gemessen
+antwortet `POST /mcp` dort mit **404** und unter Streamable HTTP mit **200**.
+Deshalb ist `streamable-http` die Vorgabe des Container-Images; ein Connector,
+der auf ein SSE-Deployment zeigt, bekommt einen 404 und kommt nie zum Handshake.
+
+#### `I14Y_MCP_ALLOWED_HOSTS` — für einen öffentlichen Betrieb nötig
+
+Eine kommagetrennte Liste der Hostnamen, unter denen der Server erreicht wird —
+**nur Hostnamen, ohne Schema und ohne Port**:
+
+```bash
+I14Y_MCP_ALLOWED_HOSTS=i14y-mcp.up.railway.app,mcp.example.ch
+```
+
+Der Wert wird literal mit dem eingehenden `Host`-Header verglichen. Ein
+`https://i14y-mcp.up.railway.app` oder ein angehängtes `:443` trifft deshalb
+nichts, und jede Anfrage scheitert mit **HTTP 421 Invalid Host header**. Hinter
+TLS schickt der Browser den blossen Hostnamen; für einen abweichenden Port gibt
+es im SDK genau eine Wildcard-Form, `host:*`. Loopback bleibt in jedem Fall
+erreichbar, Container-Health-Checks sind also nicht betroffen.
+
+Die Variable wegzulassen fällt bei einem Nicht-Loopback-Bind **nicht** auf etwas
+Sicheres zurück. Der Server kann den Namen nicht erraten, unter dem er
+angesprochen wird, und eine geratene Liste würde jede echte Anfrage abweisen —
+also schaltet er die Host-Prüfung ganz ab und schreibt es ins Log:
+
+```
+dns_rebinding_protection_off
+```
+
+CORS exponiert den `Mcp-Session-Id`-Header, damit Browser-MCP-Clients ihre Session behalten.
 Welche Browser-Origins den Server aufrufen dürfen, kommt aus
 `I14Y_MCP_CORS_ORIGINS`, einer kommagetrennten Liste — **nicht gesetzt heisst:
 kein Browser-Client wird zugelassen**, und das ist der Standard. `*` geht
@@ -251,7 +287,7 @@ Nicht-Browser-Clients sind davon unberührt.
 ### Docker
 
 ```bash
-docker compose up --build      # SSE-Transport auf http://localhost:8000
+docker compose up --build      # Streamable HTTP auf http://localhost:8000/mcp
 ```
 
 Das Image ist ein gehärteter Multi-Stage-Build: Es läuft als Nicht-Root-Benutzer,

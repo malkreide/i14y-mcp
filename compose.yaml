@@ -4,11 +4,21 @@ services:
     image: i14y-mcp:dev
     ports: ["8000:8000"]
     environment:
-      I14Y_MCP_TRANSPORT: sse
+      # Same value as the image default (Dockerfile), repeated here on purpose:
+      # an explicit `sse` stood at this line and silently overrode the image, so
+      # changing only the Dockerfile would have left `docker compose up` on the
+      # transport the change was meant to retire. Streamable HTTP serves /mcp —
+      # the path a Claude.ai custom connector asks for.
+      I14Y_MCP_TRANSPORT: streamable-http
       # Explicit opt-in: bind all interfaces INSIDE the isolated container so the
       # published port is reachable (the server default is 127.0.0.1 — SEC-016).
       HOST: "0.0.0.0"
       PORT: "8000"
+      # Deliberately no I14Y_MCP_ALLOWED_HOSTS here. With a non-loopback bind and
+      # no allow-list, `build_transport_security` returns None and the Host header
+      # is not checked at all — acceptable for a stack whose port is published to
+      # the developer's own loopback, and the server logs the warning either way.
+      # A public deployment must set it; see the README.
     read_only: true
     cap_drop: [ALL]
     security_opt: [no-new-privileges:true]

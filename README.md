@@ -233,12 +233,48 @@ pip install -e ".[dev]"
 ### Remote deployment (Render, Railway)
 
 ```bash
-I14Y_MCP_TRANSPORT=sse HOST=0.0.0.0 PORT=8000 i14y-mcp
+I14Y_MCP_TRANSPORT=streamable-http HOST=0.0.0.0 PORT=8000 i14y-mcp
 ```
 
-`I14Y_MCP_TRANSPORT` accepts `stdio` (default), `sse` or `streamable-http`. The
-HTTP transports bind to `HOST`, which defaults to `127.0.0.1` (loopback); set
-`HOST=0.0.0.0` to expose the port on a PaaS (the Docker image already does).
+`I14Y_MCP_TRANSPORT` accepts `stdio` (the default of the entry point itself),
+`streamable-http` (`http` is a synonym) or `sse`. The HTTP transports bind to
+`HOST`, which defaults to `127.0.0.1` (loopback); set `HOST=0.0.0.0` to expose
+the port on a PaaS (the container image already does both).
+
+#### Connector URL: `https://<host>/mcp`
+
+A Claude.ai custom connector speaks Streamable HTTP, and that transport serves
+exactly one path: `/mcp`. `sse` is the older transport and serves `/sse` and
+`/messages` instead — measured through the assembled app, `POST /mcp` answers
+**404** there and **200** under Streamable HTTP. The container image therefore
+defaults to `streamable-http`; a connector pointed at an SSE deployment gets a
+404 and never completes a handshake.
+
+#### `I14Y_MCP_ALLOWED_HOSTS` — required for a public deployment
+
+A comma-separated list of the hostnames the server is reached under —
+**hostnames only, no scheme and no port**:
+
+```bash
+I14Y_MCP_ALLOWED_HOSTS=i14y-mcp.up.railway.app,mcp.example.ch
+```
+
+The value is compared literally against the incoming `Host` header, so
+`https://i14y-mcp.up.railway.app` or a trailing `:443` matches nothing and every
+request fails with **HTTP 421 Invalid Host header**. Behind TLS the browser
+sends the bare hostname; a non-standard port needs the SDK's only wildcard form,
+`host:*`. Loopback stays reachable either way, so container health checks are
+unaffected.
+
+Leaving it unset on a non-loopback bind does not fall back to something safe.
+The server cannot guess the name it will be addressed by, and a guessed list
+would reject every real request, so it switches the Host check off entirely and
+says so in the log:
+
+```
+dns_rebinding_protection_off
+```
+
 CORS exposes the `Mcp-Session-Id` header so browser MCP clients keep their session.
 Which browser origins may call the server comes from `I14Y_MCP_CORS_ORIGINS`, a
 comma-separated list — **unset means no browser client is permitted at all**,
@@ -248,7 +284,7 @@ non-browser clients are unaffected either way.
 ### Docker
 
 ```bash
-docker compose up --build      # SSE transport on http://localhost:8000
+docker compose up --build      # Streamable HTTP on http://localhost:8000/mcp
 ```
 
 The image is a hardened multi-stage build: it runs as a non-root user, ships no

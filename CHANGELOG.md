@@ -6,6 +6,68 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- **Das Container-Image fährt jetzt Streamable HTTP statt SSE.**
+  `I14Y_MCP_TRANSPORT` stand im `Dockerfile` auf `sse` — dem einen Wert, den ein
+  gehosteter Betrieb nicht brauchen kann. Ein Claude.ai-Custom-Connector spricht
+  Streamable HTTP und holt den Server unter `/mcp` ab; die SSE-App serviert
+  `/sse` und `/messages` und hat `/mcp` gar nicht. Am zusammengebauten Stack
+  gemessen, nicht aus dem Transportnamen geschlossen:
+
+  ```
+  sse              POST /mcp -> 404
+  streamable-http  POST /mcp -> 200
+  ```
+
+  Aufgefallen ist es im Railway-Deployment vom 20.9.2026: Der Container lief,
+  der Health-Check war grün, der Port war offen — und der Connector kam nie zum
+  Handshake, weil er einen 404 bekam. Ein TCP-Health-Check kann das nicht sehen,
+  und er soll es auch nicht: Er prüft bewusst den Port und keinen MCP-Pfad, der
+  mit dem Transport wandert.
+
+  `main()` bleibt unverändert und nimmt weiterhin `sse`, `streamable-http` und
+  `http`; `stdio` bleibt die Vorgabe des Einstiegspunkts selbst. Wer
+  `uvx i14y-mcp` für Claude Desktop startet, ist von der Änderung nicht
+  betroffen — sie betrifft nur das Image.
+
+- **`compose.yaml` setzt denselben Wert.** Die Datei setzte
+  `I14Y_MCP_TRANSPORT: sse` eigenständig und überstimmte damit das Image. Eine
+  Änderung allein am `Dockerfile` hätte `docker compose up` deshalb auf genau
+  dem Transport gelassen, der abgelöst werden sollte — im Diff vollständig
+  aussehend, im Betrieb nicht. Dieselbe Klasse wie die drei
+  `mcp.settings`-Zeilen aus `0.4.0`, von denen eine repariert wurde und zwei
+  stehen blieben.
+
+  `tests/test_entrypoint.py` hält beide Stellen jetzt fest und misst dabei nicht
+  die Zeichenkette, sondern die Pfade der App, die `main()` an uvicorn übergibt.
+  Ein Vergleich auf `"streamable-http"` wäre grün geblieben, wenn das SDK den
+  Pfad verschöbe. Ein zusätzlicher Fall hält fest, dass `/mcp` die beiden
+  Transporte überhaupt trennt — ohne ihn wäre die Zusicherung auch gegen ein
+  Image mit `sse` grün, sobald beide Apps denselben Pfad servierten.
+
+### Fixed
+
+- **Der HEALTHCHECK-Kommentar im `Dockerfile` beschrieb den falschen Transport.**
+  «The SSE runtime opens PORT» stimmte nach dem Wechsel nicht mehr und wäre
+  genau die Sorte Satz, die beim nächsten Mal als Beleg gelesen wird. Jetzt
+  transportneutral, mit der Begründung, warum der Check ein TCP-Connect ist und
+  kein Request auf den MCP-Pfad.
+
+### Documentation
+
+- **Beide READMEs nennen die Connector-URL `https://<host>/mcp`** und erklären,
+  warum ein SSE-Deployment dort einen 404 liefert.
+
+- **`I14Y_MCP_ALLOWED_HOSTS` ist jetzt dokumentiert**, samt der beiden
+  Fehlbedienungen, die im Betrieb gegensätzlich aussehen. Der Wert wird literal
+  mit dem `Host`-Header verglichen: Mit Schema oder Port geschrieben trifft er
+  nichts, und jede Anfrage scheitert mit HTTP 421 — also **nur Hostnamen,
+  kommagetrennt, ohne Schema und ohne Port**. Weggelassen fällt er bei einem
+  Nicht-Loopback-Bind nicht auf etwas Sicheres zurück, sondern schaltet die
+  Host-Prüfung ganz ab (`dns_rebinding_protection_off` im Log). Beides war im
+  Code begründet und in keinem README erwähnt.
+
 ## [0.4.0] — 2026-09-19
 
 Zwei Gründe, warum dieses Release nötig ist, und beide betreffen Leute, die das

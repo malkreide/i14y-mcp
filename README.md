@@ -275,6 +275,35 @@ says so in the log:
 dns_rebinding_protection_off
 ```
 
+#### `railway.json`
+
+[`railway.json`](railway.json) pins the one build setting the deployment cannot
+get wrong on its own:
+
+```json
+{ "build": { "builder": "DOCKERFILE", "dockerfilePath": "Dockerfile" } }
+```
+
+With any other builder Railway never looks at the Dockerfile. It derives a start
+command itself, `I14Y_MCP_TRANSPORT` is then set nowhere, and `main()` falls into
+the stdio branch — the container runs, never opens a port, and the only trace is
+a failing health check. `tests/test_entrypoint.py` fails the day that setting
+changes.
+
+Two things the file deliberately does **not** carry:
+
+- **No environment variables.** Railway's schema has no key for them at any
+  level, so `I14Y_MCP_ALLOWED_HOSTS` and `I14Y_MCP_TRANSPORT` belong in the
+  service variables. The trap is that the schema validates *values* but waves
+  *invented keys* through: a `"variables": { … }` block passes validation, your
+  editor stays quiet, and Railway ignores it. A test rejects such a key.
+- **No `healthcheckPath`.** Measured through the assembled app, no path answers
+  a GET with 2xx: `/` and `/health` are 404, `/mcp` is 400 without a session and
+  421 under a foreign `Host`. A health check pointed at any of them would mark
+  the deployment unhealthy and roll it back. The Dockerfile's TCP check does the
+  right thing instead. Should the server ever grow a real health route, the key
+  may be set — a test then requires that the path actually answers.
+
 CORS exposes the `Mcp-Session-Id` header so browser MCP clients keep their session.
 Which browser origins may call the server comes from `I14Y_MCP_CORS_ORIGINS`, a
 comma-separated list — **unset means no browser client is permitted at all**,

@@ -254,3 +254,121 @@ def test_compose_ueberstimmt_das_image_nicht() -> None:
     `mcp.settings`-Zeilen oben.
     """
     assert _transport_vorgabe(_COMPOSE) == _transport_vorgabe(_DOCKERFILE)
+
+
+# ---------------------------------------------------------------------------
+# railway.json — die Kette bis in den Betrieb
+# ---------------------------------------------------------------------------
+#
+# Die Tests oben belegen, dass das Image Streamable HTTP faehrt. Damit dieser
+# Default im Betrieb ankommt, muss Railway das Dockerfile ueberhaupt bauen.
+# Steht `builder` auf NIXPACKS, wird das Dockerfile gar nicht angesehen: Railway
+# leitet den Startbefehl selbst ab, `I14Y_MCP_TRANSPORT` ist dann nirgends
+# gesetzt, und `main()` faellt in den stdio-Zweig. Der Container laeuft, oeffnet
+# nie einen Port, und die einzige Spur ist ein fehlschlagender Health-Check.
+#
+# Das Schema unter `https://railway.com/railway.schema.json` faengt das nicht:
+# Am 20.9.2026 gemessen lehnt es falsche *Werte* ab (`NIXPACKS_TYPO`,
+# `restartPolicyType: SOMETIMES`), winkt aber *erfundene Schluessel* durch —
+# `{"variables": {...}}` und `{"deploy": {"env": {...}}}` validieren beide
+# sauber. Wer die Allow-List dort hineinschreibt, bekommt keine Fehlermeldung
+# und keine Wirkung. Railway kennt keinen Weg, Umgebungsvariablen in dieser
+# Datei zu deklarieren; sie gehoeren in die Service-Variablen.
+
+_RAILWAY = _ROOT / "railway.json"
+
+# Die Schluessel, die das Schema am Wurzelknoten fuehrt. Bewusst hier gepinnt
+# und nicht zur Laufzeit geholt: ein Test, der das Netz braucht, ist in der CI
+# kein Test. Kommt bei Railway einer dazu, faellt dieser Fall — und dann ist zu
+# entscheiden, ob er hier hingehoert, statt ihn blind aufzunehmen.
+_SCHEMA_WURZEL = {"$schema", "build", "deploy", "environments"}
+
+# Namen, unter denen jemand Umgebungsvariablen vermuten wuerde. Keiner davon
+# existiert im Schema; alle validieren trotzdem.
+_KLINGT_NACH_UMGEBUNG = {"variables", "env", "environment", "envvars", "variable"}
+
+
+def _railway() -> dict[str, Any]:
+    import json
+
+    return json.loads(_RAILWAY.read_text(encoding="utf-8"))
+
+
+def test_railway_baut_das_dockerfile() -> None:
+    """Ohne diesen Fall kann der Transport-Default lautlos umgangen werden.
+
+    Er ist das Bindeglied: Die Tests oben pruefen das Dockerfile, dieser prueft,
+    dass es im Betrieb ueberhaupt zur Anwendung kommt.
+    """
+    konf = _railway()
+    build = konf.get("build", {})
+    assert build.get("builder") == "DOCKERFILE", (
+        f"builder ist {build.get('builder')!r}; mit allem ausser DOCKERFILE "
+        "wird das Dockerfile nicht gebaut und I14Y_MCP_TRANSPORT nie gesetzt"
+    )
+    pfad = build.get("dockerfilePath", "Dockerfile")
+    assert (_ROOT / pfad).is_file(), f"dockerfilePath zeigt auf {pfad}, das es nicht gibt"
+
+
+def test_railway_deklariert_keine_umgebungsvariablen() -> None:
+    """Ein Schluessel, der validiert und nichts bewirkt, ist schlimmer als keiner.
+
+    Faellt dieser Test, hat jemand die Allow-List oder den Transport in die
+    `railway.json` geschrieben. Das Schema sagt dazu nichts, Railway liest es
+    nicht, und im Dashboard steht weiterhin der alte Wert.
+    """
+    konf = _railway()
+    unbekannt = set(konf) - _SCHEMA_WURZEL
+    assert not unbekannt, (
+        f"railway.json fuehrt Schluessel, die das Schema nicht kennt: {sorted(unbekannt)}"
+    )
+
+    def suchen(knoten: Any, pfad: str = "") -> list[str]:
+        treffer: list[str] = []
+        if isinstance(knoten, dict):
+            for k, v in knoten.items():
+                hier = f"{pfad}.{k}" if pfad else k
+                if k.lower() in _KLINGT_NACH_UMGEBUNG:
+                    treffer.append(hier)
+                treffer += suchen(v, hier)
+        return treffer
+
+    gefunden = suchen(konf)
+    assert not gefunden, (
+        f"railway.json sieht aus, als deklariere sie Umgebungsvariablen ({gefunden}). "
+        "Railway liest sie dort nicht — I14Y_MCP_ALLOWED_HOSTS und "
+        "I14Y_MCP_TRANSPORT gehoeren in die Service-Variablen."
+    )
+
+
+def test_ein_gesetzter_healthcheck_pfad_antwortet_auch(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """`healthcheckPath` ist bewusst nicht gesetzt — und wer ihn setzt, muss messen.
+
+    Am 20.9.2026 durch den zusammengebauten Stack gemessen: Es gibt keinen Pfad,
+    der auf ein GET mit 2xx antwortet. `/` und `/health` sind 404, `/mcp` ist
+    400 ohne Session und 421 unter fremdem Host. Ein gesetzter Health-Check
+    haette das Deployment als ungesund markiert und zurueckgerollt — der
+    TCP-Check im Dockerfile tut stattdessen das Richtige.
+
+    Dieser Fall verbietet den Schluessel nicht, er verlangt nur einen Beleg.
+    Bekommt der Server eines Tages einen echten Health-Pfad, darf er hier
+    eingetragen werden, sobald er antwortet.
+    """
+    from starlette.testclient import TestClient
+
+    pfad = _railway().get("deploy", {}).get("healthcheckPath")
+    if pfad is None:
+        pytest.skip("kein healthcheckPath gesetzt — nichts zu belegen")
+
+    monkeypatch.setenv("I14Y_MCP_ALLOWED_HOSTS", "railway.test")
+    security = server.build_transport_security("0.0.0.0", 8080)  # noqa: S104 — Testwert
+    app = server.build_http_app("streamable-http", security, "0.0.0.0")  # noqa: S104
+    with TestClient(app, base_url="http://railway.test") as c:
+        antwort = c.get(pfad, headers={"Host": "railway.test"})
+
+    assert 200 <= antwort.status_code < 300, (
+        f"healthcheckPath {pfad!r} antwortet mit {antwort.status_code}; "
+        "Railway wuerde das Deployment als ungesund zurueckrollen"
+    )

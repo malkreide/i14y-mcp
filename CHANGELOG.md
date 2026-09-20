@@ -6,6 +6,52 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- **`railway.json`** — Konfiguration als Code für den Railway-Betrieb, geschrieben
+  gegen das echte Schema (`https://railway.com/railway.schema.json`, am
+  20.9.2026 abgerufen und validiert), nicht aus dem Gedächtnis.
+
+  Die Datei hält genau eine Einstellung fest: `builder: DOCKERFILE`. Mit jedem
+  anderen Builder sieht Railway das Dockerfile nicht an, leitet den Startbefehl
+  selbst ab, und `I14Y_MCP_TRANSPORT` ist nirgends gesetzt — `main()` fällt dann
+  in den stdio-Zweig. Der Container läuft, öffnet nie einen Port, und die
+  einzige Spur ist ein fehlschlagender Health-Check. Damit schliesst sie die
+  Lücke zwischen dem Image-Default aus dem letzten Eintrag und dem, was im
+  Betrieb tatsächlich startet.
+
+  **Was sie bewusst nicht trägt, und warum das der wichtigere Teil ist.** Das
+  Schema führt auf keiner Ebene einen Schlüssel für Umgebungsvariablen. Es prüft
+  aber nur *Werte*: `builder: NIXPACKS_TYPO` und
+  `restartPolicyType: SOMETIMES` werden abgewiesen, ein erfundenes
+  `"variables": {…}` oder `deploy.env` validiert sauber durch. Wer die
+  Allow-List dort hineinschreibt, bekommt keine Fehlermeldung und keine
+  Wirkung — dieselbe Klasse wie ein Schlüssel, dessen Vorgabe niemand gelesen
+  hat. `I14Y_MCP_ALLOWED_HOSTS` und `I14Y_MCP_TRANSPORT` gehören in die
+  Service-Variablen.
+
+  Ebenso fehlt `healthcheckPath`, und zwar gemessen statt vergessen: Durch den
+  zusammengebauten Stack antwortet **kein** Pfad auf ein GET mit 2xx — `/` und
+  `/health` sind 404, `/mcp` ist 400 ohne Session und 421 unter fremdem `Host`.
+  Ein darauf gerichteter Health-Check hätte das Deployment als ungesund
+  markiert und zurückgerollt. Der TCP-Check im Dockerfile prüft stattdessen den
+  Port und bleibt dadurch vom Transport unabhängig.
+
+  Drei Tests in `tests/test_entrypoint.py` halten das fest, bei den
+  Transport-Tests, weil es dieselbe Kette ist: `railway.json` → Dockerfile →
+  `main()` → `/mcp`. Der dritte verbietet `healthcheckPath` nicht, er verlangt
+  einen Beleg — ist der Schlüssel gesetzt, wird der Pfad durch den gebauten
+  Stack abgefragt und muss 2xx liefern. Gegenproben: Builder auf `NIXPACKS`,
+  `dockerfilePath` ins Leere, `variables` am Wurzelknoten, `deploy.env` eine
+  Ebene tiefer, `healthcheckPath: "/"` — jede fällt genau auf dem zugehörigen
+  Test, und die letzte lässt den sonst übersprungenen Fall wirklich anlaufen.
+
+### Documentation
+
+- **Beide READMEs beschreiben `railway.json`**, samt der zwei Fallen: dass
+  Umgebungsvariablen dort nicht hingehören, obwohl das Schema sie durchwinkt,
+  und warum `healthcheckPath` leer bleibt.
+
 ### Changed
 
 - **Das Container-Image fährt jetzt Streamable HTTP statt SSE.**

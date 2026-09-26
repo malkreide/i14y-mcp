@@ -484,9 +484,9 @@ wie der Code: Nichts ist rot, weil nichts geprüft wird, worauf es ankommt.
 
 ## Teil 2 — i14y-mcp
 
-**ruff-Pin: `ruff==0.16.3`**, einzige Quelle ist `[project.optional-dependencies].dev`
-in `pyproject.toml`; die CI erbt ihn über `pip install -e ".[dev]"`. Eine
-`.pre-commit-config.yaml` existiert nicht — es gibt also keine zweite,
+**ruff-Pin:** exakt, einzige Quelle ist `[project.optional-dependencies].dev`
+in `pyproject.toml` — die Version steht dort, nicht hier; die CI erbt ihn
+über `pip install -e ".[dev]"`. Eine `.pre-commit-config.yaml` existiert nicht — es gibt also keine zweite,
 abweichende Version, aber auch kein lokales Gate vor dem Push.
 
 Keine zweite Version in die Workflows schreiben: ein solcher Schritt liefe nach

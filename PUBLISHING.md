@@ -102,7 +102,7 @@ python -m build
 twine check dist/*
 ```
 
-Check `ruff --version` first: the pin is `ruff==0.16.3` in
+Check `ruff --version` first against the exact pin in
 `[project.optional-dependencies].dev`, and an older `ruff` earlier in `PATH`
 beats it without the install saying anything.
 
